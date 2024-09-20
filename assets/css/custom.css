@@ -1,0 +1,321 @@
+:root,
+[data-bs-theme=light] {
+    --tblr-blue: #224a75;
+    --tblr-indigo: #4263eb;
+    --tblr-purple: #ae3ec9;
+    --tblr-pink: #d6336c;
+    --tblr-red: #d63939;
+    --tblr-orange: #f76707;
+    --tblr-yellow: #f59f00;
+    --tblr-green: #2fb344;
+    --tblr-teal: #0ca678;
+    --tblr-cyan: #17a2b8;
+    --tblr-black: #000000;
+    --tblr-white: #ffffff;
+    --tblr-gray: #667382;
+    --tblr-gray-dark: #182433;
+    --tblr-gray-100: #f6f8fb;
+    --tblr-gray-200: #eef1f4;
+    --tblr-gray-300: #dadfe5;
+    --tblr-gray-400: #bbc3cd;
+    --tblr-gray-500: #929dab;
+    --tblr-gray-600: #667382;
+    --tblr-gray-700: #3a4859;
+    --tblr-gray-800: #182433;
+    --tblr-gray-900: #040a11;
+    --tblr-primary: #224a75;
+    --tblr-secondary: #667382;
+    --tblr-success: #c6f94c;
+    --tblr-info: #4299e1;
+    --tblr-warning: #f76707;
+    --tblr-danger: #d63939;
+    --tblr-light: #fcfdfe;
+    --tblr-dark: #182433;
+    --tblr-muted: #667382;
+    --tblr-blue: #224a75;
+    --tblr-azure: #4299e1;
+    --tblr-indigo: #4263eb;
+    --tblr-purple: #ae3ec9;
+    --tblr-pink: #d6336c;
+    --tblr-red: #d63939;
+    --tblr-orange: #f76707;
+    --tblr-yellow: #f59f00;
+    --tblr-lime: #74b816;
+    --tblr-green: #2fb344;
+    --tblr-teal: #0ca678;
+    --tblr-cyan: #17a2b8;
+    --tblr-facebook: #1877f2;
+    --tblr-twitter: #1da1f2;
+    --tblr-linkedin: #0a66c2;
+    --tblr-google: #dc4e41;
+    --tblr-youtube: #ff0000;
+    --tblr-vimeo: #1ab7ea;
+    --tblr-dribbble: #ea4c89;
+    --tblr-github: #181717;
+    --tblr-instagram: #e4405f;
+    --tblr-pinterest: #bd081c;
+    --tblr-vk: #6383a8;
+    --tblr-rss: #ffa500;
+    --tblr-flickr: #0063dc;
+    --tblr-bitbucket: #0052cc;
+    --tblr-tabler: #224a75;
+    --tblr-primary-rgb: 0, 82, 141;
+    --tblr-secondary-rgb: 102, 115, 130;
+    --tblr-success-rgb: 47, 179, 68;
+    --tblr-info-rgb: 66, 153, 225;
+    --tblr-warning-rgb: 247, 103, 7;
+    --tblr-danger-rgb: 214, 57, 57;
+    --tblr-light-rgb: 252, 253, 254;
+    --tblr-dark-rgb: 24, 36, 51;
+    --tblr-muted-rgb: 102, 115, 130;
+    --tblr-blue-rgb: 34, 74, 117;
+    --tblr-azure-rgb: 66, 153, 225;
+    --tblr-indigo-rgb: 66, 99, 235;
+    --tblr-purple-rgb: 174, 62, 201;
+    --tblr-pink-rgb: 214, 51, 108;
+    --tblr-red-rgb: 214, 57, 57;
+    --tblr-orange-rgb: 247, 103, 7;
+    --tblr-yellow-rgb: 245, 159, 0;
+    --tblr-lime-rgb: 116, 184, 22;
+    --tblr-green-rgb: 47, 179, 68;
+    --tblr-teal-rgb: 12, 166, 120;
+    --tblr-cyan-rgb: 23, 162, 184;
+    --tblr-facebook-rgb: 24, 119, 242;
+    --tblr-twitter-rgb: 29, 161, 242;
+    --tblr-linkedin-rgb: 10, 102, 194;
+    --tblr-google-rgb: 220, 78, 65;
+    --tblr-youtube-rgb: 255, 0, 0;
+    --tblr-vimeo-rgb: 26, 183, 234;
+    --tblr-dribbble-rgb: 234, 76, 137;
+    --tblr-github-rgb: 24, 23, 23;
+    --tblr-instagram-rgb: 228, 64, 95;
+    --tblr-pinterest-rgb: 189, 8, 28;
+    --tblr-vk-rgb: 99, 131, 168;
+    --tblr-rss-rgb: 255, 165, 0;
+    --tblr-flickr-rgb: 0, 99, 220;
+    --tblr-bitbucket-rgb: 0, 82, 204;
+    --tblr-tabler-rgb: 32, 107, 196;
+    --tblr-primary-text-emphasis: #0d2b4e;
+    --tblr-secondary-text-emphasis: #292e34;
+    --tblr-success-text-emphasis: #13481b;
+    --tblr-info-text-emphasis: #1a3d5a;
+    --tblr-warning-text-emphasis: #632903;
+    --tblr-danger-text-emphasis: #561717;
+    --tblr-light-text-emphasis: #3a4859;
+    --tblr-dark-text-emphasis: #3a4859;
+    --tblr-primary-bg-subtle: #d2e1f3;
+    --tblr-secondary-bg-subtle: #e0e3e6;
+    --tblr-success-bg-subtle: #d5f0da;
+    --tblr-info-bg-subtle: #d9ebf9;
+    --tblr-warning-bg-subtle: #fde1cd;
+    --tblr-danger-bg-subtle: #f7d7d7;
+    --tblr-light-bg-subtle: #fbfcfd;
+    --tblr-dark-bg-subtle: #bbc3cd;
+    --tblr-primary-border-subtle: #a6c4e7;
+    --tblr-secondary-border-subtle: #c2c7cd;
+    --tblr-success-border-subtle: #ace1b4;
+    --tblr-info-border-subtle: #b3d6f3;
+    --tblr-warning-border-subtle: #fcc29c;
+    --tblr-danger-border-subtle: #efb0b0;
+    --tblr-light-border-subtle: #eef1f4;
+    --tblr-dark-border-subtle: #929dab;
+    --tblr-white-rgb: 255, 255, 255;
+    --tblr-black-rgb: 0, 0, 0;
+    --tblr-font-sans-serif: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+    --tblr-font-monospace: Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+    --tblr-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+    --tblr-body-font-family: var(--tblr-font-sans-serif);
+    --tblr-body-font-size: 0.875rem;
+    --tblr-body-font-weight: 400;
+    --tblr-body-line-height: 1.4285714286;
+    --tblr-body-color: #182433;
+    --tblr-body-color-rgb: 24, 36, 51;
+    --tblr-body-bg: #f6f8fb;
+    --tblr-body-bg-rgb: 246, 248, 251;
+    --tblr-emphasis-color: #182433;
+    --tblr-emphasis-color-rgb: 24, 36, 51;
+    --tblr-secondary-color: rgba(24, 36, 51, 0.75);
+    --tblr-secondary-color-rgb: 24, 36, 51;
+    --tblr-secondary-bg: #eef1f4;
+    --tblr-secondary-bg-rgb: 238, 241, 244;
+    --tblr-tertiary-color: rgba(24, 36, 51, 0.5);
+    --tblr-tertiary-color-rgb: 24, 36, 51;
+    --tblr-tertiary-bg: #f6f8fb;
+    --tblr-tertiary-bg-rgb: 246, 248, 251;
+    --tblr-link-color: #224a75;
+    --tblr-link-color-rgb: 32, 107, 196;
+    --tblr-link-decoration: none;
+    --tblr-link-hover-color: #1a569d;
+    --tblr-link-hover-color-rgb: 26, 86, 157;
+    --tblr-link-hover-decoration: underline;
+    --tblr-code-color: var(--tblr-gray-600);
+    --tblr-highlight-bg: #fdeccc;
+    --tblr-border-width: 1px;
+    --tblr-border-style: solid;
+    --tblr-border-color: #fafafa;
+    --tblr-border-color-translucent: rgba(4, 32, 69, 0.14);
+    --tblr-border-radius: 4px;
+    --tblr-border-radius-sm: 2px;
+    --tblr-border-radius-lg: 8px;
+    --tblr-border-radius-xl: 1rem;
+    --tblr-border-radius-xxl: 2rem;
+    --tblr-border-radius-2xl: var(--tblr-border-radius-xxl);
+    --tblr-border-radius-pill: 100rem;
+    --tblr-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    --tblr-box-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --tblr-box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+    --tblr-box-shadow-inset: 0 0 transparent;
+    --tblr-focus-ring-width: 0.25rem;
+    --tblr-focus-ring-opacity: 0.25;
+    --tblr-focus-ring-color: rgba(32, 107, 196, 0.25);
+    --tblr-form-valid-color: #2fb344;
+    --tblr-form-valid-border-color: #2fb344;
+    --tblr-form-invalid-color: #d63939;
+    --tblr-form-invalid-border-color: #d63939;
+}
+
+[data-bs-theme=dark] {
+    --tblr-blue: #224a75;
+    color-scheme: dark;
+    --tblr-body-color: #fcfdfe;
+    --tblr-body-color-rgb: 252, 253, 254;
+    --tblr-body-bg: #040a11;
+    --tblr-body-bg-rgb: 4, 10, 17;
+    --tblr-emphasis-color: #ffffff;
+    --tblr-emphasis-color-rgb: 255, 255, 255;
+    --tblr-secondary-color: rgba(252, 253, 254, 0.75);
+    --tblr-secondary-color-rgb: 252, 253, 254;
+    --tblr-secondary-bg: #182433;
+    --tblr-secondary-bg-rgb: 24, 36, 51;
+    --tblr-tertiary-color: rgba(252, 253, 254, 0.5);
+    --tblr-tertiary-color-rgb: 252, 253, 254;
+    --tblr-tertiary-bg: #0e1722;
+    --tblr-tertiary-bg-rgb: 14, 23, 34;
+    --tblr-primary-text-emphasis: #79a6dc;
+    --tblr-secondary-text-emphasis: #a3abb4;
+    --tblr-success-text-emphasis: #82d18f;
+    --tblr-info-text-emphasis: #8ec2ed;
+    --tblr-warning-text-emphasis: #faa46a;
+    --tblr-danger-text-emphasis: #e68888;
+    --tblr-light-text-emphasis: #f6f8fb;
+    --tblr-dark-text-emphasis: #dadfe5;
+    --tblr-primary-bg-subtle: #061527;
+    --tblr-secondary-bg-subtle: #14171a;
+    --tblr-success-bg-subtle: #09240e;
+    --tblr-info-bg-subtle: #0d1f2d;
+    --tblr-warning-bg-subtle: #311501;
+    --tblr-danger-bg-subtle: #2b0b0b;
+    --tblr-light-bg-subtle: #182433;
+    --tblr-dark-bg-subtle: #0c121a;
+    --tblr-primary-border-subtle: #134076;
+    --tblr-secondary-border-subtle: #3d454e;
+    --tblr-success-border-subtle: #1c6b29;
+    --tblr-info-border-subtle: #285c87;
+    --tblr-warning-border-subtle: #943e04;
+    --tblr-danger-border-subtle: #802222;
+    --tblr-light-border-subtle: #3a4859;
+    --tblr-dark-border-subtle: #182433;
+    --tblr-link-color: #79a6dc;
+    --tblr-link-hover-color: #94b8e3;
+    --tblr-link-color-rgb: 121, 166, 220;
+    --tblr-link-hover-color-rgb: 148, 184, 227;
+    --tblr-code-color: var(--tblr-gray-300);
+    --tblr-border-color: #1f2e41;
+    --tblr-border-color-translucent: rgba(72, 110, 149, 0.14);
+    --tblr-form-valid-color: #82d18f;
+    --tblr-form-valid-border-color: #82d18f;
+    --tblr-form-invalid-color: #e68888;
+    --tblr-form-invalid-border-color: #e68888;
+}
+
+.form-control:focus {
+    color: inherit;
+    background-color: var(--tblr-bg-forms);
+    border-color: #fafafa;
+    outline: 0;
+    box-shadow: 0 0 transparent, 0 0 0 0.25rem rgba(32, 107, 196, 0.25);
+}
+
+/* .form-control::-webkit-input-placeholder {
+    color: #fafafa;
+    opacity: 1;
+} */
+
+
+/* Extra small devices (phones) */
+@media (max-width: 575.98px) {
+
+}
+
+/* Small devices (tablets) */
+@media (min-width: 576px) {
+
+}
+
+/* Medium devices (desktops) */
+@media (min-width: 768px) {
+
+}
+
+/* Large devices (desktops) */
+@media (min-width: 992px) {
+    .page-wrapper-extra-sidebar {
+        margin-left: 36rem !important;
+    }
+
+    .navbar-extra-w {
+        width: 21rem !important;
+    }
+}
+
+/* Extra large devices (large desktops) */
+@media (min-width: 1200px) {
+    .page-wrapper-extra-sidebar {
+        margin-left: 36rem !important;
+    }
+
+    .navbar-extra-w {
+        width: 21rem !important;
+    }
+}
+
+.whitespace-nowrap {
+    white-space: nowrap;
+}
+.space-x-0\.5>:not([hidden])~:not([hidden]) {
+    --tw-space-x-reverse: 0;
+    margin-left: .125rem;
+    margin-left: calc(.125rem*(1 - var(--tw-space-x-reverse)));
+    margin-right: 0;
+    margin-right: calc(.125rem*var(--tw-space-x-reverse))
+}
+.text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+
+.min-h-\[42px\] {
+    min-height: 42px;
+}
+
+.flex-1 {
+    flex: 1 1 0%;
+}
+.max-w-\[90px\] {
+    max-width: 90px;
+}
+.btn-direction {
+    background: var(--color-primary);
+    border-radius: 50%;
+    color: rgb(107,114,128);
+    padding: 0.25rem;
+    border: none;
+    transition-property: all;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+
+}
+.btn-direction:hover {
+    background: rgb(209 213 219);
+    color: rgb(0 82 141);
+}

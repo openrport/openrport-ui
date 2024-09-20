@@ -1,0 +1,48 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@iconify-json/mdi": "^1.1.67",
+    "@nuxt/devtools": "latest",
+    "@nuxt/icon": "^1.3.1",
+    "@nuxtjs/tailwindcss": "^6.12.0",
+    "nuxt": "^3.12.4",
+    "nuxt-headlessui": "^1.1.5",
+    "nuxt-snackbar": "^1.0.4",
+    "shadcn-nuxt": "^0.10.0",
+    "typescript": "^5.4.2",
+    "vue": "^3.4.19",
+    "vue-router": "^4.2.5"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^0.5.1",
+    "@radix-icons/vue": "^1.0.0",
+    "@tabler/core": "^1.0.0-beta20",
+    "@tabler/icons-vue": "^2.47.0",
+    "@tinymce/tinymce-vue": "^5.1.1",
+    "@vueform/multiselect": "^2.6.7",
+    "@vueuse/core": "^10.11.0",
+    "axios": "^1.6.7",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "codemirror": "^6.0.1",
+    "lucide-vue-next": "^0.356.0",
+    "pinia": "^2.1.7",
+    "radix-vue": "^1.8.5",
+    "sass": "^1.69.5",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7",
+    "vue-codemirror": "^6.1.1"
+  },
+  "resolutions": {
+    "string-width": "4.2.3"
+  }
+}
