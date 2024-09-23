@@ -1,19 +1,23 @@
 <template>
-  <div class="row">
-    <div class="col w-100">
-      <RportClientCard :device="device"></RportClientCard>
-      <GroupsCard :groups="device?.groups"></GroupsCard>
-      <TagsLabelsCard :tags="device?.tags" :labels="device?.labels"></TagsLabelsCard>
-      <OperatingSystemCard :device="device"></OperatingSystemCard>
-    </div>
-    <div class="col w-100">
-      <BenchmarkCard></BenchmarkCard>
-      <IPAddressessCard></IPAddressessCard>
-      <UpdatesStatusCard :updates="device?.updates_status"></UpdatesStatusCard>
-      <AllowedUserGroupsCard></AllowedUserGroupsCard>
-    </div>
-  </div>
+	<div class="row">
+		<div class="col w-100">
+			<RportClientCard :device="device" />
+			<GroupsCard :groups="device?.groups" />
+			<TagsLabelsCard
+				:tags="device?.tags"
+				:labels="device?.labels"
+			/>
+			<OperatingSystemCard :device="device" />
+		</div>
+		<div class="col w-100">
+			<BenchmarkCard />
+			<IPAddressessCard />
+			<UpdatesStatusCard :updates="device?.updates_status" />
+			<AllowedUserGroupsCard />
+		</div>
+	</div>
 </template>
+
 <script setup lang="ts">
 import RportClientCard from '../components/device/RportClientCard.vue';
 import GroupsCard from '../components/device/GroupsCard.vue';
@@ -25,8 +29,8 @@ import UpdatesStatusCard from '../components/device/UpdatesStatusCard.vue';
 import AllowedUserGroupsCard from '~/components/device/AllowedUserGroupsCard.vue';
 
 const props = defineProps({
-  device: {
-    type: Object
-  }
-})
+	device: {
+		type: Object,
+	},
+});
 </script>

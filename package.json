@@ -7,13 +7,17 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
     "@iconify-json/mdi": "^1.1.67",
     "@nuxt/devtools": "latest",
+    "@nuxt/eslint": "^0.5.7",
     "@nuxt/icon": "^1.3.1",
     "@nuxtjs/tailwindcss": "^6.12.0",
+    "eslint": "^9.11.0",
     "nuxt": "^3.12.4",
     "nuxt-headlessui": "^1.1.5",
     "nuxt-snackbar": "^1.0.4",
@@ -44,5 +48,6 @@
   },
   "resolutions": {
     "string-width": "4.2.3"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

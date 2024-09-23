@@ -1,29 +1,30 @@
 <template>
-
-    <Accordion :items="accordionItems">
-        <template v-slot:title="{ item }">
-            {{ item.title }}
-        </template>
-        <template v-slot:content="{ item }">
-            {{ item.content }}
-        </template>
-    </Accordion>
+	<Accordion :items="accordionItems">
+		<template #title="{ item }">
+			{{ item.title }}
+		</template>
+		<template #content="{ item }">
+			{{ item.content }}
+		</template>
+	</Accordion>
 </template>
+
 <script setup>
 import {
-    IconFolder,
-    IconBrandDebian
+	IconFolder,
+	IconBrandDebian,
 } from '@tabler/icons-vue';
 import Accordion from './Accordion.vue';
 
 const props = defineProps({
-    accordionItems: Array,
-    default: [
-        { title: "All", content: "Content for item 1" },
-        { title: "Favorites", content: "Content for item 2" },
-    ]
+	accordionItems: Array,
+	default: [
+		{ title: 'All', content: 'Content for item 1' },
+		{ title: 'Favorites', content: 'Content for item 2' },
+	],
 });
 </script>
+
 <style>
 .hover:hover {
     background-color: rgb(226 232 240);

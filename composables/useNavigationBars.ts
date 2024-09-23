@@ -1,19 +1,19 @@
 export const useNavigationBars = () => {
-    const isDeviceBarOpen = ref(false);
-    const isSettingsBarOpen = ref(false);
+	const isDeviceBarOpen = ref(false);
+	const isSettingsBarOpen = ref(false);
 
-    const toggleDeviceBarNav = () => {
-        isDeviceBarOpen.value = !isDeviceBarOpen.value;
-    };
+	const toggleDeviceBarNav = () => {
+		isDeviceBarOpen.value = !isDeviceBarOpen.value;
+	};
 
-    const toggleSettingsBarNav = () => {
-        isSettingsBarOpen.value = !isSettingsBarOpen.value;
-    };
+	const toggleSettingsBarNav = () => {
+		isSettingsBarOpen.value = !isSettingsBarOpen.value;
+	};
 
-    return {
-        isDeviceBarOpen,
-        isSettingsBarOpen,
-        toggleDeviceBarNav,
-        toggleSettingsBarNav
-    };
-}
+	return {
+		isDeviceBarOpen,
+		isSettingsBarOpen,
+		toggleDeviceBarNav,
+		toggleSettingsBarNav,
+	};
+};

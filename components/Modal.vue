@@ -1,52 +1,83 @@
 <template>
-    <div class="modal modal-blur " :class="{ 'is-active': isActive }" role="dialog">
-        <div class="modal-dialog modal-lg modal-dialog-centered mh-100" role="document">
-            <div class="modal-content ">
-                <div class="modal-header">
-                    <h3 class="modal-title">{{ title }}</h3>
-                    <button @click="closeModal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
-                </div>
-                <div class="modal-body modal-height overflow-y-auto">
-                    <!-- Modal content goes here -->
-                    <slot></slot>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn me-auto" data-bs-dismiss="modal" @click="closeModal">{{closeButtonText}}</button>
-                    <button type="button" class="btn btn-primary" @click="submit" data-bs-dismiss="modal">{{saveButtonText}}</button>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div
+		class="modal modal-blur "
+		:class="{ 'is-active': isActive }"
+		role="dialog"
+	>
+		<div
+			class="modal-dialog modal-lg modal-dialog-centered mh-100"
+			role="document"
+		>
+			<div class="modal-content ">
+				<div class="modal-header">
+					<h3 class="modal-title">
+						{{ title }}
+					</h3>
+					<button
+						type="button"
+						class="btn-close"
+						data-bs-dismiss="modal"
+						aria-label="Close"
+						@click="closeModal"
+					>
+						X
+					</button>
+				</div>
+				<div class="modal-body modal-height overflow-y-auto">
+					<!-- Modal content goes here -->
+					<slot />
+				</div>
+				<div class="modal-footer">
+					<button
+						type="button"
+						class="btn me-auto"
+						data-bs-dismiss="modal"
+						@click="closeModal"
+					>
+						{{ closeButtonText }}
+					</button>
+					<button
+						type="button"
+						class="btn btn-primary"
+						data-bs-dismiss="modal"
+						@click="submit"
+					>
+						{{ saveButtonText }}
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
 export default {
-    props: {
-        isActive: {
-            type: Boolean,
-            default: false
-        },
-        title: {
-            type: String,
-            default: 'Modal Title'
-        },
-        closeButtonText: {
-            type: String,
-            default: 'Close'
-        },
-        saveButtonText: {
-            type: String,
-            default: 'Save changes'
-        }
-    },
-    methods: {
-        closeModal() {
-            this.$emit('close');
-        },
-        submit() {
-            this.$emit('save');
-        }
-    }
+	props: {
+		isActive: {
+			type: Boolean,
+			default: false,
+		},
+		title: {
+			type: String,
+			default: 'Modal Title',
+		},
+		closeButtonText: {
+			type: String,
+			default: 'Close',
+		},
+		saveButtonText: {
+			type: String,
+			default: 'Save changes',
+		},
+	},
+	methods: {
+		closeModal() {
+			this.$emit('close');
+		},
+		submit() {
+			this.$emit('save');
+		},
+	},
 };
 </script>
 
@@ -68,5 +99,4 @@ export default {
 .modal.is-active {
     display: flex;
 }
-
 </style>

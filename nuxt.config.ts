@@ -1,75 +1,83 @@
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-  css: ['~/assets/css/tailwind.css'],
+	devtools: { enabled: true },
+	css: ['~/assets/css/tailwind.css'],
 
-  postcss: {
-      plugins: {
-          tailwindcss: {},
-          autoprefixer: {}
-      }
-  },
+	postcss: {
+		plugins: {
+			tailwindcss: {},
+			autoprefixer: {},
+		},
+	},
 
-  modules: [
-      "@nuxt/icon",
-      '@pinia/nuxt',
-      '@nuxtjs/tailwindcss',
-      'shadcn-nuxt',
-      'nuxt-snackbar',
-      'nuxt-headlessui',
+	modules: [
+		'@nuxt/icon',
+		'@pinia/nuxt',
+		'@nuxtjs/tailwindcss',
+		'shadcn-nuxt',
+		'nuxt-snackbar',
+		'nuxt-headlessui',
+		'@nuxt/eslint',
+	],
 
-  ],
+	eslint: {
+		config: {
+			stylistic: {
+				indent: 'tab',
+				semi: true,
+			},
+		},
+	},
+	shadcn: {
+		componentDir: './components/ui',
+	},
 
-  shadcn: {
-      componentDir: './components/ui'
-  },
+	snackbar: {
+		bottom: true,
+		duration: 3000,
+	},
 
-  snackbar: {
-      bottom: true,
-      duration: 3000
-  },
+	headlessui: {
+		prefix: 'Headless',
+	},
 
-  headlessui: {
-      prefix: 'Headless'
-  },
+	app: {
+		head: {
+			title: 'OpenRport',
 
-  app: {
-      head: {
-          title: 'OpenRport',
+			link: [
 
-          link: [
+			],
+			bodyAttrs: {
+				class: 'min-h-screen h-full bg-gray-50 dark:bg-gray-800',
+			},
+		},
+	},
 
-          ],
-          bodyAttrs: {
-              class: 'min-h-screen h-full bg-gray-50 dark:bg-gray-800'
-          },
-      }
-  },
+	plugins: [
+		// { src: '~/node_modules/@tabler/core/dist/js/tabler.min.js', mode: 'client' }
+	],
 
-  plugins: [
-      // { src: '~/node_modules/@tabler/core/dist/js/tabler.min.js', mode: 'client' }
-  ],
+	alias: {
+		assets: '/<rootDir>/assets',
+	},
 
-  alias: {
-      assets: "/<rootDir>/assets"
-  },
+	routeRules: {
+		// '/': { redirect: '/dashboard' }
+	},
 
-  routeRules: {
-      // '/': { redirect: '/dashboard' }
-  },
+	router: {
+		options: {
+			linkActiveClass: 'bg-sky-700',
+			linkExactActiveClass: 'bg-sky-700',
+		},
+	},
 
-  router: {
-      options: {
-          linkActiveClass: 'bg-sky-700',
-          linkExactActiveClass: 'bg-sky-700'
-      }
-  },
+	runtimeConfig: {
+		public: {
+			appEnv: process.env.NUXT_APP_ENV,
+			apiUrl: process.env.NUXT_API_URL,
+		},
+	},
 
-  runtimeConfig: {
-      public: {
-          appEnv: process.env.NUXT_APP_ENV,
-          apiUrl: process.env.NUXT_API_URL,
-      }
-  },
-
-  ssr: false,
-})
+	ssr: false,
+});
