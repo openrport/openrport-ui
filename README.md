@@ -26,5 +26,29 @@ yarn dev
 
 ```
 
+#### Cors configuration
+
+During the developement to allow cross-origin resource sharing (CORS) for all domain in the OpenRport back-end, you need to modify rportd.config file. This is useful because in development your front-end is on different domain than your back0end.
+
+1. Open your `rportd.conf` file (path: `/etc/rport/rportd.conf`).
+2. In the `[api]` section, locate or add the cors settings.
+3. Update the setting to allow all origins by setting it to `*`:
+
+```conf
+[api]
+# Other configurations
+
+## Allowed origins for cross-origin requests.
+cors = ["*"]
+
+```
+
+This configuration will enable requests from all domains, which is useful for development purposes. For production, it's recommended to specify a list of allowed domains or leave it empty.
+
+4. Save the changes and restart OpenRport service to apply the new configuration:
+```bash
+sudo systemctl restart rportd
+```
+
 ### Credits
 - Thanks to [Johan Cabeza](https://github.com/cryptodev4) for the great work on the design.
