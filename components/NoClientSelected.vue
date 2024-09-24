@@ -1,18 +1,12 @@
 <template>
-	<div class="empty d-flex justify-content-center align-self-center vh-100">
-		<div class="empty-img">
-			<img
-				src="/img/illustrations/undraw_printing_invoices_5r4r.svg"
-				height="128"
-				alt=""
-			>
+	<div class="scrollbar-hide max-h-screen flex-1 xl:overflow-y-auto">
+		<div class="mx-auto h-screen max-h-screen max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
+			<div class="dashboard-index flex items-center justify-center">
+				<div class="text-primary dark:text-primary-400">
+					No client selected
+				</div>
+			</div>
 		</div>
-		<p class="empty-title">
-			No client selected
-		</p>
-		<p class="empty-subtitle text-muted">
-			Try adjusting your search or filter to find what you're looking for.
-		</p>
 	</div>
 </template>
 

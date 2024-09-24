@@ -163,7 +163,7 @@ defineProps({
 	},
 	labels: {
 		type: Object,
-		default: () => {},
+		default: () => [],
 	},
 });
 </script>
