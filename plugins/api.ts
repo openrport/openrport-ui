@@ -25,6 +25,7 @@ interface IApiInstance {
 export default defineNuxtPlugin((nuxtApp) => {
 	const config = useRuntimeConfig();
 	const userAuth = useCookie('token');
+	const is_authenticated = useCookie<boolean>('is_authenticated');
 	const fetchOptions: FetchOptions = {
 		baseURL: config.public.apiUrl,
 	};
@@ -33,6 +34,16 @@ export default defineNuxtPlugin((nuxtApp) => {
 		headers: {
 			Accept: 'application/json',
 			Authorization: `Bearer ${userAuth.value}`,
+		},
+		onRequestError({ request, options, error }): void | Promise<void> {
+			console.log('[fetch request error]', request, error);
+		},
+		async onResponseError({ request, response, options }): void | Promise<void> {
+			if (response.status === 401) {
+				userAuth.value = null;
+				is_authenticated.value = false;
+				await navigateTo('/auth');
+			}
 		},
 	};
 	const authFetcher = $fetch.create(fetchOptions);

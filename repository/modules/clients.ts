@@ -1,7 +1,5 @@
-import type { FetchOptions } from 'ofetch';
 import { HttpFactory } from '~/repository/factory';
 import type {
-	Client,
 	ClientMetricsResponse,
 	ClientResponse,
 	ClientsResponse,
@@ -24,6 +22,13 @@ class ClientsModule extends HttpFactory {
 	async listClients(): Promise<ClientsResponse> {
 		return this.call<ClientsResponse>('GET',
 			`${this.RESOURCE}?sort=name&fields[clients]=id,name,os,os_family,os_kernel,os_full_name,ipv4,disconnected_at,tags&page[limit]=20&page[offset]=0`,
+			undefined,
+		);
+	}
+
+	async getClientsName(clientsIds: Array<string>): Promise<ClientsResponse> {
+		return this.call<ClientsResponse>('GET',
+			`${this.RESOURCE}?sort=name&fields[clients]=name,id&page[limit]=${clientsIds.length}&page[offset]=0&filter[id]=${clientsIds.join(',')}`,
 			undefined,
 		);
 	}

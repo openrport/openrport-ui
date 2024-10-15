@@ -74,7 +74,20 @@
 								<td class="w-full p-1">
 									{{ formatedDate(device?.last_heartbeat_at) }}
 								</td>
-							</tr><!---->
+							</tr>
+							<tr
+								v-else
+								class="flex flex-col md:table-row"
+							>
+								<td
+									class="w-full whitespace-nowrap p-1 font-medium tracking-tight text-primary md:w-fit md:min-w-min"
+								>
+									Disconnected since:
+								</td>
+								<td class="w-full p-1">
+									{{ formatedDate(device?.disconnected_at) }}
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -84,7 +97,7 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
 	device: Object,
 	required: true,
 });
