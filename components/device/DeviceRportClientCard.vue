@@ -57,7 +57,7 @@
 								</td>
 								<td class="w-full">
 									<a
-										href="/client-access#prod-queoaccess-iot"
+										:href="`/client-access#${device?.client_auth_id}`"
 										class=""
 									>{{ device?.client_auth_id }}</a>
 								</td>

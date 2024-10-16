@@ -1,7 +1,8 @@
+@import "rport.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @layer base {
     :root {
         --background: 0 0% 100%;
@@ -34,6 +35,31 @@
         --ring: 222.2 84% 4.9%;
 
         --radius: 0.5rem;
+
+        --color-gray-50: 249 250 251;
+        --color-gray-100: 243 244 246;
+        --color-gray-200: 229 231 235;
+        --color-gray-300: 209 213 219;
+        --color-gray-400: 156 163 175;
+        --color-gray-500: 107 114 128;
+        --color-gray-600: 75 85 99;
+        --color-gray-700: 55 65 81;
+        --color-gray-800: 31 41 55;
+        --color-gray-900: 17 24 39;
+
+        --color-error: 239 68 68;
+
+        --color-vtd-primary-50: 240 249 255;
+        --color-vtd-primary-100: 224 242 254;
+        --color-vtd-primary-200: 186 230 253;
+        --color-vtd-primary-300: 125 211 252;
+        --color-vtd-primary-400: 56 189 248;
+        --color-vtd-primary-500: 0 82 141;
+        --color-vtd-primary-600: 2 132 199;
+        --color-vtd-primary-700: 3 105 161;
+        --color-vtd-primary-800: 7 89 133;
+        --color-vtd-primary-900: 12 74 110;
+
     }
 
     .dark {

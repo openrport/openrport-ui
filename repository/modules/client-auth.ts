@@ -19,7 +19,7 @@ class ClientAuthModule extends HttpFactory {
 	async searchById(offset = 0, id: string): Promise<ClientAuthResponse> {
 		return this.call<ClientAuthResponse>(
 			'GET',
-			`${this.RESOURCE}?page[limit]=20&page[offset]=0&filter[id]${id}`,
+			`${this.RESOURCE}?page[limit]=20&page[offset]=${offset}&filter[id]=${id}*`,
 			undefined,
 		);
 	}
