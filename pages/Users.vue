@@ -18,7 +18,7 @@
 							<button
 								class="bg-primary-800 hover:bg-primary-800 focus-visible:outline-primary-600 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:focus-visible:outline-gray-400 text-white disabled:text-gray-500 cursor-pointer rounded-md px-2.5 py-1.5 text-sm relative font-semibold shadow-sm transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
 								type="button"
-								@click.prevent="addUser"
+								@click.prevent="openAddUserModal"
 							>
 								<span class="flex items-center justify-center gap-x-2">
 									Add user</span>
@@ -111,10 +111,9 @@
 																		<DropdownMenuTrigger as-child>
 																			<button>
 																				<div
-																					class="z-20 tw-inline-flex tw-h-8 tw-w-8 tw-items-center tw-justify-center tw-rounded-full tw-bg-opacity-20 tw-p-1 tw-text-gray-600 tw-transition-all tw-duration-300 hover:tw-bg-primary-500 hover:tw-bg-opacity-30 hover:tw-text-gray-200 focus:outline-none"
+																					class="z-20 inline-flex h-8 w-8 items-center justify-center rounded-full bg-opacity-20 p-1 text-gray-600 transition-all duration-300 hover:bg-primary-500 hover:bg-opacity-30 hover:text-gray-200 focus:outline-none"
 																				>
 																					<svg
-																						data-v-ca945699=""
 																						xmlns="http://www.w3.org/2000/svg"
 																						width="20px"
 																						height="20px"
@@ -129,53 +128,60 @@
 																				</div>
 																			</button>
 																		</DropdownMenuTrigger>
-																		<DropdownMenuContent
-																			class="tw-absolute tw-w-56 -tw-right-3 tw-mt-2"
-																		>
-																			<div class="tw-px-1 tw-py-1">
-																				<DropdownMenuItem
-																					class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs"
+																		<div class="z-20">
+																			<div
+																				class="fixed z-30"
+																				style="top: 316px"
+																			>
+																				<DropdownMenuContent
+																					class="absolute -right-8 -top-0 z-20 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-950"
 																				>
-																					<Pencil
-																						class="tw-mr-2 tw-h-4 tw-w-4"
-																					/>
-																					<span>Edit</span>
-																				</DropdownMenuItem>
+																					<div class="px-1 py-1">
+																						<DropdownMenuItem
+																							class="focus:bg-vtd-primary-600 focus:text-white disabled:bg-transparent group flex w-full items-center rounded-md px-2 py-2 text-xs transition-all duration-300 disabled:text-gray-400"
+																						>
+																							<Pencil
+																								class="mr-2 h-4 w-4"
+																							/>
+																							<span>Edit</span>
+																						</DropdownMenuItem>
+																					</div>
+																					<div class="px-1 py-1">
+																						<DropdownMenuItem
+																							class="focus:bg-vtd-primary-600 focus:text-white disabled:bg-transparent group flex w-full items-center rounded-md px-2 py-2 text-xs transition-all duration-300 disabled:text-gray-400"
+																							@click="copy(user.username)"
+																						>
+																							<Copy
+																								class="mr-2 h-4 w-4"
+																							/>
+																							<span>Copy username</span>
+																						</DropdownMenuItem>
+																					</div>
+																					<div class="px-1 py-1">
+																						<DropdownMenuItem
+																							class="focus:bg-vtd-primary-600 focus:text-white disabled:bg-transparent group flex w-full items-center rounded-md px-2 py-2 text-xs transition-all duration-300 disabled:text-gray-400"
+																						>
+																							<Laptop
+																								class="mr-2 h-4 w-4"
+																							/>
+																							<span>Manage Session</span>
+																						</DropdownMenuItem>
+																					</div>
+																					<DropdownMenuSeparator />
+																					<div class="px-1 py-1">
+																						<DropdownMenuItem
+																							class="focus:bg-vtd-primary-600 focus:text-white disabled:bg-transparent group flex w-full items-center rounded-md px-2 py-2 text-xs transition-all duration-300 disabled:text-gray-400"
+																							@click="triggerDelete(user)"
+																						>
+																							<Trash2
+																								class="mr-2 h-4 w-4"
+																							/>
+																							<span>Delete</span>
+																						</DropdownMenuItem>
+																					</div>
+																				</DropdownMenuContent>
 																			</div>
-																			<div class="tw-px-1 tw-py-1">
-																				<DropdownMenuItem
-																					class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs"
-																					@click="copy(user.username)"
-																				>
-																					<Copy
-																						class="tw-mr-2 tw-h-4 tw-w-4"
-																					/>
-																					<span>Copy username</span>
-																				</DropdownMenuItem>
-																			</div>
-																			<div class="tw-px-1 tw-py-1">
-																				<DropdownMenuItem
-																					class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs"
-																				>
-																					<Laptop
-																						class="tw-mr-2 tw-h-4 tw-w-4"
-																					/>
-																					<span>Manage Session</span>
-																				</DropdownMenuItem>
-																			</div>
-																			<DropdownMenuSeparator />
-																			<div class="tw-px-1 tw-py-1">
-																				<DropdownMenuItem
-																					class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs"
-																					@click="triggerDelete(user)"
-																				>
-																					<Trash2
-																						class="tw-mr-2 tw-h-4 tw-w-4"
-																					/>
-																					<span>Delete</span>
-																				</DropdownMenuItem>
-																			</div>
-																		</DropdownMenuContent>
+																		</div>
 																	</DropdownMenu>
 																</div>
 																<div class="z-20">
@@ -265,237 +271,248 @@
 				</div>
 			</div>
 		</div>
-		<div class="container mt-4">
-			<page-header
-				title="Users"
-				has-action="{true}"
-				action-name="Add user"
-				@action="addUser"
-			/>
-			<div class="card table-responsive">
-				<table class="table table-vcenter">
-					<thead class="rounded bg-gray-50">
-						<tr>
-							<th class="py-3 ps-4 pe-4 text-sm-start fw-semibold">
-								User
-							</th>
-							<th class="py-3 ps-4 pe-4 text-sm-start fw-semibold">
-								Groups
-							</th>
-							<th class="w-1" />
-						</tr>
-					</thead>
-					<tbody class="bg-white">
-						<tr
-							v-for="user in users"
-							:key="user.username"
-						>
-							<td class="text-left py-3 ps-4 pe-4 min-h-[42px] whitespace-nowrap">
-								{{ user.username }}
-							</td>
-							<td class="text-left py-3 ps-4 pe-4 min-h-[42px] whitespace-nowrap">
-								<div class="d-flex align-items-center space-x-0.5">
-									<span
-										v-for="(group, key) in user.groups"
-										:key="key"
-										class="tag bg-azure-lt border-azure"
-									>{{ group }}</span>
-								</div>
-							</td>
-							<td>
-								!-- <a href="#">Edit</a>--
-								<dropdown-menu>
-									<dropdown-menu-trigger as-child>
-										<button>
-											<div
-												class="z-20 tw-inline-flex tw-h-8 tw-w-8 tw-items-center tw-justify-center tw-rounded-full tw-bg-opacity-20 tw-p-1 tw-text-gray-600 tw-transition-all tw-duration-300 hover:tw-bg-primary-500 hover:tw-bg-opacity-30 hover:tw-text-gray-200 focus:outline-none"
-											>
-												<svg
-													data-v-ca945699=""
-													xmlns="http://www.w3.org/2000/svg"
-													width="20px"
-													height="20px"
-													viewBox="0 0 24 24"
-													class="icon"
-												>
-													<path
-														fill="currentColor"
-														d="M16 12a2 2 0 0 1 2-2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2m-6 0a2 2 0 0 1 2-2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2m-6 0a2 2 0 0 1 2-2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2Z"
-													/>
-												</svg>
-											</div>
-										</button>
-									</dropdown-menu-trigger>
-									<dropdown-menu-content class="tw-absolute tw-w-56 -tw-right-3 tw-mt-2">
-										<div class="tw-px-1 tw-py-1">
-											<dropdown-menu-item
-												class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs"
-											>
-												<Pencil class="tw-mr-2 tw-h-4 tw-w-4" />
-												<span>Edit</span>
-											</dropdown-menu-item>
-										</div>
-										<div class="tw-px-1 tw-py-1">
-											<dropdown-menu-item
-												class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs"
-												@click="copy(user.username)"
-											>
-												<Copy class="tw-mr-2 tw-h-4 tw-w-4" />
-												<span>Copy username</span>
-											</dropdown-menu-item>
-										</div>
-										<div class="tw-px-1 tw-py-1">
-											<dropdown-menu-item
-												class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs"
-											>
-												<Laptop class="tw-mr-2 tw-h-4 tw-w-4" />
-												<span>Manage Session</span>
-											</dropdown-menu-item>
-										</div>
-										<dropdown-menu-separator />
-										<div class="tw-px-1 tw-py-1">
-											<dropdown-menu-item
-												class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs"
-												@click="triggerDelete(user)"
-											>
-												<Trash2 class="tw-mr-2 tw-h-4 tw-w-4" />
-												<span>Delete</span>
-											</dropdown-menu-item>
-										</div>
-									</dropdown-menu-content>
-								</dropdown-menu>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="row">
-					<div class="col">
-						<div class="bg-gray-50">
-							<div>
-								<div class="py-4 ps-4 pe-3 text-sm-start fw-semibold">
-									<div class="d-flex w-100 align-items-center justify-content-between">
-										<div class="d-flex text-xs align-items-center justify-content-between">
-											Showing 1 to 0 of 0 results
-										</div>
-										<div class="flex-1" />
-										<div
-											class="d-flex w-100 max-w-[90px] align-items-center justify-content-between"
-										>
-											<button
-												disabled
-												class="btn-direction"
-											>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 20 20"
-													fill="currentColor"
-													aria-hidden="true"
-													width="24"
-													height="24"
-												>
-													<path
-														fill-rule="evenodd"
-														d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-														clip-rule="evenodd"
-													/>
-												</svg>
-											</button>
-											<button
-												disabled
-												class="btn-direction"
-											>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 20 20"
-													fill="currentColor"
-													aria-hidden="true"
-													width="24"
-													height="24"
-												>
-													<path
-														fill-rule="evenodd"
-														d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-														clip-rule="evenodd"
-													/>
-												</svg>
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<Button
-				variant="destructive"
-				@click="testSnack"
-			>
-				Click me
-			</Button>
-		</div>
+		<!-- <div class="container mt-4"> -->
+		<!--	<page-header -->
+		<!--		title="Users" -->
+		<!--		has-action="{true}" -->
+		<!--		action-name="Add user" -->
+		<!--		@action="addUser" -->
+		<!--	/> -->
+		<!--	<div class="card table-responsive"> -->
+		<!--		<table class="table table-vcenter"> -->
+		<!--			<thead class="rounded bg-gray-50"> -->
+		<!--				<tr> -->
+		<!--					<th class="py-3 ps-4 pe-4 text-sm-start fw-semibold"> -->
+		<!--						User -->
+		<!--					</th> -->
+		<!--					<th class="py-3 ps-4 pe-4 text-sm-start fw-semibold"> -->
+		<!--						Groups -->
+		<!--					</th> -->
+		<!--					<th class="w-1" /> -->
+		<!--				</tr> -->
+		<!--			</thead> -->
+		<!--			<tbody class="bg-white"> -->
+		<!--				<tr -->
+		<!--					v-for="user in users" -->
+		<!--					:key="user.username" -->
+		<!--				> -->
+		<!--					<td class="text-left py-3 ps-4 pe-4 min-h-[42px] whitespace-nowrap"> -->
+		<!--						{{ user.username }} -->
+		<!--					</td> -->
+		<!--					<td class="text-left py-3 ps-4 pe-4 min-h-[42px] whitespace-nowrap"> -->
+		<!--						<div class="d-flex align-items-center space-x-0.5"> -->
+		<!--							<span -->
+		<!--								v-for="(group, key) in user.groups" -->
+		<!--								:key="key" -->
+		<!--								class="tag bg-azure-lt border-azure" -->
+		<!--							>{{ group }}</span> -->
+		<!--						</div> -->
+		<!--					</td> -->
+		<!--					<td> -->
+		<!--						!-- <a href="#">Edit</a>---->
+		<!--						<dropdown-menu> -->
+		<!--							<dropdown-menu-trigger as-child> -->
+		<!--								<button> -->
+		<!--									<div -->
+		<!--										class="z-20 tw-inline-flex tw-h-8 tw-w-8 tw-items-center tw-justify-center tw-rounded-full tw-bg-opacity-20 tw-p-1 tw-text-gray-600 tw-transition-all tw-duration-300 hover:tw-bg-primary-500 hover:tw-bg-opacity-30 hover:tw-text-gray-200 focus:outline-none" -->
+		<!--									> -->
+		<!--										<svg -->
+		<!--											data-v-ca945699="" -->
+		<!--											xmlns="http://www.w3.org/2000/svg" -->
+		<!--											width="20px" -->
+		<!--											height="20px" -->
+		<!--											viewBox="0 0 24 24" -->
+		<!--											class="icon" -->
+		<!--										> -->
+		<!--											<path -->
+		<!--												fill="currentColor" -->
+		<!--												d="M16 12a2 2 0 0 1 2-2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2m-6 0a2 2 0 0 1 2-2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2m-6 0a2 2 0 0 1 2-2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2Z" -->
+		<!--											/> -->
+		<!--										</svg> -->
+		<!--									</div> -->
+		<!--								</button> -->
+		<!--							</dropdown-menu-trigger> -->
+		<!--							<dropdown-menu-content class="tw-absolute tw-w-56 -tw-right-3 tw-mt-2"> -->
+		<!--								<div class="tw-px-1 tw-py-1"> -->
+		<!--									<dropdown-menu-item -->
+		<!--										class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs" -->
+		<!--									> -->
+		<!--										<Pencil class="tw-mr-2 tw-h-4 tw-w-4" /> -->
+		<!--										<span>Edit</span> -->
+		<!--									</dropdown-menu-item> -->
+		<!--								</div> -->
+		<!--								<div class="tw-px-1 tw-py-1"> -->
+		<!--									<dropdown-menu-item -->
+		<!--										class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs" -->
+		<!--										@click="copy(user.username)" -->
+		<!--									> -->
+		<!--										<Copy class="tw-mr-2 tw-h-4 tw-w-4" /> -->
+		<!--										<span>Copy username</span> -->
+		<!--									</dropdown-menu-item> -->
+		<!--								</div> -->
+		<!--								<div class="tw-px-1 tw-py-1"> -->
+		<!--									<dropdown-menu-item -->
+		<!--										class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs" -->
+		<!--									> -->
+		<!--										<Laptop class="tw-mr-2 tw-h-4 tw-w-4" /> -->
+		<!--										<span>Manage Session</span> -->
+		<!--									</dropdown-menu-item> -->
+		<!--								</div> -->
+		<!--								<dropdown-menu-separator /> -->
+		<!--								<div class="tw-px-1 tw-py-1"> -->
+		<!--									<dropdown-menu-item -->
+		<!--										class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs" -->
+		<!--										@click="triggerDelete(user)" -->
+		<!--									> -->
+		<!--										<Trash2 class="tw-mr-2 tw-h-4 tw-w-4" /> -->
+		<!--										<span>Delete</span> -->
+		<!--									</dropdown-menu-item> -->
+		<!--								</div> -->
+		<!--							</dropdown-menu-content> -->
+		<!--						</dropdown-menu> -->
+		<!--					</td> -->
+		<!--				</tr> -->
+		<!--			</tbody> -->
+		<!--		</table> -->
+		<!--		<div class="row"> -->
+		<!--			<div class="col"> -->
+		<!--				<div class="bg-gray-50"> -->
+		<!--					<div> -->
+		<!--						<div class="py-4 ps-4 pe-3 text-sm-start fw-semibold"> -->
+		<!--							<div class="d-flex w-100 align-items-center justify-content-between"> -->
+		<!--								<div class="d-flex text-xs align-items-center justify-content-between"> -->
+		<!--									Showing 1 to 0 of 0 results -->
+		<!--								</div> -->
+		<!--								<div class="flex-1" /> -->
+		<!--								<div -->
+		<!--									class="d-flex w-100 max-w-[90px] align-items-center justify-content-between" -->
+		<!--								> -->
+		<!--									<button -->
+		<!--										disabled -->
+		<!--										class="btn-direction" -->
+		<!--									> -->
+		<!--										<svg -->
+		<!--											xmlns="http://www.w3.org/2000/svg" -->
+		<!--											viewBox="0 0 20 20" -->
+		<!--											fill="currentColor" -->
+		<!--											aria-hidden="true" -->
+		<!--											width="24" -->
+		<!--											height="24" -->
+		<!--										> -->
+		<!--											<path -->
+		<!--												fill-rule="evenodd" -->
+		<!--												d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" -->
+		<!--												clip-rule="evenodd" -->
+		<!--											/> -->
+		<!--										</svg> -->
+		<!--									</button> -->
+		<!--									<button -->
+		<!--										disabled -->
+		<!--										class="btn-direction" -->
+		<!--									> -->
+		<!--										<svg -->
+		<!--											xmlns="http://www.w3.org/2000/svg" -->
+		<!--											viewBox="0 0 20 20" -->
+		<!--											fill="currentColor" -->
+		<!--											aria-hidden="true" -->
+		<!--											width="24" -->
+		<!--											height="24" -->
+		<!--										> -->
+		<!--											<path -->
+		<!--												fill-rule="evenodd" -->
+		<!--												d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" -->
+		<!--												clip-rule="evenodd" -->
+		<!--											/> -->
+		<!--										</svg> -->
+		<!--									</button> -->
+		<!--								</div> -->
+		<!--							</div> -->
+		<!--						</div> -->
+		<!--					</div> -->
+		<!--				</div> -->
+		<!--			</div> -->
+		<!--		</div> -->
+		<!--	</div> -->
+		<!--	<Button -->
+		<!--		variant="destructive" -->
+		<!--		@click="testSnack" -->
+		<!--	> -->
+		<!--		Click me -->
+		<!--	</Button> -->
+		<!-- </div> -->
 		<AddUser
-			:is_active="userModal"
+			ref="addUserModal"
 			:groups="userGroups"
-			@close="closeModal"
 			@save="createUser"
 		/>
-		<Confirm
+		<!-- <Confirm
 			:is_active="delConfirm"
 			@close="closeModal"
 			@save="deleteUser"
 		>
 			<div>Are you sure you want to delete the user {{ activeUser?.username }}?</div>
-		</Confirm>
+		</Confirm> -->
+		<Modal
+			v-model="delConfirm"
+			title="Please confirm!"
+			ok-text="Ok"
+			cancel-text="Cancel"
+			:show-cancel="true"
+			@ok="deleteUser(activeUser?.username)"
+		>
+			<div class="absolute inset-0 flex h-full min-h-[240px] flex-col items-center justify-center p-8 text-center">
+				<div>Do you want to delete the user {{ activeUser?.username }}?</div>
+			</div>
+		</Modal>
 	</new-page-wrapper>
 </template>
 
 <script setup lang="ts">
 import { Pencil, Copy, Laptop, Trash2 } from 'lucide-vue-next';
 import { useClipboard } from '@vueuse/core';
-import { Button } from '@/components/ui/button';
 import AddUser from '@/components/users/AddUser.vue';
 import type { UserPayload } from '~/types';
 import Confirm from '@/components/custom/dialog/Confirm.vue';
+import Modal from "~/components/Modal.vue";
 
 const { copy } = useClipboard();
 const { $api } = useNuxtApp();
 const snackbar = useSnackbar();
 
-const { data: users } = useAsyncData('users', () => $api.users.getAll());
-const { data: userGroups } = useAsyncData(('user-groups'), () => $api.userGroups.all());
+const { data: users, pending, refresh } = useLazyAsyncData('users', () => $api.users.getAll());
+const { data: userGroups } = useLazyAsyncData(('user-groups'), () => $api.userGroups.all());
 
-const userModal = ref(false);
 const delConfirm = ref(false);
 const activeUser = ref(null);
-const addUser = () => {
-	userModal.value = true;
+
+const addUserModal = ref<InstanceType<typeof AddUser> | null>(null);
+
+const openAddUserModal = () => {
+	addUserModal.value?.open();
+};
+const closeAddUserModal = () => {
+	addUserModal.value?.close();
 };
 
-const createUser = async (data) => {
-	const userpayload: UserPayload = {
-		username: data.username,
-		password: data.password,
-		groups: data.groups,
-	};
-	await $api.users.create(userpayload);
+const createUser = async (data: UserPayload) => {
+	await $api.users.create(data);
 	try {
-		const { data: users } = useAsyncData('users', () => $api.users.getAll());
-		users.value = users;
+		await refresh();
+		closeAddUserModal();
 		snackbar.add({
 			type: 'success',
 			text: 'User created successfully',
 		});
 	}
 	catch (e) {
-
+		snackbar.add({
+			type: 'error',
+			text: 'Failed to create user',
+		});
 	}
-
-	userModal.value = false;
 };
 
 const closeModal = async () => {
-	userModal.value = false;
 	delConfirm.value = false;
 };
 
@@ -503,12 +520,11 @@ const triggerDelete = (user) => {
 	activeUser.value = user;
 	delConfirm.value = true;
 };
-const deleteUser = async () => {
+const deleteUser = async (activeUsername: string) => {
 	try {
 		delConfirm.value = false;
-		await $api.users.delete(activeUser?.value.username);
-		const { data: users } = useAsyncData('users', () => $api.users.getAll());
-		users.value = users;
+		await $api.users.delete(activeUsername);
+		await refresh();
 		snackbar.add({
 			type: 'success',
 			text: 'User deleted successfully',
@@ -520,11 +536,5 @@ const deleteUser = async () => {
 			text: 'Something went wrong user not deleted',
 		});
 	}
-};
-const testSnack = () => {
-	snackbar.add({
-		type: 'success',
-		text: 'This is a snackbar message',
-	});
 };
 </script>

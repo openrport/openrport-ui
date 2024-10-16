@@ -2,6 +2,7 @@
 	<div class="flex h-full min-h-screen">
 		<NewSidebar />
 		<slot />
+		<NuxtSnackbar/>
 	</div>
 </template>
 
