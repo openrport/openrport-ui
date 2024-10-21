@@ -264,6 +264,17 @@ export interface StoredTunnelResponse {
 	data: StoredTunnel[];
 	meta: Meta;
 }
+export interface UserSession {
+	expires_at: Date;
+	ip_address: string;
+	last_access_at: Date;
+	session_id: number;
+	user_agent: string;
+	username: string;
+}
+export interface UserSessionResponse {
+	data: UserSession[];
+}
 
 export interface AuditLog {
 	timestamp: Date;

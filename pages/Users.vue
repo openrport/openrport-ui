@@ -86,12 +86,11 @@
 														>
 															<div class="flex items-center space-x-0.5">
 																<span
-																	class="bg-primary-50 dark:bg-primary-500/10 text-primary-800 dark:text-primary-400 ring-primary-600/20 dark:ring-primary-400/30 px-2 py-1 inline-flex items-center gap-x-1.5 rounded-md text-xs font-medium ring-1 ring-inset"
+																	v-for="(group, key) in user.groups"
+																	:key="key"
+																	class="bg-vtd-primary-50 dark:bg-vtd-primary-500/10 text-vtd-primary-700 dark:text-vtd-primary-400 ring-vtd-primary-600/20 dark:ring-vtd-primary-400/30 px-2 py-1 inline-flex items-center gap-x-1.5 rounded-md text-xs font-medium ring-1 ring-inset"
 																><span />
-																	<span
-																		v-for="(group, key) in user.groups"
-																		:key="key"
-																	>{{ group }}
+																	<span>{{ group }}
 																	</span>
 																</span>
 															</div>
@@ -160,6 +159,7 @@
 																					<div class="px-1 py-1">
 																						<DropdownMenuItem
 																							class="focus:bg-vtd-primary-600 focus:text-white disabled:bg-transparent group flex w-full items-center rounded-md px-2 py-2 text-xs transition-all duration-300 disabled:text-gray-400"
+																							@click="openManageSessionModal(user)"
 																						>
 																							<Laptop
 																								class="mr-2 h-4 w-4"
@@ -199,247 +199,17 @@
 									</div>
 								</div>
 							</div>
-							<div class="relative z-0 -mx-4 mt-2 sm:-mx-6 lg:-mx-8">
-								<div class="inline-block min-w-full align-middle sm:px-6 lg:px-8">
-									<div
-										class="border-t border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-950"
-									>
-										<div>
-											<div
-												colspan="5"
-												class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-600 sm:pl-6"
-											>
-												<div class="flex w-full items-center justify-between">
-													<div class="flex items-center justify-between">
-														<span
-															class="text-xs text-gray-500"
-														> Showing <span
-															class="font-medium"
-														>1</span> to <span
-															class="font-medium"
-														>1</span> of <span
-															class="font-medium"
-														>1</span> results </span>
-													</div>
-													<div class="flex-1" />
-													<div class="flex w-full max-w-[90px] items-center justify-between">
-														<button
-															disabled=""
-															class="rounded-full p-1 text-gray-500 transition-all duration-300 hover:bg-gray-300 hover:text-primary-600 disabled:cursor-not-allowed disabled:text-gray-300 hover:disabled:bg-transparent hover:dark:bg-gray-900 disabled:dark:text-gray-700 hover:dark:disabled:bg-transparent"
-														>
-															<svg
-																xmlns="http://www.w3.org/2000/svg"
-																viewBox="0 0 20 20"
-																fill="currentColor"
-																aria-hidden="true"
-																class="h-6 w-6"
-															>
-																<path
-																	fill-rule="evenodd"
-																	d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-																	clip-rule="evenodd"
-																/>
-															</svg>
-														</button><button
-															disabled=""
-															class="rounded-full p-1 text-gray-500 transition-all duration-300 hover:bg-gray-300 hover:text-primary-600 disabled:cursor-not-allowed disabled:text-gray-300 hover:disabled:bg-transparent hover:dark:bg-gray-900 disabled:dark:text-gray-700 hover:dark:disabled:bg-transparent"
-														>
-															<svg
-																xmlns="http://www.w3.org/2000/svg"
-																viewBox="0 0 20 20"
-																fill="currentColor"
-																aria-hidden="true"
-																class="h-6 w-6"
-															>
-																<path
-																	fill-rule="evenodd"
-																	d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-																	clip-rule="evenodd"
-																/>
-															</svg>
-														</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+							<Pagination
+								:current-page-item-count="users?.length"
+								:page="0"
+								:total-items="users?.length"
+							/>
 						</div>
 						<div class="h-12 w-full" />
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- <div class="container mt-4"> -->
-		<!--	<page-header -->
-		<!--		title="Users" -->
-		<!--		has-action="{true}" -->
-		<!--		action-name="Add user" -->
-		<!--		@action="addUser" -->
-		<!--	/> -->
-		<!--	<div class="card table-responsive"> -->
-		<!--		<table class="table table-vcenter"> -->
-		<!--			<thead class="rounded bg-gray-50"> -->
-		<!--				<tr> -->
-		<!--					<th class="py-3 ps-4 pe-4 text-sm-start fw-semibold"> -->
-		<!--						User -->
-		<!--					</th> -->
-		<!--					<th class="py-3 ps-4 pe-4 text-sm-start fw-semibold"> -->
-		<!--						Groups -->
-		<!--					</th> -->
-		<!--					<th class="w-1" /> -->
-		<!--				</tr> -->
-		<!--			</thead> -->
-		<!--			<tbody class="bg-white"> -->
-		<!--				<tr -->
-		<!--					v-for="user in users" -->
-		<!--					:key="user.username" -->
-		<!--				> -->
-		<!--					<td class="text-left py-3 ps-4 pe-4 min-h-[42px] whitespace-nowrap"> -->
-		<!--						{{ user.username }} -->
-		<!--					</td> -->
-		<!--					<td class="text-left py-3 ps-4 pe-4 min-h-[42px] whitespace-nowrap"> -->
-		<!--						<div class="d-flex align-items-center space-x-0.5"> -->
-		<!--							<span -->
-		<!--								v-for="(group, key) in user.groups" -->
-		<!--								:key="key" -->
-		<!--								class="tag bg-azure-lt border-azure" -->
-		<!--							>{{ group }}</span> -->
-		<!--						</div> -->
-		<!--					</td> -->
-		<!--					<td> -->
-		<!--						!-- <a href="#">Edit</a>---->
-		<!--						<dropdown-menu> -->
-		<!--							<dropdown-menu-trigger as-child> -->
-		<!--								<button> -->
-		<!--									<div -->
-		<!--										class="z-20 tw-inline-flex tw-h-8 tw-w-8 tw-items-center tw-justify-center tw-rounded-full tw-bg-opacity-20 tw-p-1 tw-text-gray-600 tw-transition-all tw-duration-300 hover:tw-bg-primary-500 hover:tw-bg-opacity-30 hover:tw-text-gray-200 focus:outline-none" -->
-		<!--									> -->
-		<!--										<svg -->
-		<!--											data-v-ca945699="" -->
-		<!--											xmlns="http://www.w3.org/2000/svg" -->
-		<!--											width="20px" -->
-		<!--											height="20px" -->
-		<!--											viewBox="0 0 24 24" -->
-		<!--											class="icon" -->
-		<!--										> -->
-		<!--											<path -->
-		<!--												fill="currentColor" -->
-		<!--												d="M16 12a2 2 0 0 1 2-2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2m-6 0a2 2 0 0 1 2-2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2m-6 0a2 2 0 0 1 2-2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2Z" -->
-		<!--											/> -->
-		<!--										</svg> -->
-		<!--									</div> -->
-		<!--								</button> -->
-		<!--							</dropdown-menu-trigger> -->
-		<!--							<dropdown-menu-content class="tw-absolute tw-w-56 -tw-right-3 tw-mt-2"> -->
-		<!--								<div class="tw-px-1 tw-py-1"> -->
-		<!--									<dropdown-menu-item -->
-		<!--										class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs" -->
-		<!--									> -->
-		<!--										<Pencil class="tw-mr-2 tw-h-4 tw-w-4" /> -->
-		<!--										<span>Edit</span> -->
-		<!--									</dropdown-menu-item> -->
-		<!--								</div> -->
-		<!--								<div class="tw-px-1 tw-py-1"> -->
-		<!--									<dropdown-menu-item -->
-		<!--										class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs" -->
-		<!--										@click="copy(user.username)" -->
-		<!--									> -->
-		<!--										<Copy class="tw-mr-2 tw-h-4 tw-w-4" /> -->
-		<!--										<span>Copy username</span> -->
-		<!--									</dropdown-menu-item> -->
-		<!--								</div> -->
-		<!--								<div class="tw-px-1 tw-py-1"> -->
-		<!--									<dropdown-menu-item -->
-		<!--										class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs" -->
-		<!--									> -->
-		<!--										<Laptop class="tw-mr-2 tw-h-4 tw-w-4" /> -->
-		<!--										<span>Manage Session</span> -->
-		<!--									</dropdown-menu-item> -->
-		<!--								</div> -->
-		<!--								<dropdown-menu-separator /> -->
-		<!--								<div class="tw-px-1 tw-py-1"> -->
-		<!--									<dropdown-menu-item -->
-		<!--										class="focus:tw-text-white focus:tw-bg-gray-500 tw-text-xs" -->
-		<!--										@click="triggerDelete(user)" -->
-		<!--									> -->
-		<!--										<Trash2 class="tw-mr-2 tw-h-4 tw-w-4" /> -->
-		<!--										<span>Delete</span> -->
-		<!--									</dropdown-menu-item> -->
-		<!--								</div> -->
-		<!--							</dropdown-menu-content> -->
-		<!--						</dropdown-menu> -->
-		<!--					</td> -->
-		<!--				</tr> -->
-		<!--			</tbody> -->
-		<!--		</table> -->
-		<!--		<div class="row"> -->
-		<!--			<div class="col"> -->
-		<!--				<div class="bg-gray-50"> -->
-		<!--					<div> -->
-		<!--						<div class="py-4 ps-4 pe-3 text-sm-start fw-semibold"> -->
-		<!--							<div class="d-flex w-100 align-items-center justify-content-between"> -->
-		<!--								<div class="d-flex text-xs align-items-center justify-content-between"> -->
-		<!--									Showing 1 to 0 of 0 results -->
-		<!--								</div> -->
-		<!--								<div class="flex-1" /> -->
-		<!--								<div -->
-		<!--									class="d-flex w-100 max-w-[90px] align-items-center justify-content-between" -->
-		<!--								> -->
-		<!--									<button -->
-		<!--										disabled -->
-		<!--										class="btn-direction" -->
-		<!--									> -->
-		<!--										<svg -->
-		<!--											xmlns="http://www.w3.org/2000/svg" -->
-		<!--											viewBox="0 0 20 20" -->
-		<!--											fill="currentColor" -->
-		<!--											aria-hidden="true" -->
-		<!--											width="24" -->
-		<!--											height="24" -->
-		<!--										> -->
-		<!--											<path -->
-		<!--												fill-rule="evenodd" -->
-		<!--												d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" -->
-		<!--												clip-rule="evenodd" -->
-		<!--											/> -->
-		<!--										</svg> -->
-		<!--									</button> -->
-		<!--									<button -->
-		<!--										disabled -->
-		<!--										class="btn-direction" -->
-		<!--									> -->
-		<!--										<svg -->
-		<!--											xmlns="http://www.w3.org/2000/svg" -->
-		<!--											viewBox="0 0 20 20" -->
-		<!--											fill="currentColor" -->
-		<!--											aria-hidden="true" -->
-		<!--											width="24" -->
-		<!--											height="24" -->
-		<!--										> -->
-		<!--											<path -->
-		<!--												fill-rule="evenodd" -->
-		<!--												d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" -->
-		<!--												clip-rule="evenodd" -->
-		<!--											/> -->
-		<!--										</svg> -->
-		<!--									</button> -->
-		<!--								</div> -->
-		<!--							</div> -->
-		<!--						</div> -->
-		<!--					</div> -->
-		<!--				</div> -->
-		<!--			</div> -->
-		<!--		</div> -->
-		<!--	</div> -->
-		<!--	<Button -->
-		<!--		variant="destructive" -->
-		<!--		@click="testSnack" -->
-		<!--	> -->
-		<!--		Click me -->
-		<!--	</Button> -->
-		<!-- </div> -->
 		<AddUser
 			ref="addUserModal"
 			:groups="userGroups"
@@ -464,6 +234,11 @@
 				<div>Do you want to delete the user {{ activeUser?.username }}?</div>
 			</div>
 		</Modal>
+		<ManageSessionModal
+			ref="manageSessionModal"
+			:username="activeUser"
+			:user-sessions="userSessions"
+		/>
 	</new-page-wrapper>
 </template>
 
@@ -471,9 +246,10 @@
 import { Pencil, Copy, Laptop, Trash2 } from 'lucide-vue-next';
 import { useClipboard } from '@vueuse/core';
 import AddUser from '@/components/users/AddUser.vue';
-import type { UserPayload } from '~/types';
-import Confirm from '@/components/custom/dialog/Confirm.vue';
-import Modal from "~/components/Modal.vue";
+import type { UserPayload, UserSession } from '~/types';
+import Modal from '~/components/Modal.vue';
+import ManageSessionModal from '~/components/users/ManageSessionModal.vue';
+import { Pagination } from '~/components/ui/pagination';
 
 const { copy } = useClipboard();
 const { $api } = useNuxtApp();
@@ -483,9 +259,11 @@ const { data: users, pending, refresh } = useLazyAsyncData('users', () => $api.u
 const { data: userGroups } = useLazyAsyncData(('user-groups'), () => $api.userGroups.all());
 
 const delConfirm = ref(false);
-const activeUser = ref(null);
+const activeUser = ref<UserPayload | null>(null);
+const userSessions = ref<UserSession[]>([]);
 
 const addUserModal = ref<InstanceType<typeof AddUser> | null>(null);
+const manageSessionModal = ref<InstanceType<typeof ManageSessionModal> | null>(null);
 
 const openAddUserModal = () => {
 	addUserModal.value?.open();
@@ -494,6 +272,20 @@ const closeAddUserModal = () => {
 	addUserModal.value?.close();
 };
 
+const openManageSessionModal = async (active: UserPayload) => {
+	activeUser.value = active;
+	try {
+		const sessions = await $api.users.getSessions(active?.username as string);
+		userSessions.value = sessions.data as UserSession[];
+		manageSessionModal.value?.open();
+	}
+	catch (error) {
+		snackbar.add({
+			type: 'error',
+			text: 'Failed to fetch user sessions',
+		});
+	}
+};
 const createUser = async (data: UserPayload) => {
 	await $api.users.create(data);
 	try {

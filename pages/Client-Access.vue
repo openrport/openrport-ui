@@ -225,7 +225,8 @@
 											</div>
 										</div>
 									</div>
-								</div><div class="relative z-0 -mx-4 mt-2 sm:-mx-6 lg:-mx-8">
+								</div>
+								<div class="relative z-0 -mx-4 mt-2 sm:-mx-6 lg:-mx-8">
 									<div class="inline-block min-w-full align-middle sm:px-6 lg:px-8">
 										<div class="border-t border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-950">
 											<div>
@@ -235,7 +236,7 @@
 												>
 													<div class="flex w-full items-center justify-between">
 														<div class="flex items-center justify-between">
-															<span class="text-xs text-gray-500"> Showing <span class="font-medium">{{ 1 + (page*20) }}</span> to <span class="font-medium">{{ 1 + (page*20) }}</span> to <span class="tw-font-medium">{{ response?.data?.length + (page*20) }}</span> of <span class="font-medium">{{ response?.meta?.count }}</span> results </span>
+															<span class="text-xs text-gray-500"> Showing <span class="font-medium">{{ 1 + (page*ITEMS_PER_PAGE) }}</span> to <span class="font-medium">{{ response?.data?.length + (page*ITEMS_PER_PAGE) }}</span> of <span class="font-medium">{{ response?.meta?.count }}</span> results </span>
 														</div>
 														<div class="flex-1" />
 														<div class="flex w-full max-w-[90px] items-center justify-between">
@@ -280,7 +281,9 @@
 										</div>
 									</div>
 								</div>
+								<!-- -->
 							</div>
+							<div class="h-12 w-full"></div>
 						</div>
 					</div>
 				</div>
@@ -329,6 +332,7 @@ import { Wrench, Trash2 } from 'lucide-vue-next';
 import { useClipboard, useDebounceFn } from '@vueuse/core';
 import NewPageWrapper from '~/components/NewPageWrapper.vue';
 import AddClientModal from '~/components/clients/AddClientModal.vue';
+import { Pagination } from '~/components/ui/pagination';
 
 const { copy, copied } = useClipboard();
 const { $api } = useNuxtApp();

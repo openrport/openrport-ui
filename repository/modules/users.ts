@@ -1,6 +1,5 @@
 import { HttpFactory } from '~/repository/factory';
-import type { User, UserListResponse } from '~/types';
-import type { UserPayload } from '#build/types';
+import type { UserPayload, User, UserListResponse, UserSessionResponse } from '~/types';
 
 class UsersModule extends HttpFactory {
 	private RESOURCE = 'api/v1/users';
@@ -12,6 +11,30 @@ class UsersModule extends HttpFactory {
 			undefined,
 		);
 		return response.data;
+	}
+
+	public async getSessions(username: string): Promise<UserSessionResponse> {
+		return this.call<UserSessionResponse>(
+			'GET',
+			`${this.RESOURCE}/${username}/sessions`,
+			undefined,
+		);
+	}
+
+	public async deleteSessionForUser(username: string, session_id: number): Promise<never> {
+		return this.call(
+			'DELETE',
+			`${this.RESOURCE}/${username}/sessions/${session_id}`,
+			undefined,
+		);
+	}
+
+	public async deleteSessions(username: string): Promise<never> {
+		return this.call(
+			'DELETE',
+			`${this.RESOURCE}/${username}/sessions`,
+			undefined,
+		);
 	}
 
 	public async create(user: UserPayload): Promise<User> {
