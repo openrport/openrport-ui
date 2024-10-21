@@ -10,6 +10,12 @@ class GroupsModule extends HttpFactory {
 			`${this.RESOURCE}?page[limit]=20&page[offset]=0&fields[client_groups]=id,description,num_clients`, undefined);
 	}
 
+	async paginate(offset = 0, itemPerPage = 20): Promise<ClientGroupResponse> {
+		return this.call<ClientGroupResponse>(
+			'GET',
+			`${this.RESOURCE}?page[limit]=${itemPerPage}&page[offset]=${offset}&fields[client_groups]=id,description,params,allowed_user_groups`, undefined);
+	}
+
 	async create(payload: Client): Promise<any> {
 		return this.call(
 			HttpMethod.POST,

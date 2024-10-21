@@ -23,35 +23,34 @@
 						</div><!---->
 						<div class="mt-10 flex w-full flex-wrap justify-start gap-4 xl:flex-nowrap xl:justify-center">
 							<div
-								class="flex flex-1 flex-col divide-y divide-gray-50 overflow-hidden rounded-lg bg-white shadow dark:divide-gray-700 dark:bg-gray-900 divide-none"
+								class="flex flex-1 flex-col divide-y divide-slate-50 overflow-hidden rounded-lg bg-white shadow dark:divide-slate-700 dark:bg-slate-900 divide-none"
 							>
 								<div class="p-4 px-6">
 									<a
-										href="https://rport.io/support"
+										href="https://github.com/sponsors/openrport"
 										rel="noopener noreferrer"
 										target="_blank"
-										class="cursor-pointer text-primary-500 underline transition-all duration-300 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-400"
+										class="cursor-pointer text-vtd-primary-500 underline transition-all duration-300 hover:text-vtd-primary-500 dark:text-primary-400 dark:hover:text-primary-400"
 									>
 										<h5 class="text-sm uppercase">Premium Support</h5>
 									</a>
 								</div>
-								<div class="flex-1 px-4 py-5 text-gray-950 dark:text-gray-50 sm:p-6">
+								<div class="flex-1 px-4 py-5 text-slate-950 dark:text-gray-50 sm:p-6">
 									<div class="h-full w-full">
 										<p class="mb-3 text-sm">
-											Get fast and reliable support from the RPort creators.
-											RealVNC offers affordable support plans to safeguard your RPort server and
-											clients.
+											Get fast and reliable support from the OpenRPort maintainers.
+											Become a premium sponsors to get access directly to a maintainer to safeguard your OpenRPort Server and clients..
 										</p>
 									</div>
 								</div>
 								<div class="max-h-20 px-4 py-4 sm:px-6">
 									<button
-										class="bg-primary-500 hover:bg-primary-800 focus-visible:outline-primary-600 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:focus-visible:outline-gray-400 text-white disabled:text-gray-500 cursor-pointer rounded-md px-2.5 py-1.5 text-sm relative font-semibold shadow-sm transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 w-full"
+										class="bg-vtd-primary-500 hover:bg-vtd-primary-800 focus-visible:outline-vtd-primary-600 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:focus-visible:outline-gray-400 text-white disabled:text-gray-500 cursor-pointer rounded-md px-2.5 py-1.5 text-sm relative font-semibold shadow-sm transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 w-full"
 										type="button"
 										target="_blank"
 									>
 										<!----><a
-											href="https://rport.io/support"
+											href="https://github.com/sponsors/openrport"
 											rel="noopener noreferrer"
 											target="_blank"
 											class="absolute inset-0"
@@ -76,19 +75,19 @@
 								</div>
 							</div>
 							<div
-								class="flex flex-1 flex-col divide-y divide-gray-50 overflow-hidden rounded-lg bg-white shadow dark:divide-gray-700 dark:bg-gray-900 divide-none"
+								class="flex flex-1 flex-col divide-y divide-slate-50 overflow-hidden rounded-lg bg-white shadow dark:divide-slate-700 dark:bg-slate-900 divide-none"
 							>
 								<div class="p-4 px-6">
 									<a
-										href="https://kb.rport.io/"
+										href="https://kb.openrport.io/"
 										rel="noopener noreferrer"
 										target="_blank"
-										class="cursor-pointer text-primary-500 underline transition-all duration-300 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-400"
+										class="cursor-pointer text-vtd-primary-500 underline transition-all duration-300 hover:text-vtd-primary-500 dark:text-vtd-primary-400 dark:hover:text-vtd-primary-400"
 									>
 										<h5 class="text-sm uppercase">Documentation</h5>
 									</a>
 								</div>
-								<div class="flex-1 px-4 py-5 text-gray-950 dark:text-gray-50 sm:p-6">
+								<div class="flex-1 px-4 py-5 text-slate-950 dark:text-gray-50 sm:p-6">
 									<div class="h-full w-full">
 										<p class="mb-3 text-sm">
 											Read the documentation and find solutions for the most
@@ -98,12 +97,12 @@
 								</div>
 								<div class="max-h-20 px-4 py-4 sm:px-6">
 									<button
-										class="bg-primary-500 hover:bg-primary-800 focus-visible:outline-primary-600 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:focus-visible:outline-gray-400 text-white disabled:text-gray-500 cursor-pointer rounded-md px-2.5 py-1.5 text-sm relative font-semibold shadow-sm transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 w-full"
+										class="bg-vtd-primary-500 hover:bg-vtd-primary-800 focus-visible:outline-vtd-primary-600 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:focus-visible:outline-gray-400 text-white disabled:text-gray-500 cursor-pointer rounded-md px-2.5 py-1.5 text-sm relative font-semibold shadow-sm transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 w-full"
 										type="button"
 										target="_blank"
 									>
 										<!----><a
-											href="https://kb.rport.io/"
+											href="https://kb.openrport.io/"
 											rel="noopener noreferrer"
 											target="_blank"
 											class="absolute inset-0"
@@ -125,39 +124,39 @@
 												fill="currentColor"
 												d="m29.7 9.3l-7-7c-.2-.2-.4-.3-.7-.3H12c-1.1 0-2 .9-2 2v24c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V10c0-.3-.1-.5-.3-.7zM22 4.4l5.6 5.6H22V4.4zM28 28H12V4h8v6c0 1.1.9 2 2 2h6v16z"
 											/>
-										</svg><span class="pl-2">Visit RPort Knowledge base</span></span>
+										</svg><span class="pl-2">Visit OpenRPort Knowledge base</span></span>
 									</button>
 								</div>
 							</div>
 							<div
-								class="flex flex-1 flex-col divide-y divide-gray-50 overflow-hidden rounded-lg bg-white shadow dark:divide-gray-700 dark:bg-gray-900 divide-none"
+								class="flex flex-1 flex-col divide-y divide-slate-50 overflow-hidden rounded-lg bg-white shadow dark:divide-slate-700 dark:bg-slate-900 divide-none"
 							>
 								<div class="p-4 px-6">
 									<a
-										href="https://rport.io/forum"
+										href="https://discord.gg/HQ4wMQmzcu"
 										rel="noopener noreferrer"
 										target="_blank"
-										class="cursor-pointer text-primary-500 underline transition-all duration-300 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-400"
+										class="cursor-pointer text-vtd-primary-500 underline transition-all duration-300 hover:text-vtd-primary-500 dark:text-vtd-primary-400 dark:hover:text-vtd-primary-400"
 									>
 										<h5 class="text-sm uppercase">Community Support</h5>
 									</a>
 								</div>
-								<div class="flex-1 px-4 py-5 text-gray-950 dark:text-gray-50 sm:p-6">
+								<div class="flex-1 px-4 py-5 text-slate-950 dark:text-slate-50 sm:p-6">
 									<div class="h-full w-full">
 										<p class="mb-3 text-sm">
 											Ask the community for help. Friendly people are always
-											willing to help each other. Post your question to our forum on GitHub.
+											willing to help each other. Post your question to our discord on GitHub.
 										</p>
 									</div>
 								</div>
 								<div class="max-h-20 px-4 py-4 sm:px-6">
 									<button
-										class="bg-primary-500 hover:bg-primary-800 focus-visible:outline-primary-600 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:focus-visible:outline-gray-400 text-white disabled:text-gray-500 cursor-pointer rounded-md px-2.5 py-1.5 text-sm relative font-semibold shadow-sm transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 w-full"
+										class="bg-vtd-primary-500 hover:bg-vtd-primary-800 focus-visible:outline-vtd-primary-600 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:focus-visible:outline-gray-400 text-white disabled:text-gray-500 cursor-pointer rounded-md px-2.5 py-1.5 text-sm relative font-semibold shadow-sm transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 w-full"
 										type="button"
 										target="_blank"
 									>
 										<!----><a
-											href="https://rport.io/forum"
+											href="https://discord.gg/HQ4wMQmzcu"
 											rel="noopener noreferrer"
 											target="_blank"
 											class="absolute inset-0"
@@ -179,7 +178,7 @@
 												strokeWidth="1.5"
 												d="M7 18v-1a5 5 0 0 1 5-5v0a5 5 0 0 1 5 5v1M1 18v-1a3 3 0 0 1 3-3v0m19 4v-1a3 3 0 0 0-3-3v0m-8-2a3 3 0 1 0 0-6a3 3 0 0 0 0 6Zm-8 2a2 2 0 1 0 0-4a2 2 0 0 0 0 4Zm16 0a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z"
 											/>
-										</svg><span class="pl-2">Join forum</span></span>
+										</svg><span class="pl-2">Join discord</span></span>
 									</button>
 								</div>
 							</div>
