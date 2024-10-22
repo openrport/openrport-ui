@@ -40,11 +40,13 @@
     "codemirror": "^6.0.1",
     "lucide-vue-next": "^0.356.0",
     "pinia": "^2.1.7",
+    "prismjs": "^1.29.0",
     "radix-vue": "^1.8.5",
     "sass": "^1.69.5",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "vue-codemirror": "^6.1.1"
+    "vue-codemirror": "^6.1.1",
+    "vue-prism-editor": "^2.0.0-alpha.2"
   },
   "resolutions": {
     "string-width": "4.2.3"

@@ -276,6 +276,26 @@ export interface UserSessionResponse {
 	data: UserSession[];
 }
 
+export interface APIToken {
+	prefix: string;
+	scope: string;
+	name: string;
+	created_at: Date;
+	expires_at: Date;
+}
+export interface APITokensResponse {
+	data: APIToken[];
+}
+
+export interface APITokenResponse {
+	data: APIToken;
+}
+export interface APITokenPayload {
+	expires_at: Date;
+	name: string;
+	scope: string;
+}
+
 export interface AuditLog {
 	timestamp: Date;
 	username: string;
@@ -304,4 +324,19 @@ export interface FilePayload {
 	mode: string;
 	user: string;
 	group: string;
+}
+export type INstallerOptionId = 'remote' | 'sudoright' | 'filetransfer' | 'sudotransfer' | 'tacoscript';
+export interface InstallerOption {
+	id: INstallerOptionId;
+	label: string;
+	flag: string;
+	platformSupport?: 'all' | 'linux';
+}
+
+export interface InstallerResponse {
+	installers: {
+		linux: string;
+		windows: string;
+	};
+	pairing_code: string;
 }

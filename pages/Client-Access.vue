@@ -198,7 +198,10 @@
 																		>
 																			<DropdownMenuContent class="absolute -right-8 -top-0 z-20 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-950">
 																				<div class="px-1 py-1">
-																					<DropdownMenuItem class="focus:bg-vtd-primary-600 focus:text-white disabled:bg-transparent group flex w-full items-center rounded-md px-2 py-2 text-xs transition-all duration-300 disabled:text-gray-400">
+																					<DropdownMenuItem
+																						class="focus:bg-vtd-primary-600 focus:text-white disabled:bg-transparent group flex w-full items-center rounded-md px-2 py-2 text-xs transition-all duration-300 disabled:text-gray-400"
+																						@click="triggerInstall(client)"
+																					>
 																						<Wrench class="mr-2 h-4 w-4" />
 																						<span>Install client</span>
 																					</DropdownMenuItem>
@@ -324,6 +327,10 @@
 			ref="addClientModal"
 			@save="createClientAccess"
 		/>
+		<InstallClientModal
+			ref="installClientModal"
+			@save="closeInstallClientModal"
+		/>
 	</new-page-wrapper>
 </template>
 
@@ -333,11 +340,14 @@ import { useClipboard, useDebounceFn } from '@vueuse/core';
 import NewPageWrapper from '~/components/NewPageWrapper.vue';
 import AddClientModal from '~/components/clients/AddClientModal.vue';
 import { Pagination } from '~/components/ui/pagination';
+import InstallClientModal from '~/components/clients/InstallClientModal.vue';
 
 const { copy, copied } = useClipboard();
 const { $api } = useNuxtApp();
 const snackbar = useSnackbar();
 const route = useRoute();
+const statusStore = useStatusStore();
+const { status } = storeToRefs(statusStore);
 
 const ITEMS_PER_PAGE = 20;
 
@@ -348,22 +358,37 @@ const delConfirm = ref(false);
 const forceDeleteConfirm = ref(false);
 
 const addClientModal = ref<InstanceType<typeof AddClientModal> | null>(null);
+const installClientModal = ref<InstanceType<typeof InstallClientModal> | null>(null);
 
 filter.value = route.hash.slice(1);
 const { data: response, pending, refresh } = useLazyAsyncData(`clients-auth`, () => $api.clientAuth.paginate(page.value, filter.value), {
 	watch: [page, filter],
 });
+await statusStore.loadStatus();
 
 const openAddClientModal = () => {
 	addClientModal.value?.open();
 };
 
+const openInstallClientModal = async (client: ClientAuth) => {
+	await installClientModal.value?.open(client, statusStore.status);
+};
+
 const closeAddClientModal = () => {
 	addClientModal.value?.close();
+};
+
+const closeInstallClientModal = () => {
+	installClientModal.value?.close();
 };
 const triggerDelete = (client) => {
 	activeClient.value = client;
 	delConfirm.value = true;
+};
+
+const triggerInstall = (client) => {
+	activeClient.value = client;
+	openInstallClientModal(client);
 };
 const disabledNext = computed(() => {
 	return Math.ceil((response?.value?.meta?.count ?? 0) / ITEMS_PER_PAGE) === page.value + 1;

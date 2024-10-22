@@ -9,9 +9,10 @@ export const useStatusStore = defineStore('status', {
 	actions: {
 		async loadStatus() {
 			try {
-				const data = await useStatus();
-				if (data?.value) {
-					this.$state.status = data.value as ServerStatus;
+				const { $api } = useNuxtApp();
+				const { data: response } = await $api.status.show();
+				if (response) {
+					this.$state.status = response.value.data as ServerStatus;
 				}
 			}
 			catch (e) {

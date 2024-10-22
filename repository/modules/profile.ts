@@ -1,5 +1,5 @@
-import { HttpFactory } from '~/repository/factory';
-import type { Profile, ProfileResponse } from '~/types';
+import { HttpFactory, HttpMethod } from '~/repository/factory';
+import type {APITokenPayload, APITokenResponse, APITokensResponse, Profile, ProfileResponse} from '~/types';
 
 class ProfileModule extends HttpFactory {
 	private RESOURCE = 'api/v1/me';
@@ -11,6 +11,38 @@ class ProfileModule extends HttpFactory {
 			undefined,
 		);
 		return response.data;
+	}
+
+	async apiTokens(): Promise<APITokensResponse> {
+		return this.call<APITokensResponse>(
+			'GET',
+			`${this.RESOURCE}/tokens`,
+			undefined,
+		);
+	}
+
+	async create(payload: APITokenPayload): Promise<APITokenResponse> {
+		return this.call<APITokenResponse>(
+			HttpMethod.POST,
+			`${this.RESOURCE}/tokens`,
+			payload,
+		);
+	}
+
+	async update(payload: APITokenPayload): Promise<APITokenResponse> {
+		return this.call<APITokenResponse>(
+			HttpMethod.PUT,
+			`${this.RESOURCE}/tokens/${payload.prefix}`,
+			payload,
+		);
+	}
+
+	async delete(tokenPrefix: string): Promise<never> {
+		return this.call(
+			HttpMethod.DELETE,
+			`${this.RESOURCE}/tokens/${tokenPrefix}`,
+			undefined,
+		);
 	}
 }
 

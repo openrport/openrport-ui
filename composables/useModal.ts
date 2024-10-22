@@ -1,19 +1,23 @@
 import { ref } from 'vue';
 
 export const useModal = () => {
-	const modalIsActive = ref(false);
+	const isOpen = ref(false);
+	const modalData = ref(null);
 
-	const openModal = () => {
-		modalIsActive.value = true;
+	const open = (data = null) => {
+		isOpen.value = true;
+		modalData.value = data;
 	};
 
-	const closeModal = () => {
-		modalIsActive.value = false;
+	const close = () => {
+		isOpen.value = false;
+		modalData.value = null;
 	};
 
 	return {
-		modalIsActive,
-		openModal,
-		closeModal,
+		isOpen,
+		modalData,
+		open,
+		close,
 	};
 };

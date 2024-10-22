@@ -227,14 +227,14 @@ import { Pagination } from '~/components/ui/pagination';
 
 const { $api } = useNuxtApp();
 const ITEMS_PER_PAGE = 20;
-const page = ref(0);
+const page = ref<number>(0);
 
 const { data: response, pending, refresh } = useLazyAsyncData(`clients-group`, () => $api.groups.paginate(page.value, ITEMS_PER_PAGE), {
 	watch: [page],
 });
 
 const handlePrevious = async () => {
-	if (!page.value === 0) {
+	if (page.value > 0) {
 		page.value--;
 		await refresh();
 	}
