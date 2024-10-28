@@ -38,7 +38,10 @@
 		<div class="flex-1 px-4 py-5 text-gray-950 dark:text-gray-50 sm:p-6">
 			<div class="w-full h-full">
 				<div class="w-full">
-					<div class="p-0">
+					<div
+						v-if="device?.updates_status != null"
+						class="p-0"
+					>
 						<div class="flex items-center justify-between">
 							<div class="flex flex-col">
 								<div class="flex">
@@ -129,6 +132,23 @@
 							>
 								Last status from {{ formatedDate(device?.updates_status?.refreshed) }}
 							</div>
+						</div>
+					</div>
+					<div
+						v-else
+						class="mb-4 rounded-lg bg-yellow-50 p-4 text-sm text-yellow-800"
+						role="alert"
+					>
+						<span
+							class="icon"
+							style="font-size: 24px; line-height: 24px; width: 24px; height: 24px;"
+						>warning</span>
+						<div>
+							The client version is not supporting update supervision or update supervision is disabled. <br><a
+								href="https://kb.openrport.io/digging-deeper/client-configuration-options/supervision-of-os-updates"
+								class="text-primary"
+								target="_blank"
+							>Learn more </a>
 						</div>
 					</div>
 				</div>

@@ -13,6 +13,7 @@
 						<button
 							class="bg-primary-800 hover:bg-primary-800 focus-visible:outline-primary-600 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:focus-visible:outline-gray-400 text-white disabled:text-gray-500 cursor-pointer rounded-md px-2.5 py-1.5 text-sm relative font-semibold shadow-sm transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
 							type="button"
+							@click="$emit('addtunnel')"
 						>
 							<span class="flex items-center justify-center gap-x-2"> Add Tunnel</span>
 						</button>
@@ -419,6 +420,8 @@ const props = defineProps({
 		required: true,
 	},
 });
+
+defineEmits(['addtunnel']);
 const { $api } = useNuxtApp();
 
 const { data: tunnels } = useAsyncData(`tunnels_${props.id}`, () => $api.clients.tunnels(props.id));

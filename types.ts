@@ -290,10 +290,16 @@ export interface APITokensResponse {
 export interface APITokenResponse {
 	data: APIToken;
 }
+export interface IpResponse {
+	data: {
+		ip: string;
+	};
+}
 export interface APITokenPayload {
 	expires_at: Date;
 	name: string;
 	scope: string;
+	prefix?: string;
 }
 
 export interface AuditLog {
@@ -326,17 +332,81 @@ export interface FilePayload {
 	group: string;
 }
 export type INstallerOptionId = 'remote' | 'sudoright' | 'filetransfer' | 'sudotransfer' | 'tacoscript';
+export type TunnelOptionId = 'ssh' | 'rdp' | 'vnc' | 'realvnc' | 'http' | 'https' | 'other' | 'forwarding';
 export interface InstallerOption {
 	id: INstallerOptionId;
 	label: string;
 	flag: string;
 	platformSupport?: 'all' | 'linux';
 }
-
+export interface TunnelOption {
+	id: TunnelOptionId;
+	label: string;
+	ports: string;
+	link?: string;
+	linkLabel?: string;
+}
 export interface InstallerResponse {
 	installers: {
 		linux: string;
 		windows: string;
 	};
 	pairing_code: string;
+}
+
+export interface TunnelFormState {
+	service: string;
+	forwardingService?: string;
+	forwardDestination?: string;
+	port: number;
+	storeInLibrary: boolean;
+	protocol: 'tcp' | 'udp' | 'tcp+udp';
+	name?: string;
+	lport?: number;
+	lport_random?: 'random' | 'specify';
+	acl_model: 'current' | 'specific' | 'anyone';
+	acl_risk: boolean;
+	http_proxy?: boolean;
+	auth_user?: string;
+	auth_password?: string;
+	host_header?: string;
+	acl: string;
+	skip_idle_timeout: boolean;
+	idle_timeout_minutes: number;
+	autoclose_enable: boolean;
+	autoclose_hour: number;
+	autoclose_minute: number;
+}
+
+export interface TunnelPayload {
+	'local'?: string;
+	'remote': string;
+	'scheme': string;
+	'acl': string;
+	'check_port'?: string;
+	'idle-timeout-minutes'?: number;
+	'auto-close'?: string;
+	'protocol': 'tcp' | 'udp' | 'tcp+udp';
+	'skip-idle-timeout'?: number;
+	'http_proxy'?: boolean;
+	'host_header'?: string;
+	'auth_user'?: string;
+	'auth_password'?: string;
+}
+export type QueryParams = {
+	[key: string]: string | number | boolean | undefined | null;
+};
+
+export interface TunnelOptionsState {
+	skip_idle_timeout: boolean;
+	idle_timeout_minutes: number;
+	autoclose_enable: boolean;
+	autoclose_hour: number;
+	autoclose_minute: number;
+}
+
+export interface TunnelOptionsProps {
+	modelValue: TunnelOptionsState;
+	disabled?: boolean;
+	errors?: Record<string, string>;
 }

@@ -6,9 +6,12 @@
 			<div class="relative w-full h-full">
 				<device-header :device="device" />
 				<div class="absolute inset-0 w-full h-full">
-					<div class="z-10 w-full h-full pt-16">
+					<div
+						v-if="!isAddingTunnel"
+						class="z-10 w-full h-full pt-16"
+					>
 						<!-- Create tabs from here -->
-						<Tabs default-value="inventory">
+						<Tabs v-model="selectedTab">
 							<div class="relative z-20 text-center text-sm font-bold text-muted after:absolute after:-left-0 after:-right-0 after:bottom-0 after:h-px after:bg-theme-border after:content-['']">
 								<div class="flex items-center overflow-hidden">
 									<ScrollArea>
@@ -25,7 +28,6 @@
 													"
 												>
 													<svg
-														data-v-ca945699=""
 														xmlns="http://www.w3.org/2000/svg"
 														width="24px"
 														height="24px"
@@ -200,7 +202,10 @@
 												/>
 											</TabsContent>
 											<TabsContent value="tunnels">
-												<DeviceTunnelsTab :id="device.id" />
+												<DeviceTunnelsTab
+													:id="device.id"
+													@addtunnel="tunnelStore.openAddTunel()"
+												/>
 											</TabsContent>
 											<TabsContent value="meta-data">
 												<DeviceMetaDataTab />
@@ -232,6 +237,10 @@
 							</div>
 						</Tabs>
 					</div>
+					<TunnelsTunnelForm
+						v-if="isAddingTunnel"
+						:device="device"
+					/>
 				</div>
 				<div
 					class="fixed inset-0 z-50 overflow-y-auto transition"
@@ -348,52 +357,20 @@ import {
 } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { useNavigationBars } from '~/composables/useNavigationBars';
-import { useModal } from '~/composables/useModal';
 import DeviceHeader from '~/components/device/DeviceHeader.vue';
-// import InventoryTab from "~/components/device/InventoryTab.vue";
-// import TunnelsTab from "~/components/device/TunnelsTab.vue";
-// import VaultLocked from "~/components/VaultLocked.vue";
-// import CommandEditor from "~/components/CommandEditor.vue";
-// import MonitoringTab from "~/components/device/MonitoringTab.vue";
-// import FilesTab from "~/components/device/FilesTab.vue";
-// import AuditTab from "~/components/device/AuditTab.vue";
-// import SchedulesTab from "~/components/device/SchedulesTab.vue";
 import type { Client, ClientMetric } from '~/types';
-// import GroupsCard from "~/components/device/GroupsCard.vue";
-// import RportClientCard from "~/components/device/RportClientCard.vue";
-
-const {
-	isDeviceBarOpen,
-	isSettingsBarOpen,
-	toggleDeviceBarNav,
-	toggleSettingsBarNav,
-} = useNavigationBars();
 
 const { $api } = useNuxtApp();
-const { modalIsActive, openModal, closeModal } = useModal();
 const clientStore = useClientStore();
 const route = useRoute();
+const tunnelStore = useTunnelStore();
+const selectedTab = ref('inventory');
 
-const tabs = [
-	// { title: "Inventory", component: InventoryTab },
-	// { title: "Tunnels", component: TunnelsTab },
-	// { title: "Meta-Data", component: VaultLocked },
-	// { title: "Documents", component: VaultLocked },
-	// { title: "Commands", component: CommandEditor },
-	// { title: "Scripts", component: CommandEditor },
-	// { title: "Monitoring", component: MonitoringTab },
-	// { title: "Files", component: FilesTab },
-	// { title: "Audit", component: AuditTab },
-	// { title: "Schedules", component: SchedulesTab },
-];
-const accordionItems = ref([
-	{ title: 'All', content: 'Content for item 1' },
-	{ title: 'Favorites', content: 'Content for item 2' },
-]);
+const { isAddingTunnel } = storeToRefs(tunnelStore);
 
 const device = ref({} as Client);
 const metrics = ref([] as Array<ClientMetric>);
+
 onMounted(async () => {
 	await clientStore.loadClients();
 	await fetchDevice();

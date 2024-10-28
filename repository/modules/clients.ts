@@ -4,9 +4,10 @@ import type {
 	ClientResponse,
 	ClientsResponse,
 	StoredTunnel, StoredTunnelResponse,
-	Tunnel,
+	Tunnel, TunnelPayload,
 	TunnelResponse,
 } from '~/types';
+import { toQueryString } from '~/lib/utils';
 
 class ClientsModule extends HttpFactory {
 	private RESOURCE = '/api/v1/clients';
@@ -77,6 +78,14 @@ class ClientsModule extends HttpFactory {
 			undefined,
 		);
 		return response?.data;
+	}
+
+	async createTunnel(clientId: string, payload: TunnelPayload): Promise<{ data: Tunnel }> {
+		return await this.call<{ data: Tunnel }>(
+			'PUT',
+			`${this.RESOURCE}/${clientId}/tunnels${toQueryString(payload)}`,
+			undefined,
+		);
 	}
 }
 

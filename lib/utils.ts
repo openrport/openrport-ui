@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import type { QueryParams, TunnelPayload } from '~/types';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -44,4 +45,12 @@ export function bytesToSize(bytes: number): string {
 	const i = parseInt(String(Math.floor(Math.log(bytes) / Math.log(1024))), 10);
 	if (i === 0) return `${bytes} ${sizes[i]})`;
 	return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`;
+}
+
+export function toQueryString(params: QueryParams | TunnelPayload): string {
+	const queryParams = Object.entries(params)
+		.filter(([_, value]) => value !== undefined && value !== null)
+		.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+		.join('&');
+	return queryParams ? `?${queryParams}` : '';
 }

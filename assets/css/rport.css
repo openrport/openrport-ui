@@ -9,11 +9,13 @@
 .dashboard-index {
 	min-height: calc(100vh - 100px);
 }
+
 input.primary,select.primary {
     background-color: transparent;
     border-color: #e5e7eb;
     color: #374151;
 }
+
 
 input.primary:focus,select.primary:focus {
     border-color: #00528d;
@@ -23,19 +25,7 @@ input.primary.error,input.primary.error:focus,select.primary.error,select.primar
     border-color: #ef4444;
 }
 
-[multiple],[type=date],[type=datetime-local],[type=email],[type=month],[type=number],[type=password],[type=search],[type=tel],[type=text],[type=time],[type=url],[type=week],select,textarea {
-    --tw-shadow: 0 0 #0000;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-color: #fff;
-    border-color: #6b7280;
-    border-radius: 0;
-    border-width: 1px;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    padding: .5rem .75rem
-}
+
 
 [multiple]:focus,[type=date]:focus,[type=datetime-local]:focus,[type=email]:focus,[type=month]:focus,[type=number]:focus,[type=password]:focus,[type=search]:focus,[type=tel]:focus,[type=text]:focus,[type=time]:focus,[type=url]:focus,[type=week]:focus,select:focus,textarea:focus {
     --tw-ring-inset: var(--tw-empty, );
@@ -72,15 +62,7 @@ input::placeholder,textarea::placeholder {
     padding-bottom: 0;
     padding-top: 0
 }
-select {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
-    background-position: right .5rem center;
-    background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
-    padding-right: 2.5rem;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact
-}
+
 [multiple] {
     background-image: none;
     background-position: 0 0;
@@ -187,6 +169,10 @@ select {
     --tw-text-opacity: 1;
     color: #374151;
 }
+.text-theme-label {
+    --tw-text-opacity: 1;
+    color: #6b7280;
+}
 
 .bg-theme {
     --tw-bg-opacity: 1;
@@ -194,4 +180,7 @@ select {
 }
 .text-black-087 {
     color: #000000de;
+}
+.primary {
+    background-color: #00528d;
 }

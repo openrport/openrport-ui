@@ -18,7 +18,6 @@ export const useTokenStore = defineStore('token', {
 			const is_authenticated = useCookie<boolean>('is_authenticated');
 			try {
 				const response = await $api.auth.login(credentials);
-				console.log(response);
 				if (response?.data.token) {
 					if (response?.data?.two_fa !== null) {
 						this.twoFaToken = response.data.token;

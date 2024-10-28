@@ -1,5 +1,5 @@
 import { HttpFactory, HttpMethod } from '~/repository/factory';
-import type {APITokenPayload, APITokenResponse, APITokensResponse, Profile, ProfileResponse} from '~/types';
+import type {APITokenPayload, APITokenResponse, APITokensResponse, IpResponse, Profile, ProfileResponse} from '~/types';
 
 class ProfileModule extends HttpFactory {
 	private RESOURCE = 'api/v1/me';
@@ -41,6 +41,14 @@ class ProfileModule extends HttpFactory {
 		return this.call(
 			HttpMethod.DELETE,
 			`${this.RESOURCE}/tokens/${tokenPrefix}`,
+			undefined,
+		);
+	}
+
+	async ip(): Promise<IpResponse> {
+		return this.call<IpResponse>(
+			HttpMethod.GET,
+			`${this.RESOURCE}/ip`,
 			undefined,
 		);
 	}

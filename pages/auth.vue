@@ -35,14 +35,14 @@ const handleLogin = async (credentials: ILoginInput) => {
 	credentialsRef.value = credentials;
 	await store.getLoginToken(credentials);
 	if (authenticated) {
-		router.push('/');
+		await router.push('/');
 	}
 };
 
 const handleTwoFa = async (two_fa: string) => {
 	await store.verifyTwoFa(credentialsRef.value, two_fa);
 	if (authenticated) {
-		router.push('/');
+		await router.push('/');
 	}
 };
 </script>
