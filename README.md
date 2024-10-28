@@ -1,6 +1,32 @@
+<br>
+<p align="center">
+    <a href="https://kb.openrport.io" target="_blank" rel="noopener noreferrer">
+        <img width="100" height="100" src="./public/img/logo-small.svg" alt="OpenRport logo">
+    </a>
+</p>
+
+<h1 align="center"> OpenRPort UI <sup><em>alpha</em></sup> </h1>
+
+<p align="center">
+Manage remote systems with ease
+</p>
+
+<br/>
+
+<p align="center">
+    <a href="https://discord.gg/HQ4wMQmzcu"><img src="https://img.shields.io/badge/chat-discord-blue?style=flat&logo=discord" alt="discord chat"></a>
+</p>
+
+<p align="center">
+    <a href="https://kb.openrport.io" target="_blank" rel="noopener noreferrer" >
+        <img src="./public/openrport.png" alt="OpenRport screenshoots" width="800" height="auto" />
+    </a>
+</p>
+
 # OpenRport UI
 
 - [Documentation](https://ui.nuxt.com/pro/getting-started)
+- [OpenRPort](https://github.com/openrport/openrport)
 
 Welcome to the new UI of OpenRport, an open-source remote server manager without the hassle of VPNs. This project is designed using Nuxt 3 to create a seamless and responsive user interface for managing remote systems securely.
 
@@ -18,7 +44,7 @@ yarn install
 ### Configuration
 
 Start to fill out your env file. The most import variable is `NUXT_API_URL`
-That should be the url of your Openrport instance.
+That should be the url of your OpenRPort instance.
 
 ```
 cp .env.example .env

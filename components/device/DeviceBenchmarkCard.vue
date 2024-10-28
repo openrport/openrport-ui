@@ -17,7 +17,6 @@
 					type="button"
 				>
 					<!----><!----><span class="flex items-center justify-center gap-x-2"><!----><svg
-						data-v-ca945699=""
 						xmlns="http://www.w3.org/2000/svg"
 						width="14px"
 						height="14px"
@@ -129,7 +128,10 @@
 								</td>
 								<td class="w-full p-1">
 									<div class="h-3 w-full bg-gray-200">
-										<div class="h-full" />
+										<div
+											class="bg-primary h-full"
+											:style="{ width: `${io_usage_percent}%` }"
+										/>
 									</div>
 								</td>
 							</tr>

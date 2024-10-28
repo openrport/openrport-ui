@@ -178,6 +178,10 @@ input::placeholder,textarea::placeholder {
     --tw-bg-opacity: 1;
     background-color: #fff;
 }
+.bg-warning {
+    background-color: #ef6c00;
+    background-color: rgb(239 108 0/var(--tw-bg-opacity))
+}
 .text-black-087 {
     color: #000000de;
 }
