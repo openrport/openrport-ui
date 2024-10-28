@@ -14,181 +14,184 @@
 						<Tabs v-model="selectedTab">
 							<div class="relative z-20 text-center text-sm font-bold text-muted after:absolute after:-left-0 after:-right-0 after:bottom-0 after:h-px after:bg-theme-border after:content-['']">
 								<div class="flex items-center overflow-hidden">
-									<ScrollArea>
-										<TabsList class="relative shrink-0 flex border-b border-mauve6">
-											<Button
-												type="button"
-												class="inline-flex items-center duration-200 focus:outline-none rounded-full p-3 flex h-14 w-6 items-center justify-center px-0 py-0 focus:border-0 focus:outline-none focus:ring-0"
-											>
-												<span
-													class="flex items-center justify-center"
-													style="
+									<!--									<ScrollArea> -->
+									<button
+										type="button"
+										class="inline-flex items-center duration-200 focus:outline-none rounded-full p-3 flex h-14 w-6 items-center justify-center px-0 py-0 focus:border-0 focus:outline-none focus:ring-0"
+										:disabled="isAtStart"
+										@click="scrollLeft"
+									>
+										<span
+											class="flex items-center justify-center"
+											style="
 														width: 24px;
 														height: 24px;
 													"
-												>
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														width="24px"
-														height="24px"
-														viewBox="0 0 24 24"
-														class="icon"
-													>
-														<path
-															fill="currentColor"
-															d="m13.3 17.3l-4.6-4.6q-.15-.15-.212-.325T8.425 12q0-.2.063-.375T8.7 11.3l4.6-4.6q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L10.8 12l3.9 3.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275Z"
-														/>
-													</svg>
-												</span>
-											</Button>
-											<div class="overflow-hidden">
-												<ul
-													class="relative flex justify-start w-full gap-0 -mb-px transition flex-nowrap"
-													style="
-														transform: translateX(
-															0px
-														);
-													"
-												>
-													<TabsTrigger
-														as="li"
-														value="inventory"
-														class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
-													>
-														<span
-															class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
-														>
-															Inventory
-														</span>
-													</TabsTrigger>
-													<TabsTrigger
-														as="li"
-														value="tunnels"
-														class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
-													>
-														<span
-															class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
-														>
-															Tunnels
-														</span>
-													</TabsTrigger>
-													<TabsTrigger
-														as="li"
-														value="meta-data"
-														class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
-													>
-														<span
-															class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
-														>
-															Meta-Data
-														</span>
-													</TabsTrigger>
-													<TabsTrigger
-														as="li"
-														value="documents"
-														class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
-													>
-														<span
-															class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
-														>
-															Documents
-														</span>
-													</TabsTrigger>
-													<TabsTrigger
-														as="li"
-														value="commands"
-														class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
-													>
-														<span
-															class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
-														>
-															Commands
-														</span>
-													</TabsTrigger>
-													<TabsTrigger
-														as="li"
-														value="scripts"
-														class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
-													>
-														<span
-															class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
-														>
-															Scripts
-														</span>
-													</TabsTrigger>
-													<TabsTrigger
-														as="li"
-														value="monitoring"
-														class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
-													>
-														<span
-															class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
-														>
-															Monitoring
-														</span>
-													</TabsTrigger>
-													<TabsTrigger
-														as="li"
-														value="files"
-														class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
-													>
-														<span
-															class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
-														>
-															Files
-														</span>
-													</TabsTrigger>
-													<TabsTrigger
-														as="li"
-														value="audit"
-														class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
-													>
-														<span
-															class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-800"
-														>
-															Audit
-														</span>
-													</TabsTrigger>
-													<TabsTrigger
-														as="li"
-														value="schedules"
-														class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
-													>
-														<span
-															class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-800"
-														>
-															Schedules
-														</span>
-													</TabsTrigger>
-												</ul>
-											</div>
-											<Button
-												class="flex inline-flex items-center justify-center w-6 p-3 px-0 py-0 duration-200 rounded-full focus:outline-none h-14 focus:border-0 focus:ring-0"
+										>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												width="24px"
+												height="24px"
+												viewBox="0 0 24 24"
+												class="icon"
 											>
-												<span
-													class="flex items-center justify-center"
-													style="
-														width: 24px;
-														height: 24px;
-													"
-												><svg
-													data-v-ca945699=""
-													xmlns="http://www.w3.org/2000/svg"
-													width="24px"
-													height="24px"
-													viewBox="0 0 24 24"
-													class="icon"
+												<path
+													fill="#607a8c"
+													d="m13.3 17.3l-4.6-4.6q-.15-.15-.212-.325T8.425 12q0-.2.063-.375T8.7 11.3l4.6-4.6q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L10.8 12l3.9 3.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275Z"
+												/>
+											</svg>
+										</span>
+									</button>
+									<div class="overflow-hidden">
+										<TabsList
+
+											class="relative shrink-0 flex border-b border-mauve6"
+										>
+											<ul
+												ref="tabsListRef"
+												class="relative flex justify-start w-full gap-0 -mb-px transition flex-nowrap"
+												:style="{ transform: `translateX(${translateX}px)` }"
+											>
+												<TabsTrigger
+													as="li"
+													value="inventory"
+													class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
 												>
-													<path
-														fill="currentColor"
-														d="M8.7 17.3q-.275-.275-.275-.7t.275-.7l3.9-3.9l-3.9-3.9q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l4.6 4.6q.15.15.213.325t.062.375q0 .2-.063.375t-.212.325l-4.6 4.6q-.275.275-.7.275t-.7-.275Z"
-													/>
-												</svg>
-												</span>
-											</Button>
+													<span
+														class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
+													>
+														Inventory
+													</span>
+												</TabsTrigger>
+												<TabsTrigger
+													as="li"
+													value="tunnels"
+													class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
+												>
+													<span
+														class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
+													>
+														Tunnels
+													</span>
+												</TabsTrigger>
+												<TabsTrigger
+													as="li"
+													value="meta-data"
+													class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
+												>
+													<span
+														class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
+													>
+														Meta-Data
+													</span>
+												</TabsTrigger>
+												<TabsTrigger
+													as="li"
+													value="documents"
+													class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
+												>
+													<span
+														class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
+													>
+														Documents
+													</span>
+												</TabsTrigger>
+												<TabsTrigger
+													as="li"
+													value="commands"
+													class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
+												>
+													<span
+														class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
+													>
+														Commands
+													</span>
+												</TabsTrigger>
+												<TabsTrigger
+													as="li"
+													value="scripts"
+													class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
+												>
+													<span
+														class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
+													>
+														Scripts
+													</span>
+												</TabsTrigger>
+												<TabsTrigger
+													as="li"
+													value="monitoring"
+													class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
+												>
+													<span
+														class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
+													>
+														Monitoring
+													</span>
+												</TabsTrigger>
+												<TabsTrigger
+													as="li"
+													value="files"
+													class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
+												>
+													<span
+														class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600"
+													>
+														Files
+													</span>
+												</TabsTrigger>
+												<TabsTrigger
+													as="li"
+													value="audit"
+													class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
+												>
+													<span
+														class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-800"
+													>
+														Audit
+													</span>
+												</TabsTrigger>
+												<TabsTrigger
+													as="li"
+													value="schedules"
+													class="w-1/10 min-w-min cursor-pointer whitespace-nowrap border-b-[3px] border-transparent"
+												>
+													<span
+														class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-800"
+													>
+														Schedules
+													</span>
+												</TabsTrigger>
+											</ul>
 										</TabsList>
-										<ScrollBar orientation="horizontal" />
-									</ScrollArea>
+									</div>
+									<button
+										class="flex inline-flex items-center justify-center w-6 p-3 px-0 py-0 duration-200 rounded-full focus:outline-none h-14 focus:border-0 focus:ring-0"
+										:disabled="isAtEnd"
+										@click="scrollRight"
+									>
+										<span
+											class="flex items-center justify-center"
+											style="
+														width: 24px;
+														height: 24px;
+													"
+										><svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="24px"
+											height="24px"
+											viewBox="0 0 24 24"
+											class="icon"
+										>
+											<path
+												fill="#607a8c"
+												d="M8.7 17.3q-.275-.275-.275-.7t.275-.7l3.9-3.9l-3.9-3.9q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l4.6 4.6q.15.15.213.325t.062.375q0 .2-.063.375t-.212.325l-4.6 4.6q-.275.275-.7.275t-.7-.275Z"
+											/>
+										</svg>
+										</span>
+									</button>
+									<!--										<ScrollBar orientation="horizontal" /> -->
+									<!--									</ScrollArea> -->
 								</div>
 							</div>
 							<div class="absolute inset-0 z-0 w-full pt-12 top-20">
@@ -371,10 +374,35 @@ const { isAddingTunnel } = storeToRefs(tunnelStore);
 const device = ref({} as Client);
 const metrics = ref([] as Array<ClientMetric>);
 
+const translateX = ref(0);
+const containerWidth = ref(0);
+const tabsListWidth = ref(0);
+const tabsListRef = ref<HTMLElement | null>(null);
+const isAtStart = computed(() => translateX.value === 0);
+const isAtEnd = computed(() => tabsListWidth.value + translateX.value <= containerWidth.value);
+
 onMounted(async () => {
+	if (tabsListRef.value) {
+		containerWidth.value = tabsListRef.value.offsetParent?.clientWidth || 0;
+		console.log(tabsListRef.value.offsetParent?.clientWidth);
+		tabsListWidth.value = tabsListRef.value.scrollWidth;
+	}
 	await clientStore.loadClients();
 	await fetchDevice();
 });
+
+// Scroll function for left button
+function scrollLeft() {
+	const scrollAmount = containerWidth.value * 0.75;
+	translateX.value = Math.min(translateX.value + scrollAmount, 0); // Ensure we don’t go past the start
+}
+
+// Scroll function for right button
+function scrollRight() {
+	const scrollAmount = containerWidth.value * 0.75;
+	const maxScroll = containerWidth.value - tabsListWidth.value;
+	translateX.value = Math.max(translateX.value - scrollAmount, maxScroll); // Ensure we don’t go past the end
+}
 
 const fetchDevice = async () => {
 	try {

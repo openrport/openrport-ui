@@ -33,7 +33,39 @@
 							</div>
 						</span>
 					</div>
-					<div class="hidden lg:block" />
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger>
+								<div class="hidden lg:block">
+									<div class="inline-flex w-max cursor-pointer">
+										<button
+											type="button"
+											class="inline-flex items-center duration-200 focus:outline-none rounded-full p-3 p-0 text-slate-500 hover:bg-theme-light"
+										>
+											<span
+												class="flex items-center justify-center"
+												style="width: 20px; height: 20px;"
+											>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													width="24px"
+													height="24px"
+													viewBox="0 0 24 24"
+													class="icon"
+												><path
+													fill="currentColor"
+													d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2s-2 .9-2 2s.9 2 2 2z"
+												/></svg>
+											</span>
+										</button>
+									</div>
+								</div>
+							</TooltipTrigger>
+							<TooltipContent>
+								<span>Only members of the Administrators group are allowed to manage this client.</span>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
 				</div>
 			</h3>
 			<p class="mt-2 text-sm text-gray-600 dark:text-gray-400">

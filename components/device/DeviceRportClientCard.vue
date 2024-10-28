@@ -5,7 +5,7 @@
 		<div class="px-4 py-4 sm:flex sm:items-center sm:px-6">
 			<div class="flex max-h-16 flex-1 content-center items-center">
 				<h3 class="text-xl font-semibold leading-7 text-gray-900 dark:text-gray-50">
-					{{ device?.name?.toUpperCase() }}
+					RPort Client
 				</h3>
 				<p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500 dark:text-gray-500" />
 			</div><!---->
