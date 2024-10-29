@@ -1,0 +1,97 @@
+# Configuration for welcome - https://github.com/behaviorbot/welcome
+
+# Configuration for new-issue-welcome - https://github.com/behaviorbot/new-issue-welcome
+
+
+# Comment to be posted to on first time issues
+newIssueWelcomeComment: >
+  Hello There! Thanks for opening your first issue on this repo!
+  
+  A heads-up: **We use Github Issues only for tracking bugs**. Talk about new features is also acceptable. This helps _a lot_ in keeping our focus on improving Backpack. **If you issue is not a bug/feature, please help us out by closing the issue yourself and posting in the appropriate medium (see below)**. If you're not sure where it fits, it's ok, a community member will probably reply to help you with that.
+  
+  OpenRPort communication channels:
+    - Bug Reports, Feature Requests - GitHub Issues (here);
+    - Questions, DiscussionsQuick help (_How do I do X_) - [Discord](https://discord.gg/HQ4wMQmzcu)
+  
+  Thank You
+  
+  --
+  
+  The OpenRPort Robot
+  
+
+# Configuration for new-pr-welcome - https://github.com/behaviorbot/new-pr-welcome
+
+# Comment to be posted to on PRs from first time contributors in your repository
+newPRWelcomeComment: >
+  BOOM! Your first PR with us, thank you so much! Someone will take a look at it shortly.
+  
+  Please Keep in mind that:
+    - **if this constitute a breaking change, it might take quite a while for this to get merged**;
+    - **even if it's a non-breaking change, it might take a few days/weeks for the PR to get merged**; unless it's a no-brainer, **we like to have some community feedback on new features, before we merge them**;
+  
+  Thank you!
+  
+  --
+  
+  The OpenRPort Robot
+
+# Configuration for first-pr-merge - https://github.com/behaviorbot/first-pr-merge
+
+# Comment to be posted to on pull requests merged by a first time user
+firstPRMergeComment: >
+  Congrats, your first PR on this repo has officially been merged.
+  
+  ![party](https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGloZmpjbDN6M2NodGE4d203bzNwaG11MDRqYXhpYTU3ZDN2dHFkbSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9uoYC7cjcU6w8/giphy.gif "Party!!!")
+  
+  If you wish to join the community members let us know. You can also join the discord to chat with us. 
+  
+  If you want to help the community in other ways, you can:
+    - **give your opinion on other Github Issues & PRs**;
+    - **chat with others** in the [Discord](https://discord.gg/HQ4wMQmzcu) server;
+  
+  Again. Thank you for the PR. Keep pushing 'em to us :-)
+  
+  Cheers!
+  
+  --
+  
+  The OpenRPort Robot
+
+# It is recommended to include as many gifs and emojis as possible!
+
+# *OPTIONAL* Comment to reply with
+# Can be either a string :
+requestInfoReplyComment: >
+  Hi there!
+
+
+  Could you please provide us with more info about this? Looks like you skipped the title/body.
+
+
+  Thank you!
+
+
+  --
+  
+  The OpenRPort Robot
+
+# *OPTIONAL* default titles to check against for lack of descriptiveness
+# MUST BE ALL LOWERCASE
+requestInfoDefaultTitles:
+  # - update readme.md
+  - updates
+
+# *OPTIONAL* Label to be added to Issues and Pull Requests with insufficient information given
+requestInfoLabelToAdd: needs-more-info
+
+# *OPTIONAL* Only warn about insufficient information on these events type
+# Keys must be lowercase. Valid values are 'issue' and 'pullRequest'
+requestInfoOn:
+  pullRequest: true
+  issue: true
+
+# *OPTIONAL* Add a list of people whose Issues/PRs will not be commented on
+# keys must be GitHub usernames
+requestInfoUserstoExclude:
+  - alhdo
