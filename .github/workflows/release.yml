@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get version number from package.json
+        id: get_version
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "::set-output name=version::$VERSION"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Build Ui
+        run: yarn generate
+
+      - name: Create dist folder
+        run: |
+          ARTIFACT_NAME="openrport-frontend-${{ steps.get_version.outputs.version }}"
+          # Create ZIP file
+          (cd .output/public && zip -r - .) > "${ARTIFACT_NAME}.zip"
+          
+          # Create MD5 checksum
+          md5sum "${ARTIFACT_NAME}.zip" > "${ARTIFACT_NAME}.zip.md5"
+          
+          echo "artifact_name=$ARTIFACT_NAME" >> "$GITHUB_ENV"
+        id: create_artifact
+
+      - name: Create Github Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v${{ steps.get_version.outputs.version }}"
+          name: "v${{ steps.get_version.outputs.version }}"
+          files: |
+            ${{ env.artifact_name }}.zip
+            ${{ env.artifact_name }}.zip.md5
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
