@@ -358,62 +358,22 @@ import {
 	TabsList,
 	TabsTrigger,
 } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import DeviceHeader from '~/components/device/DeviceHeader.vue';
-import type { Client, ClientMetric } from '~/types';
+import { useScrollableTabs } from '~/composables/useScrollableTabs';
+import { useClientDetail } from '~/composables/useClientDetail';
 
-const { $api } = useNuxtApp();
-const clientStore = useClientStore();
-const route = useRoute();
 const tunnelStore = useTunnelStore();
 const selectedTab = ref('inventory');
 
 const { isAddingTunnel } = storeToRefs(tunnelStore);
 
-const device = ref({} as Client);
-const metrics = ref([] as Array<ClientMetric>);
-
-const translateX = ref(0);
-const containerWidth = ref(0);
-const tabsListWidth = ref(0);
-const tabsListRef = ref<HTMLElement | null>(null);
-const isAtStart = computed(() => translateX.value === 0);
-const isAtEnd = computed(() => tabsListWidth.value + translateX.value <= containerWidth.value);
-
-onMounted(async () => {
-	if (tabsListRef.value) {
-		containerWidth.value = tabsListRef.value.offsetParent?.clientWidth || 0;
-		console.log(tabsListRef.value.offsetParent?.clientWidth);
-		tabsListWidth.value = tabsListRef.value.scrollWidth;
-	}
-	await clientStore.loadClients();
-	await fetchDevice();
-});
-
-// Scroll function for left button
-function scrollLeft() {
-	const scrollAmount = containerWidth.value * 0.75;
-	translateX.value = Math.min(translateX.value + scrollAmount, 0); // Ensure we don’t go past the start
-}
-
-// Scroll function for right button
-function scrollRight() {
-	const scrollAmount = containerWidth.value * 0.75;
-	const maxScroll = containerWidth.value - tabsListWidth.value;
-	translateX.value = Math.max(translateX.value - scrollAmount, maxScroll); // Ensure we don’t go past the end
-}
-
-const fetchDevice = async () => {
-	try {
-		const deviceId = route.params.id;
-		if (deviceId) {
-			const response = await $api.clients.show(deviceId as string);
-			device.value = response.data;
-			const metricsData = await $api.clients.metrics(deviceId as string);
-			metrics.value = metricsData.data;
-		}
-	}
-	catch (e) {}
-};
+const { device, metrics } = useClientDetail();
+const {
+	translateX,
+	tabsListRef,
+	isAtStart,
+	isAtEnd,
+	scrollLeft,
+	scrollRight,
+} = useScrollableTabs();
 </script>

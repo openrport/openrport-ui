@@ -4,8 +4,7 @@
 			<DeviceRportClientCard :device="device" />
 			<DeviceGroupsCard :groups="device?.groups" />
 			<DeviceTagsLabelsCard
-				:labels="device?.labels"
-				:tags="device?.tags"
+				:client="device"
 			/>
 			<DeviceOS :device="device" />
 		</div>
