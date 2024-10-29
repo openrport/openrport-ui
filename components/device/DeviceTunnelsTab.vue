@@ -199,12 +199,12 @@
 														</svg>
 													</span>
 												</td>
-												<div class="inline-flex w-max cursor-pointer">
-													<button class="absolute inset-y-0 left-0 right-16 z-10 w-[90%]" />
-													<button class="absolute inset-y-0 right-0 z-10 w-8" />
-													<button class="absolute inset-y-0 left-0 right-16 z-10 w-12" />
-													<!---->
-												</div>
+												<!--												<div class="inline-flex w-max cursor-pointer"> -->
+												<!--													<button class="absolute inset-y-0 left-0 right-16 z-10 w-[90%]" /> -->
+												<!--													<button class="absolute inset-y-0 right-0 z-10 w-8" /> -->
+												<!--													<button class="absolute inset-y-0 left-0 right-16 z-10 w-12" /> -->
+												<!--													&lt;!&ndash;&ndash;&gt; -->
+												<!--												</div> -->
 											</tr>
 										</tbody>
 									</table>
@@ -391,12 +391,12 @@
 														</svg>
 													</span>
 												</td>
-												<div class="inline-flex w-max cursor-pointer">
-													<button class="absolute inset-y-0 left-0 right-16 z-10 w-[90%]" />
-													<button class="absolute inset-y-0 right-0 z-10 w-8" />
-													<button class="absolute inset-y-0 left-0 right-16 z-10 w-12" />
-													<!---->
-												</div>
+												<!--												<div class="inline-flex w-max cursor-pointer"> -->
+												<!--													<button class="absolute inset-y-0 left-0 right-16 z-10 w-[90%]" /> -->
+												<!--													<button class="absolute inset-y-0 right-0 z-10 w-8" /> -->
+												<!--													<button class="absolute inset-y-0 left-0 right-16 z-10 w-12" /> -->
+												<!--													&lt;!&ndash;&ndash;&gt; -->
+												<!--												</div> -->
 											</tr>
 										</tbody>
 									</table>

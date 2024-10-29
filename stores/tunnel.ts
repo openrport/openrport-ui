@@ -17,7 +17,7 @@ export const useTunnelStore = defineStore('tunnel', {
 				console.log(data);
 				return { data: data, error: null };
 			}
-			catch (e) {
+			catch (e: any) {
 				return {
 					data: null,
 					error: e.data,
