@@ -13,12 +13,12 @@
 						>
 					</form>
 					<svg
-						data-v-ca945699=""
 						xmlns="http://www.w3.org/2000/svg"
 						width="22px"
 						height="22px"
 						viewBox="0 0 24 24"
 						class="icon text-primary"
+						@click="openFilter"
 					>
 						<path
 							fill="currentColor"
@@ -38,7 +38,6 @@
 							>
 								<span class="flex items-center justify-center">
 									<svg
-										data-v-ca945699=""
 										xmlns="http://www.w3.org/2000/svg"
 										width="20px"
 										height="20px"
@@ -63,7 +62,6 @@
 									style=""
 								>
 									<svg
-										data-v-ca945699=""
 										xmlns="http://www.w3.org/2000/svg"
 										width="20px"
 										height="20px"
@@ -261,6 +259,7 @@
 				</Accordion>
 			</div>
 		</div>
+		<CustomModalFilter v-model="isFilterModalOpen" />
 	</nav>
 </template>
 
@@ -282,7 +281,11 @@ const props = defineProps({
 
 const isClientSettingOpen = ref(false);
 const selectedSettingOpt = useLocalStorage('dashboard_nav_drawer_item_lines', 1);
+const isFilterModalOpen = ref(false);
 
+const openFilter = () => {
+	isFilterModalOpen.value = true;
+};
 const toggleClientSetting = () => {
 	isClientSettingOpen.value = !isClientSettingOpen.value;
 };

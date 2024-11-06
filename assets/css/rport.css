@@ -169,6 +169,10 @@ input::placeholder,textarea::placeholder {
     --tw-text-opacity: 1;
     color: #374151;
 }
+.text-theme-inverted-light,.text-theme-inverted-lighter {
+    --tw-text-opacity: 1;
+    color: #4b5563;
+}
 .text-theme-label {
     --tw-text-opacity: 1;
     color: #6b7280;
@@ -177,6 +181,18 @@ input::placeholder,textarea::placeholder {
 .bg-theme {
     --tw-bg-opacity: 1;
     background-color: #fff;
+}
+.bg-theme-light {
+    --tw-bg-opacity: 1;
+    background-color: #f3f4f6;
+}
+.bg-theme-lighter {
+    --tw-bg-opacity: 1;
+    background-color: #f9fafb;
+}
+
+.bg-theme-backdrop\/75 {
+    background-color: #6b7280bf;
 }
 .bg-warning {
     background-color: #ef6c00;

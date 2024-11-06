@@ -3,6 +3,7 @@ import type {
 	ClientMetricsResponse,
 	ClientResponse,
 	ClientsResponse,
+	Client,
 	StoredTunnel, StoredTunnelResponse,
 	Tunnel, TunnelPayload,
 	TunnelResponse,
@@ -85,6 +86,17 @@ class ClientsModule extends HttpFactory {
 			'PUT',
 			`${this.RESOURCE}/${clientId}/tunnels${toQueryString(payload)}`,
 			undefined,
+		);
+	}
+
+	async updateTagsLabel(client: Client): Promise<never> {
+		return await this.call(
+			'PUT',
+			`${this.RESOURCE}/${client.id}/attributes`,
+			{
+				tags: client.tags,
+				labels: client.labels,
+			},
 		);
 	}
 }

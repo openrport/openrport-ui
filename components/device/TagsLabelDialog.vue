@@ -70,6 +70,7 @@
 						<button
 							type="button"
 							class="inline-flex items-center duration-200 focus:outline-none rounded-full p-0"
+							@click="addTag"
 						>
 							<span
 								class="flex items-center justify-center"
@@ -149,6 +150,7 @@
 								<button
 									type="button"
 									class="inline-flex items-center duration-200 focus:outline-none rounded-full p-0"
+									@click="deleteTag(tag)"
 								>
 									<span
 										class="flex items-center justify-center"
@@ -201,6 +203,7 @@
 						<button
 							type="button"
 							class="inline-flex items-center duration-200 focus:outline-none rounded-full p-0"
+							@click="addLabel"
 						>
 							<span
 								class="flex items-center justify-center"
@@ -360,10 +363,31 @@
 			</div>
 			<div class="w-full py-8">
 				<form
-					v-if="isEdittingTag"
+					v-if="mode"
 					class="flex w-full items-start gap-1"
 				>
-					<div class="flex flex-col -mt-1 w-full text-primary">
+					<div
+						v-if="mode === 'label'"
+						class="flex flex-col -mt-1 w-full text-primary md:w-2/5"
+					>
+						<div class="relative mt-1 flex w-full flex-col">
+							<input
+								id="g0lTM66Zw1"
+								v-model="currentLabelKey"
+								class="primary input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
+								placeholder=" "
+								type="text"
+								autocomplete="off"
+							><label
+								class="absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
+								for="g0lTM66Zw1"
+							>Label Key</label>
+						</div><!----><!---->
+					</div>
+					<div
+						v-if="mode === 'tag'"
+						class="flex flex-col -mt-1 w-full text-primary"
+					>
 						<div class="relative mt-1 flex w-full flex-col">
 							<input
 								id="Vd20DgVXFS"
@@ -378,11 +402,32 @@
 							>Tag Name</label>
 						</div><!----><!---->
 					</div>
+					<div
+						v-if="mode === 'label'"
+						class="flex flex-col md:w-3/5 -mt-1 w-full text-primary"
+					>
+						<div class="relative mt-1 flex w-full flex-col">
+							<input
+								id="91vl4xAzUz"
+								v-model="currentLabelValue"
+								class="primary input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
+								placeholder=" "
+								type="text"
+								autocomplete="off"
+							><label
+								class="absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
+								for="91vl4xAzUz"
+							>Label Value</label>
+						</div><!----><!---->
+					</div>
 					<button
 						class="bg-vtd-primary-500 hover:bg-vtd-primary-700 focus-visible:outline-vtd-primary-600 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:focus-visible:outline-gray-400 text-white disabled:text-gray-500 cursor-pointer rounded-md px-2.5 py-1.5 text-sm relative font-semibold shadow-sm transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
 						type="submit"
+						:disabled="isLoading"
+						@click="handleSubmit"
 					>
-						<!----><!----><span class="flex items-center justify-center gap-x-2">{{ isEdittingTag ? 'Save' : 'Add' }}</span>
+						<LoadingSpinner v-if="isLoading" />
+						<!----><span class="flex items-center justify-center gap-x-2">{{ modeActionText }}</span>
 					</button>
 				</form>
 			</div>
@@ -392,7 +437,10 @@
 
 <script setup lang="ts">
 import { useClientDetail } from '~/composables/useClientDetail';
+import type { Client } from '~/types';
+import { LoadingSpinner } from '~/components/custom/loading-spinner';
 
+const { $api } = useNuxtApp();
 const props = defineProps({
 	modelValue: Boolean,
 	modelValueClient: Object,
@@ -401,13 +449,141 @@ const emit = defineEmits(['update:modelValue', 'update:modelValueClient', 'save'
 const internalIsOpen = ref(props.modelValue);
 const internalClient = ref(props.modelValueClient);
 const isLoading = ref(false);
+
+const mode = ref<'tag' | 'label' | null>(null);
+const action = ref<'create' | 'edit' | null>(null);
+
 const currentTag = ref('');
-const isUpdatingTag = ref(false);
-const isEdittingTag = ref(false);
+const originalTag = ref('');
+const currentLabelKey = ref('');
+const currentLabelValue = ref('');
+const originalLabelKey = ref('');
+
+const modeActionText = computed(() => (action.value === 'create' ? 'Add' : 'Save'));
 
 const editTag = (tag: string) => {
+	originalTag.value = tag;
 	currentTag.value = tag;
-	isEdittingTag.value = true;
+	mode.value = 'tag';
+	action.value = 'edit';
+};
+
+const addTag = () => {
+	currentTag.value = '';
+	mode.value = 'tag';
+	action.value = 'create';
+};
+
+const deleteTag = async (tag: string) => {
+	const index = internalClient.value?.tags.indexOf(tag);
+	if (index === -1) return;
+
+	isLoading.value = true;
+	try {
+		internalClient.value?.tags.splice(index, 1);
+		await updateClientData();
+	}
+	finally {
+		isLoading.value = false;
+	}
+};
+
+const addLabel = () => {
+	currentLabelKey.value = '';
+	currentLabelValue.value = '';
+	mode.value = 'label';
+	action.value = 'create';
+};
+
+const editLabel = (key: string, value: string) => {
+	originalLabelKey.value = key;
+	currentLabelKey.value = key;
+	currentLabelValue.value = value;
+	mode.value = 'label';
+	action.value = 'edit';
+};
+
+const deleteLabel = async (key: string) => {
+	if (!internalClient.value?.labels[key]) return;
+	isLoading.value = true;
+	try {
+		delete internalClient.value?.labels[key];
+		await updateClientData();
+	}
+	finally {
+		isLoading.value = false;
+	}
+};
+
+const handleSubmit = async () => {
+	if (mode.value === 'tag') {
+		await handleTagAction();
+	}
+	else if (mode.value === 'label') {
+		await handleLabelAction();
+	}
+};
+
+const handleTagAction = async () => {
+	if (!currentTag.value) return;
+	isLoading.value = true;
+	try {
+		if (action.value === 'create') {
+			internalClient.value?.tags.push(currentTag.value);
+		}
+		else if (action.value === 'edit') {
+			const index = internalClient.value?.tags.indexOf(originalTag.value);
+			if (!internalClient.value) return;
+			if (index !== -1) internalClient.value.tags[index] = currentTag.value;
+		}
+		await updateClientData();
+		resetTagForm();
+	}
+	finally {
+		isLoading.value = false;
+	}
+};
+
+const handleLabelAction = async () => {
+	if (!currentLabelKey.value || !currentLabelValue.value) return;
+
+	isLoading.value = true;
+	try {
+		// Check if key has changed
+		if (originalLabelKey.value && currentLabelKey.value !== originalLabelKey.value) {
+			delete internalClient.value?.labels[originalLabelKey.value];
+		}
+		if (!internalClient.value) return;
+		internalClient.value.labels[currentLabelKey.value] = currentLabelValue.value;
+		await updateClientData();
+		resetLabelForm();
+	}
+	finally {
+		isLoading.value = false;
+	}
+};
+
+const resetTagForm = () => {
+	currentTag.value = '';
+	originalTag.value = '';
+	mode.value = null;
+	action.value = null;
+};
+
+const resetLabelForm = () => {
+	currentLabelKey.value = '';
+	currentLabelValue.value = '';
+	originalLabelKey.value = '';
+	mode.value = null;
+	action.value = null;
+};
+const updateClientData = async () => {
+	try {
+		const response = await $api.clients.updateTagsLabel(internalClient.value as Client);
+	}
+	catch (e) {
+		console.log(e);
+	}
 };
 
 watch(() => props.modelValue, (newValue) => {

@@ -190,8 +190,6 @@
 										</svg>
 										</span>
 									</button>
-									<!--										<ScrollBar orientation="horizontal" /> -->
-									<!--									</ScrollArea> -->
 								</div>
 							</div>
 							<div class="absolute inset-0 z-0 w-full pt-12 top-20">
