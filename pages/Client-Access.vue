@@ -286,7 +286,7 @@
 								</div>
 								<!-- -->
 							</div>
-							<div class="h-12 w-full"></div>
+							<div class="h-12 w-full" />
 						</div>
 					</div>
 				</div>
@@ -325,7 +325,7 @@
 		</Modal>
 		<AddClientModal
 			ref="addClientModal"
-			@save="createClientAccess"
+			@save="handleCreateClientAccess"
 		/>
 		<InstallClientModal
 			ref="installClientModal"
@@ -348,6 +348,7 @@ const snackbar = useSnackbar();
 const route = useRoute();
 const statusStore = useStatusStore();
 const { status } = storeToRefs(statusStore);
+const { createClientAccess } = useClientAccess();
 
 const ITEMS_PER_PAGE = 20;
 
@@ -413,12 +414,8 @@ const handleFilterList = useDebounceFn(() => {
 	refresh();
 }, 300);
 
-const createClientAccess = async (data) => {
-	const authClient: ClientAuth = {
-		id: data.id,
-		password: data.password,
-	};
-	await $api.clientAuth.create(authClient);
+const handleCreateClientAccess = async (data) => {
+	await createClientAccess(data);
 	closeAddClientModal();
 	await refresh();
 };

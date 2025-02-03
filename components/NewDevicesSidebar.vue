@@ -35,6 +35,7 @@
 							<button
 								type="button"
 								class="inline-flex items-center duration-200 focus:outline-none rounded-full p-3 px-1 py-2"
+								@click="openAddClientModal"
 							>
 								<span class="flex items-center justify-center">
 									<svg
@@ -260,16 +261,21 @@
 			</div>
 		</div>
 		<CustomModalFilter v-model="isFilterModalOpen" />
+		<AddClientModal
+			ref="addClientModal"
+			@save="handleCreateClientAccess"
+		/>
 	</nav>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {
 	IconFolder,
 	IconBrandDebian,
 } from '@tabler/icons-vue';
 import { useLocalStorage } from '@vueuse/core';
 import Accordion from './Accordion.vue';
+import AddClientModal from '~/components/clients/AddClientModal.vue';
 
 const props = defineProps({
 	accordionItems: Array,
@@ -282,9 +288,24 @@ const props = defineProps({
 const isClientSettingOpen = ref(false);
 const selectedSettingOpt = useLocalStorage('dashboard_nav_drawer_item_lines', 1);
 const isFilterModalOpen = ref(false);
+const addClientModal = ref<InstanceType<typeof AddClientModal> | null>(null);
+const { createClientAccess } = useClientAccess();
 
 const openFilter = () => {
 	isFilterModalOpen.value = true;
+};
+
+const openAddClientModal = () => {
+	addClientModal.value?.open();
+};
+
+const closeAddClientModal = () => {
+	addClientModal.value?.close();
+};
+
+const handleCreateClientAccess = async (data) => {
+	await createClientAccess(data);
+	closeAddClientModal();
 };
 const toggleClientSetting = () => {
 	isClientSettingOpen.value = !isClientSettingOpen.value;
