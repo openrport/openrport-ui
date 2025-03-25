@@ -20,7 +20,7 @@
         --border: 214.3 31.8% 91.4%;
         --input: 214.3 31.8% 91.4%;
 
-        --primary: 205.1 100% 27.6%;
+        --primary: 222.2 47.4% 11.2%;
         --primary-foreground: 210 40% 98%;
 
         --secondary: 210 40% 96.1%;
@@ -59,6 +59,11 @@
         --color-vtd-primary-700: 3 105 161;
         --color-vtd-primary-800: 7 89 133;
         --color-vtd-primary-900: 12 74 110;
+        --chart-1: 12 76% 61%;
+        --chart-2: 173 58% 39%;
+        --chart-3: 197 37% 24%;
+        --chart-4: 43 74% 66%;
+        --chart-5: 27 87% 67%;
 
     }
 
@@ -91,6 +96,16 @@
         --destructive-foreground: 210 40% 98%;
 
         --ring: 212.7 26.8% 83.9%;
+
+        --chart-1: 220 70% 50%;
+
+        --chart-2: 160 60% 45%;
+
+        --chart-3: 30 80% 55%;
+
+        --chart-4: 280 65% 60%;
+
+        --chart-5: 340 75% 55%;
     }
 }
 
@@ -103,25 +118,9 @@
         @apply bg-background text-foreground;
     }
 }
-select {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
-    background-position: right .5rem center;
-    background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
-    padding-right: 2.5rem !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact
-}
-[multiple],[type=date],[type=datetime-local],[type=email],[type=month],[type=number],[type=password],[type=search],[type=tel],[type=text],[type=time],[type=url],[type=week],select,textarea {
-    --tw-shadow: 0 0 #0000;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-color: #fff;
-    border-color: #6b7280;
-    border-radius: 0;
-    border-width: 1px;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    padding: .5rem .75rem
+
+@layer components {
+    .bg-transparent {
+        background-color: transparent;
+    }
 }

@@ -20,12 +20,11 @@
 				</div>
 				<div class="mt-5 flex h-full flex-col pb-24">
 					<div class="primary relative grid grid-cols-7">
-						<div class="bg-primary-800 col-span-2">
+						<div class="primary col-span-2">
 							<div class="max-h-[550px] min-h-[550px] overflow-y-auto px-6 py-4">
 								<div class="flex flex-col">
 									<div class="relative mt-1 flex w-full flex-col">
 										<input
-											id="43HNJXPf8x"
 											class="border-white text-white focus:border-white input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
 											placeholder=" "
 											type="text"
@@ -46,11 +45,9 @@
 										class="text-sm font-normal text-white"
 									>Tags</label>
 									<div
-										data-v-e6ecae96=""
 										class="mt-1 flex min-h-[40px] flex-wrap overflow-hidden rounded border border-white"
 									>
 										<input
-											data-v-e6ecae96=""
 											class="flex-auto border-none bg-transparent p-2 text-sm text-white placeholder-gray-300 outline-none"
 											placeholder="Add a tag by typing"
 										>
@@ -59,9 +56,8 @@
 								<div class="flex flex-col mt-1">
 									<div class="relative mt-1 flex w-full flex-col">
 										<input
-											id="3hSWIT7FZG"
 											class="border-white text-white focus:border-white input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
-											placeholder=" "
+											placeholder="300"
 											type="number"
 											autocomplete="off"
 										>
@@ -173,7 +169,6 @@
 									type="button"
 								>
 									<svg
-										data-v-ca945699=""
 										xmlns="http://www.w3.org/2000/svg"
 										width="24px"
 										height="24px"
@@ -207,7 +202,6 @@
 									type="button"
 								>
 									<svg
-										data-v-ca945699=""
 										xmlns="http://www.w3.org/2000/svg"
 										width="24px"
 										height="24px"
@@ -223,12 +217,12 @@
 											d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"
 										/>
 									</svg><span>Clients Matching</span>
-								</button><button
+								</button>
+								<button
 									class="hover:opacity-80 px-6 py-3 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none flex w-full items-start justify-start space-x-2 bg-primary"
 									type="button"
 								>
 									<svg
-										data-v-ca945699=""
 										xmlns="http://www.w3.org/2000/svg"
 										width="24px"
 										height="24px"
@@ -285,7 +279,6 @@
 											class="border-transparent text-theme-inverted hover:border-primary hover:text-primary group flex w-1/4 items-center justify-center space-x-1 border-b-2 px-1 py-4 text-center text-sm font-medium"
 										>
 											<svg
-												data-v-ca945699=""
 												xmlns="http://www.w3.org/2000/svg"
 												width="24px"
 												height="24px"
@@ -303,7 +296,6 @@
 											class="border-transparent text-theme-inverted hover:border-primary hover:text-primary group flex w-1/4 items-center justify-center space-x-1 border-b-2 px-1 py-4 text-center text-sm font-medium"
 										>
 											<svg
-												data-v-ca945699=""
 												xmlns="http://www.w3.org/2000/svg"
 												width="24px"
 												height="24px"
@@ -321,7 +313,6 @@
 											class="border-transparent text-theme-inverted hover:border-primary hover:text-primary group flex w-1/4 items-center justify-center space-x-1 border-b-2 px-1 py-4 text-center text-sm font-medium"
 										>
 											<svg
-												data-v-ca945699=""
 												xmlns="http://www.w3.org/2000/svg"
 												width="24px"
 												height="24px"
@@ -343,7 +334,6 @@
 											class="border-transparent text-theme-inverted hover:border-primary hover:text-primary group flex w-1/4 items-center justify-center space-x-1 border-b-2 px-1 py-4 text-center text-sm font-medium"
 										>
 											<svg
-												data-v-ca945699=""
 												xmlns="http://www.w3.org/2000/svg"
 												width="24px"
 												height="24px"
@@ -381,3 +371,36 @@ export default {
 
 };
 </script>
+
+<style>
+.command-editor .prism-editor__container {
+  min-height: 520px!important;
+  overflow: visible
+}
+
+.command-editor .prism-editor-wrapper {
+  overflow: visible
+}
+
+.command-editor .prism-editor-wrapper .prism-editor__editor,.command-editor .prism-editor-wrapper .prism-editor__textarea {
+  white-space: pre
+}
+
+.command-editor .prism-editor-wrapper .prism-editor__textarea:focus {
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color),var(--tw-ring-inset) 0 0 0 calc(var(--tw-ring-offset-width)) var(--tw-ring-color),0 0 #0000;
+  box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);
+  box-shadow: var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)
+}
+
+.command-editor .prism-editor__line-number {
+  --tw-text-opacity: 1!important;
+  color: #9ca3af!important;
+  color: rgb(156 163 175/var(--tw-text-opacity))!important;
+  font-size: .75rem!important;
+  line-height: 1rem!important
+}
+</style>

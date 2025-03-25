@@ -215,7 +215,7 @@
 												<DeviceDocumentsTab />
 											</TabsContent>
 											<TabsContent value="commands">
-												<DeviceCommandsTab />
+												<DeviceCommandsTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="scripts">
 												<DeviceScriptsTab />

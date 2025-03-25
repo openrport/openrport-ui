@@ -190,7 +190,9 @@ input::placeholder,textarea::placeholder {
     --tw-bg-opacity: 1;
     background-color: #f9fafb;
 }
-
+.bg-transparent {
+    background-color: transparent !important;
+}
 .bg-theme-backdrop\/75 {
     background-color: #6b7280bf;
 }
@@ -203,4 +205,70 @@ input::placeholder,textarea::placeholder {
 }
 .primary {
     background-color: #00528d;
+}
+
+.secondary {
+    background-color: #c6f94c;
+}
+
+button.primary {
+    background-color: #00528d;
+    color: #fff
+}
+
+button.secondary {
+    background-color: #c6f94c;
+    color: #000
+}
+
+button.error {
+    background-color: #d1d5db;
+    color: #fff;
+}
+
+.primary-plain,button.primary.plain {
+    background-color: rgba(0, 82, 141, .02);
+    color: rgb(0, 82, 141);
+}
+
+button.error.plain {
+    background-color: rgba(239, 68, 68, .8);
+    color: rgb(239, 68, 68)
+}
+
+/*button.primary.plain:hover {*/
+/*    background-color: theme("colors.primary.plain-hover");*/
+/*    background-color: var(--primary-plain-hover)*/
+/*}*/
+
+/*button.error.plain:hover {*/
+/*    background-color: theme("colors.error.plain-hover");*/
+/*    background-color: var(--error-plain-hover)*/
+/*}*/
+
+button.error.plain:disabled,button.error:disabled,button.primary.plain:disabled,button.primary:disabled,button.secondary:disabled {
+    background-color: rgb(209, 213, 219);
+    color: #fff;
+}
+select {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+    background-position: right .5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact
+}
+[multiple],[type=date],[type=datetime-local],[type=email],[type=month],[type=number],[type=password],[type=search],[type=tel],[type=text],[type=time],[type=url],[type=week],select,textarea {
+    --tw-shadow: 0 0 #0000;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    border-color: #6b7280;
+    border-radius: 0;
+    border-width: 1px;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    padding: .5rem .75rem
 }

@@ -32,50 +32,68 @@
 					</div>
 					<div class="relative flex w-[108px] justify-between gap-0 rounded border border-gray-400 bg-theme-lighter px-1">
 						<div class="inline-flex w-max cursor-pointer">
-							<button
-								type="button"
-								class="inline-flex items-center duration-200 focus:outline-none rounded-full p-3 px-1 py-2"
-								@click="openAddClientModal"
-							>
-								<span class="flex items-center justify-center">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="20px"
-										height="20px"
-										viewBox="0 0 256 256"
-										class="icon"
-									>
-										<path
-											fill="currentColor"
-											d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24Zm0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88Zm48-88a8 8 0 0 1-8 8h-32v32a8 8 0 0 1-16 0v-32H88a8 8 0 0 1 0-16h32V88a8 8 0 0 1 16 0v32h32a8 8 0 0 1 8 8Z"
-										/>
-									</svg>
-								</span>
-							</button>
+							<TooltipProvider>
+								<Tooltip>
+									<TooltipTrigger as-child>
+										<button
+											type="button"
+											class="inline-flex items-center duration-200 focus:outline-none rounded-full p-3 px-1 py-2"
+											@click="openAddClientModal"
+										>
+											<span class="flex items-center justify-center">
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													width="20px"
+													height="20px"
+													viewBox="0 0 256 256"
+													class="icon"
+												>
+													<path
+														fill="currentColor"
+														d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24Zm0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88Zm48-88a8 8 0 0 1-8 8h-32v32a8 8 0 0 1-16 0v-32H88a8 8 0 0 1 0-16h32V88a8 8 0 0 1 16 0v32h32a8 8 0 0 1 8 8Z"
+													/>
+												</svg>
+											</span>
+										</button>
+									</TooltipTrigger>
+									<TooltipContent>
+										<span>Add a new client</span>
+									</TooltipContent>
+								</Tooltip>
+							</TooltipProvider>
 						</div>
 						<div class="inline-flex w-max cursor-pointer">
-							<button
-								type="button"
-								class="inline-flex items-center duration-200 focus:outline-none rounded-full p-3 mx-1 px-1 py-2"
-							>
-								<span
-									class="flex items-center justify-center"
-									style=""
-								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="20px"
-										height="20px"
-										viewBox="0 0 24 24"
-										class="icon"
-									>
-										<path
-											fill="currentColor"
-											d="M2 12a9 9 0 0 0 9 9c2.39 0 4.68-.94 6.4-2.6l-1.5-1.5A6.706 6.706 0 0 1 11 19c-6.24 0-9.36-7.54-4.95-11.95C10.46 2.64 18 5.77 18 12h-3l4 4h.1l3.9-4h-3a9 9 0 0 0-18 0Z"
-										/>
-									</svg>
-								</span>
-							</button>
+							<TooltipProvider>
+								<Tooltip>
+									<TooltipTrigger>
+										<button
+											type="button"
+											class="inline-flex items-center duration-200 focus:outline-none rounded-full p-3 mx-1 px-1 py-2"
+										>
+											<span
+												class="flex items-center justify-center"
+												style=""
+											>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													width="20px"
+													height="20px"
+													viewBox="0 0 24 24"
+													class="icon"
+												>
+													<path
+														fill="currentColor"
+														d="M2 12a9 9 0 0 0 9 9c2.39 0 4.68-.94 6.4-2.6l-1.5-1.5A6.706 6.706 0 0 1 11 19c-6.24 0-9.36-7.54-4.95-11.95C10.46 2.64 18 5.77 18 12h-3l4 4h.1l3.9-4h-3a9 9 0 0 0-18 0Z"
+													/>
+												</svg>
+											</span>
+										</button>
+									</TooltipTrigger>
+									<TooltipContent>
+										<span>Reload the client list. Filter are preserved</span>
+									</TooltipContent>
+								</Tooltip>
+							</TooltipProvider>
 						</div>
 						<button
 							type="button"

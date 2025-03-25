@@ -2,46 +2,93 @@
 	<div class="h-full w-full flex-1">
 		<div class="relative">
 			<div class="primary relative grid grid-cols-7">
-				<!---->
+				<div
+					v-if="isLoading"
+					class="flex w-full justify-center border-theme-light-inverted absolute inset-0 z-30 flex items-center justify-center border-t bg-theme bg-opacity-70 py-6"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="36px"
+						height="36px"
+						viewBox="0 0 24 24"
+						class="icon primary-text animate-[spin_0.6s_linear_infinite]"
+					><path
+						fill="currentColor"
+						d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+						opacity=".25"
+					/><path
+						fill="currentColor"
+						d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z"
+					><animateTransform
+						attributeName="transform"
+						dur="0.75s"
+						repeatCount="indefinite"
+						type="rotate"
+						values="0 12 12;360 12 12"
+					/></path></svg>
+				</div>
 				<div class="primary col-span-2">
 					<div class="max-h-[550px] min-h-[550px] overflow-y-auto px-6 py-4">
 						<div class="flex flex-col">
 							<div class="relative mt-1 flex w-full flex-col">
 								<input
 									id="op07NLb9G5"
+									v-model="commandName"
 									class="border-white text-white focus:border-white input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
 									placeholder=" "
 									type="text"
 									autocomplete="off"
-								><label
+								>
+
+								<label
 									class="order-1 flex pb-1 pl-1 text-white text-sm font-normal"
 									for="op07NLb9G5"
 								>Command name</label>
 							</div><!----><!---->
 						</div>
 						<div
-							data-v-e6ecae96=""
 							class="flex flex-col mt-1"
 						>
 							<label
-								data-v-e6ecae96=""
 								class="text-sm font-normal text-white"
 							>Tags</label>
-							<div
-								data-v-e6ecae96=""
+							<TagsInput
+								v-model="tagsValue"
 								class="mt-1 flex min-h-[40px] flex-wrap overflow-hidden rounded border border-white"
 							>
-								<input
-									data-v-e6ecae96=""
+								<TagsInputItem
+									v-for="item in tagsValue"
+									:key="item"
+									class="inline-flex items-center bg-gray-100 px-2 py-0.5 text-sm text-gray-800 rounded m-1 flex w-max"
+									:value="item"
+								>
+									<TagsInputItemText />
+								</TagsInputItem>
+								<TagsInputInput
 									class="flex-auto border-none bg-transparent p-2 text-sm text-white placeholder-gray-300 outline-none"
 									placeholder="Add a tag by typing"
-								>
-							</div><!----><!----><!----><!---->
+									@input="handleInput"
+								/>
+							</TagsInput><!---->
+							<p
+								v-if="currentInput.length > 0 && tagsValue.length == 0"
+								class="mt-1 pl-1 text-xs text-gray-300"
+							>
+								Press ENTER to add this tag
+							</p>
+							<p
+								v-if="tagsValue.length > 0"
+								class="mt-1 pl-1 text-xs text-gray-300"
+							>
+								Press BACKSPACE to remove the last tag
+							</p>
+							<!---->
 						</div><!----><!----><!----><!---->
 						<div class="flex flex-col mt-1">
 							<div class="relative mt-1 flex w-full flex-col">
 								<input
 									id="v5KL7SbcZQ"
+									v-model="timeoutInSeconds"
 									class="border-white text-white focus:border-white input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
 									placeholder=" "
 									type="number"
@@ -57,8 +104,10 @@
 					<div class="flex h-[55px] items-center justify-center border-t border-[#133B66]">
 						<div class="grid grid-cols-3 rounded-l-md">
 							<button
-								class="cursor-not-allowed hover:opacity-100 px-4 py-2 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none col-span-3 secondary"
-								disabled=""
+								:class="[' px-4 py-2 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none col-span-3 secondary',
+									commandText.length == 0 || commandName.length == 0 ? 'cursor-not-allowed hover:opacity-100' : 'hover:opacity-80',
+								]"
+								:disabled="commandText.length == 0 || commandName.length == 0 "
 								type="button"
 							>
 								<!----> Save
@@ -75,52 +124,20 @@
 					<div
 						class="command-editor max-h-[550px] min-h-[550px] overflow-auto overflow-auto bg-[#224A75] text-xs text-gray-200"
 					>
-						<div class="prism-editor-wrapper my-editor p-2">
-							<div
-								class="prism-editor__line-numbers"
-								style="min-height: 16px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; background-color: rgba(0, 0, 0, 0); margin-top: 0px; padding-top: 0px; font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace; font-size: 12px; line-height: 16px; margin-bottom: 0px;"
-								aria-hidden="true"
-							>
-								<div
-									class="prism-editor__line-width-calc"
-									style="height: 0px; visibility: hidden; pointer-events: none;"
-								>
-									999
-								</div>
-								<div class="prism-editor__line-number token comment">
-									1
-								</div>
-							</div>
-							<div class="prism-editor__container">
-								<textarea
-									class="prism-editor__textarea prism-editor__textarea--empty"
-									spellcheck="false"
-									autocapitalize="none"
-									autocomplete="off"
-									autocorrect="off"
-									data-gramm="false"
-									placeholder=""
-									data-testid="textarea"
-								/>
-								<pre
-									class="prism-editor__editor"
-									data-testid="preview"
-									style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;"
-								><br></pre>
-							</div>
-						</div>
+						<command-editor v-model="commandText" />
 					</div>
 					<div
 						class="flex h-[55px] items-center justify-between border-t border-[#133B66] bg-[#224A75] p-2 shadow-md"
 					>
 						<div>
 							<button
-								class="cursor-not-allowed hover:opacity-100 px-4 py-2 text-sm text-black rounded inline-flex items-center duration-200 focus:outline-none bg-gray-100 opacity-50"
-								disabled=""
+								:class="['px-4 py-2 text-sm text-black rounded inline-flex items-center duration-200 focus:outline-none bg-slate-100',
+									commandText.length == 0 ? 'cursor-not-allowed opacity-50 hover:opacity-100' : 'hover:opacity-80',
+								]"
+								:disabled="commandText.length == 0"
 								type="button"
 							>
 								<!----><svg
-									data-v-ca945699=""
 									xmlns="http://www.w3.org/2000/svg"
 									width="24px"
 									height="24px"
@@ -144,9 +161,11 @@
 								>Abort
 									on error</label><!---->
 							</div><!----><span class="mr-4 text-xs text-gray-300"> (CMD +
-								ENTER) </span><button
+								ENTER) </span>
+							<button
 								class="hover:opacity-80 px-4 py-2 text-sm text-black rounded inline-flex items-center duration-200 focus:outline-none bg-[#C6F94C]"
 								type="button"
+								@click="runCommand"
 							>
 								<!----><svg
 									data-v-ca945699=""
@@ -165,7 +184,44 @@
 						</div>
 					</div>
 				</div>
-			</div><!----><!----><!---->
+			</div><!---->
+			<CommandResult
+				v-if="results.length > 0"
+				language="vim"
+				:results="results"
+			/>
+			<!---->
 		</div>
 	</div>
 </template>
+
+<script setup lang="ts">
+import {
+	TagsInput,
+	TagsInputInput,
+	TagsInputItem,
+	TagsInputItemText,
+} from '~/components/ui/tags-input';
+import { useCommandExecution } from '~/composables/useCommandExecution';
+
+const props = defineProps({
+	id: {
+		type: String,
+		required: true,
+	},
+});
+
+const tagsValue = ref<string[]>([]);
+const currentInput = ref<string>('');
+const timeoutInSeconds = ref<number>(300);
+const commandName = ref<string>('');
+const commandText = ref<string>('');
+const { executeCommand, isLoading, results, error, disconnect } = useCommandExecution();
+const handleInput = (event) => {
+	currentInput.value = event.target.value;
+};
+
+const runCommand = () => {
+	executeCommand(commandText.value, [props.id], []);
+};
+</script>

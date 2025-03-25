@@ -410,3 +410,30 @@ export interface TunnelOptionsProps {
 	disabled?: boolean;
 	errors?: Record<string, string>;
 }
+export interface CommandResult {
+	jid: string;
+	status?: string;
+	finished_at?: Date;
+	client_id: string;
+	client_name: string;
+	command?: string;
+	cwd?: string;
+	interpreter?: string;
+	pid?: number;
+	started_at?: Date;
+	created_by?: string;
+	timeout_sec?: number;
+	multi_job_id?: string;
+	schedule_id?: null;
+	error?: string;
+	result: Result;
+	is_sudo?: boolean;
+	is_script?: boolean;
+	stream_result?: boolean;
+}
+
+export interface Result {
+	stdout: string;
+	stderr: string;
+	summary: string;
+}

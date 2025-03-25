@@ -1,6 +1,9 @@
 export default defineNuxtConfig({
 	devtools: { enabled: true },
-	css: ['~/assets/css/tailwind.css'],
+	css: [
+		'~/assets/css/tailwind.css',
+		'~/assets/css/prism-tomorrow.css',
+	],
 
 	postcss: {
 		plugins: {
