@@ -1,5 +1,6 @@
 export default defineNuxtConfig({
 	devtools: { enabled: true },
+
 	css: [
 		'~/assets/css/tailwind.css',
 		'~/assets/css/prism-tomorrow.css',
@@ -30,6 +31,7 @@ export default defineNuxtConfig({
 			},
 		},
 	},
+
 	shadcn: {
 		componentDir: './components/ui',
 	},
@@ -83,4 +85,5 @@ export default defineNuxtConfig({
 	},
 
 	ssr: false,
+	compatibilityDate: '2025-03-25',
 });

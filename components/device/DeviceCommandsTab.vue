@@ -46,44 +46,7 @@
 								>Command name</label>
 							</div><!----><!---->
 						</div>
-						<div
-							class="flex flex-col mt-1"
-						>
-							<label
-								class="text-sm font-normal text-white"
-							>Tags</label>
-							<TagsInput
-								v-model="tagsValue"
-								class="mt-1 flex min-h-[40px] flex-wrap overflow-hidden rounded border border-white"
-							>
-								<TagsInputItem
-									v-for="item in tagsValue"
-									:key="item"
-									class="inline-flex items-center bg-gray-100 px-2 py-0.5 text-sm text-gray-800 rounded m-1 flex w-max"
-									:value="item"
-								>
-									<TagsInputItemText />
-								</TagsInputItem>
-								<TagsInputInput
-									class="flex-auto border-none bg-transparent p-2 text-sm text-white placeholder-gray-300 outline-none"
-									placeholder="Add a tag by typing"
-									@input="handleInput"
-								/>
-							</TagsInput><!---->
-							<p
-								v-if="currentInput.length > 0 && tagsValue.length == 0"
-								class="mt-1 pl-1 text-xs text-gray-300"
-							>
-								Press ENTER to add this tag
-							</p>
-							<p
-								v-if="tagsValue.length > 0"
-								class="mt-1 pl-1 text-xs text-gray-300"
-							>
-								Press BACKSPACE to remove the last tag
-							</p>
-							<!---->
-						</div><!----><!----><!----><!---->
+						<ExecutionTags v-model="tagsValue" /><!----><!----><!----><!---->
 						<div class="flex flex-col mt-1">
 							<div class="relative mt-1 flex w-full flex-col">
 								<input
@@ -122,7 +85,7 @@
 				</div>
 				<div class="col-span-5">
 					<div
-						class="command-editor max-h-[550px] min-h-[550px] overflow-auto overflow-auto bg-[#224A75] text-xs text-gray-200"
+						class="command-editor max-h-[550px] min-h-[550px]n overflow-auto bg-[#224A75] text-xs text-gray-200"
 					>
 						<command-editor v-model="commandText" />
 					</div>
@@ -196,13 +159,8 @@
 </template>
 
 <script setup lang="ts">
-import {
-	TagsInput,
-	TagsInputInput,
-	TagsInputItem,
-	TagsInputItemText,
-} from '~/components/ui/tags-input';
 import { useCommandExecution } from '~/composables/useCommandExecution';
+import ExecutionTags from '~/components/custom/ExecutionTags.vue';
 
 const props = defineProps({
 	id: {
@@ -212,14 +170,11 @@ const props = defineProps({
 });
 
 const tagsValue = ref<string[]>([]);
-const currentInput = ref<string>('');
+
 const timeoutInSeconds = ref<number>(300);
 const commandName = ref<string>('');
 const commandText = ref<string>('');
 const { executeCommand, isLoading, results, error, disconnect } = useCommandExecution();
-const handleInput = (event) => {
-	currentInput.value = event.target.value;
-};
 
 const runCommand = () => {
 	executeCommand(commandText.value, [props.id], []);

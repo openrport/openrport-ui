@@ -218,7 +218,7 @@
 												<DeviceCommandsTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="scripts">
-												<DeviceScriptsTab />
+												<DeviceScriptsTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="monitoring">
 												<DeviceMonitoringTab />

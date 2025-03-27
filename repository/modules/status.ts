@@ -1,5 +1,4 @@
 import { HttpFactory, HttpMethod } from '~/repository/factory';
-import { useAsyncData } from '#app';
 
 class StatusModule extends HttpFactory {
 	private RESOURCE = 'api/v1/status';
