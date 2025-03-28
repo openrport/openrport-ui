@@ -393,6 +393,57 @@ export interface TunnelPayload {
 	'auth_user'?: string;
 	'auth_password'?: string;
 }
+
+export interface CommandPayload	{
+	name: string;
+	tags: string[];
+	timeout_sec: number;
+	cmd: string;
+}
+
+export interface Command {
+	id: string;
+	name: string;
+	created_by: string;
+	created_at: Date;
+	updated_by: string;
+	updated_at: Date;
+	cmd: string;
+	tags: string[];
+	timeout_sec: number;
+}
+
+export interface CommandResponse {
+	data: Command[];
+	meta: Meta;
+}
+export interface ScriptPayload {
+	name: string;
+	tags: string[];
+	timeout_sec: number;
+	script: string;
+	cwd: string;
+	is_sudo: boolean;
+	interpreter: string;
+}
+export interface Script {
+	id: string;
+	name: string;
+	created_by: string;
+	created_at: Date;
+	updated_by: string;
+	updated_at: Date;
+	interpreter: string;
+	is_sudo: boolean;
+	cwd: string;
+	script: string;
+	tags: string[];
+	timeout_sec: number;
+}
+export interface ScriptResponse {
+	data: Script[];
+	meta: Meta;
+}
 export type QueryParams = {
 	[key: string]: string | number | boolean | undefined | null;
 };
