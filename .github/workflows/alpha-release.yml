@@ -1,0 +1,74 @@
+name: Alpha Release
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build for production
+        run: yarn generate
+        env:
+          NUXT_API_URL: "/"
+
+      - name: Generate release info
+        id: release_info
+        run: |
+          DATE=$(date +'%Y-%m-%d-%H%M')
+          TAG="alpha-$DATE"
+          NAME="Alpha Release $DATE"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+          echo "artifact_name=openrport-ui-$TAG" >> $GITHUB_OUTPUT
+
+      - name: Create release zip
+        run: |
+          ARTIFACT_NAME="${{ steps.release_info.outputs.artifact_name }}"
+          cd .output/public
+          zip -r "../../${ARTIFACT_NAME}.zip" .
+          cd ../..
+
+          # Create MD5 checksum
+          md5sum "${ARTIFACT_NAME}.zip" > "${ARTIFACT_NAME}.zip.md5"
+
+      - name: Create Alpha Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.release_info.outputs.tag }}
+          name: ${{ steps.release_info.outputs.name }}
+          body: |
+            🚀 Automated alpha release of OpenRPort UI
+
+            **Build Information:**
+            - Commit: ${{ github.sha }}
+            - Branch: ${{ github.ref_name }}
+            - Build Date: ${{ steps.release_info.outputs.tag }}
+
+            **Installation for Go Server:**
+            1. Download the `${{ steps.release_info.outputs.artifact_name }}.zip` file
+            2. Extract the contents to `/var/lib/rport/docroot`
+            3. Chown the files to `rport:rport`
+
+            > ⚠️ This is an alpha release - use for testing purposes only
+          files: |
+            ${{ steps.release_info.outputs.artifact_name }}.zip
+            ${{ steps.release_info.outputs.artifact_name }}.zip.md5
+          prerelease: true
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
