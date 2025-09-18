@@ -20,7 +20,10 @@
 				</div>
 			</div>
 		</div>
-		<div v-else class="relative max-h-[70vh]">
+		<div
+			v-else
+			class="relative max-h-[70vh]"
+		>
 			<div class="bg-red-50 dark:bg-red-500/10 rounded-md p-4">
 				<div class="flex items-end justify-center gap-x-3">
 					<!---->
@@ -61,7 +64,8 @@
 			<div
 				v-for="session in userSessions"
 				:key="session.id"
-				class="flex flex-1 flex-col divide-y divide-slate-50 overflow-hidden rounded-lg bg-white shadow dark:divide-slate-700 dark:bg-slate-900 mb-12 w-full">
+				class="flex flex-1 flex-col divide-y divide-slate-50 overflow-hidden rounded-lg bg-white shadow dark:divide-slate-700 dark:bg-slate-900 mb-12 w-full"
+			>
 				<!---->
 				<div class="flex-1 px-4 py-5 text-slate-950 dark:text-slate-50 sm:p-6">
 					<div class="h-full w-full">
@@ -128,7 +132,7 @@
 </template>
 
 <script setup lang="ts">
-import type { UserSession } from "~/types";
+import type { UserSession } from '~/types';
 
 const { $api } = useNuxtApp();
 const isOpen = ref(false);

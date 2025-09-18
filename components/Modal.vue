@@ -107,4 +107,3 @@ const onCancel = () => {
 	closeModal();
 };
 </script>
-

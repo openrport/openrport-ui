@@ -157,7 +157,7 @@
 							</div>
 						</div>
 					</div>
-					<ClientSelector />
+					<ClientSelector title="commands" />
 				</div>
 			</div>
 		</div>

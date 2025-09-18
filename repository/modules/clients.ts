@@ -28,6 +28,13 @@ class ClientsModule extends HttpFactory {
 		);
 	}
 
+	async listClientsWithFilter(filter: string): Promise<ClientsResponse> {
+		return this.call<ClientsResponse>('GET',
+			`${this.RESOURCE}?${filter}`,
+			undefined,
+		);
+	}
+
 	async getClientsName(clientsIds: Array<string>): Promise<ClientsResponse> {
 		return this.call<ClientsResponse>('GET',
 			`${this.RESOURCE}?sort=name&fields[clients]=name,id&page[limit]=${clientsIds.length}&page[offset]=0&filter[id]=${clientsIds.join(',')}`,

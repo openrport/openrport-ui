@@ -190,6 +190,10 @@ input::placeholder,textarea::placeholder {
     --tw-bg-opacity: 1;
     background-color: #f9fafb;
 }
+.bg-theme-dark {
+    --tw-bg-opacity: 1;
+    background-color: #e5e7eb;
+}
 .bg-transparent {
     background-color: transparent !important;
 }
