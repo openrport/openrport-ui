@@ -1,5 +1,5 @@
 import { HttpFactory } from '~/repository/factory';
-import type { Command, CommandPayload, CommandResponse } from '~/types';
+import type { Command, CommandPayload, CommandResponse, ScriptResponse } from '~/types';
 
 class LibraryModule extends HttpFactory {
 	private RESOURCE = '/api/v1/library';
@@ -7,7 +7,15 @@ class LibraryModule extends HttpFactory {
 	async listCommand(): Promise<CommandResponse> {
 		return await this.call<CommandResponse>(
 			'GET',
-			`${this.RESOURCE}/commands`,
+			`${this.RESOURCE}/commands?sort=name&page[limit]=100&page[offset]=0`,
+			undefined,
+		);
+	}
+
+	async listScripts(): Promise<ScriptResponse> {
+		return this.call(
+			'GET',
+			`${this.RESOURCE}/scripts?sort=name&page[limit]=100&page[offset]=0`,
 			undefined,
 		);
 	}

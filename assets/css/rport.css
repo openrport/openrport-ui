@@ -211,6 +211,20 @@ input::placeholder,textarea::placeholder {
     background-color: #c6f94c;
 }
 
+.error {
+    color: rgb(239, 68, 68);
+}
+
+.primary-text {
+    color: #00528d;
+}
+.secondary-text {
+    color: #c6f94c;
+}
+
+.error-text {
+    color: #EF4444FF;
+}
 button.primary {
     background-color: #00528d;
     color: #fff
@@ -272,3 +286,4 @@ select {
     line-height: 1.5rem;
     padding: .5rem .75rem
 }
+
