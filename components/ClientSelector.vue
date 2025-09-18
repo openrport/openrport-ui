@@ -112,8 +112,8 @@
 												>
 													<span class="text-theme-inverted text-sm">{{ getClientNameById(clientId) }}</span>
 													<button
-														@click="removeClient(clientId)"
 														class="text-red-500 hover:text-red-700"
+														@click="removeClient(clientId)"
 													>
 														×
 													</button>
@@ -154,8 +154,8 @@
 															<input
 																type="checkbox"
 																:checked="selectedClients.includes(client.id)"
-																@change="toggleClient(client.id)"
 																class="mr-2 h-[16px] w-[16px] cursor-pointer rounded border-none bg-transparent ring-2 ring-gray-300 focus:ring-gray-300 focus:ring-offset-0 primary-text"
+																@change="toggleClient(client.id)"
 															>
 															{{ client.name }}
 														</label>
@@ -165,9 +165,9 @@
 												<!-- Load More Button -->
 												<button
 													v-if="hasMoreClients && !isLoading"
-													@click="loadMoreClients"
 													class="hover:opacity-80 px-6 py-3 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none block w-full bg-primary"
 													type="button"
+													@click="loadMoreClients"
 												>
 													Load More
 												</button>
@@ -185,16 +185,94 @@
 								</div>
 							</TabsContent>
 							<TabsContent value="client-groups">
-								<div class="p-6">
-									<h3 class="text-lg font-medium text-theme-inverted mb-4">
-										Client Groups
-									</h3>
-									<p class="text-theme-inverted-lighter mb-4">
-										Select client groups to run commands on:
-									</p>
-									<!-- Client groups selection content goes here -->
-									<div class="text-center text-theme-inverted-lighter">
-										Client groups selection interface will be implemented here
+								<div class="absolute inset-0 z-0 h-full w-full">
+									<div class="absolute inset-0 flex h-full w-full space-x-12 pt-24">
+										<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
+											<div class="flex flex h-12 w-full items-center justify-between">
+												<h3 class="text-primary">
+													Your selection
+												</h3>
+												<span class="w-3/12 rounded-full bg-primary text-center text-white">
+													{{ selectedGroups.length }} groups selected
+												</span>
+											</div>
+											<div class="absolute inset-0 top-12 w-full flex-1 space-y-4 overflow-auto bg-theme-dark p-4">
+												<div
+													v-for="groupId in selectedGroups"
+													:key="groupId"
+													class="flex items-center justify-between p-2 bg-theme-light rounded"
+												>
+													<span class="text-theme-inverted text-sm">{{ getGroupNameById(groupId) }}</span>
+													<button
+														class="text-red-500 hover:text-red-700"
+														@click="removeGroup(groupId)"
+													>
+														×
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
+											<div class="flex flex h-12 w-full items-center justify-between">
+												<h3 class="text-primary">
+													Available groups ({{ totalGroupsCount > availableGroups.length ? `${availableGroups.length}/${totalGroupsCount}` : availableGroups.length }})
+												</h3>
+												<div class="flex flex-col w-1/2">
+													<div class="relative mt-1 flex w-full flex-col">
+														<input
+															id="groupFilter"
+															v-model="groupFilterText"
+															class="primary input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
+															placeholder=" "
+															type="text"
+															autocomplete="off"
+														>
+														<label
+															class="bg-theme peer-focus:text-theme-inverted absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
+															for="groupFilter"
+														>
+															Filter (wildcards supported)
+														</label>
+													</div>
+												</div>
+											</div>
+											<div class="absolute inset-0 top-12 w-full flex-1 space-y-4 overflow-auto bg-theme-dark p-4">
+												<div
+													v-for="group in filteredGroups"
+													:key="group.id"
+												>
+													<div class="flex flex-col">
+														<label class="flex cursor-pointer select-none items-center justify-start text-sm text-theme-label">
+															<input
+																type="checkbox"
+																:checked="selectedGroups.includes(group.id)"
+																class="mr-2 h-[16px] w-[16px] cursor-pointer rounded border-none bg-transparent ring-2 ring-gray-300 focus:ring-gray-300 focus:ring-offset-0 primary-text"
+																@change="toggleGroup(group.id)"
+															>
+															{{ group.description }} ({{ group.num_clients }} clients)
+														</label>
+													</div>
+												</div>
+
+												<!-- Load More Button -->
+												<button
+													v-if="hasMoreGroups && !isLoadingGroups"
+													class="hover:opacity-80 px-6 py-3 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none block w-full bg-primary"
+													type="button"
+													@click="loadMoreGroups"
+												>
+													Load More
+												</button>
+
+												<!-- Loading indicator -->
+												<div
+													v-if="isLoadingGroups"
+													class="flex items-center justify-center p-4"
+												>
+													<span class="text-theme-label">Loading...</span>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</TabsContent>
@@ -269,6 +347,17 @@ const hasMoreClients = ref(false);
 const availableClients = ref<Array<{ id: string; name: string }>>([]);
 const totalClientsCount = ref(0);
 
+// Groups selection state
+const selectedGroups = ref<string[]>([]);
+const groupFilterText = ref('');
+const isLoadingGroups = ref(false);
+const currentGroupOffset = ref(0);
+const hasMoreGroups = ref(false);
+
+// API groups data
+const availableGroups = ref<Array<{ id: string; description: string; num_clients: number }>>([]);
+const totalGroupsCount = ref(0);
+
 // Build the filter string for the API
 const buildFilterString = (search?: string, offset = 0) => {
 	const fields = 'id,name,os_full_name,os,os_arch,os_family,os_version,os_virtualization_role,os_virtualization_system,os_kernel,hostname,ipv4,ipv6,version,address,updates_status,client_auth_id,connection_state';
@@ -300,7 +389,8 @@ const loadClients = async (search?: string, offset = 0, append = false) => {
 
 			if (append) {
 				availableClients.value.push(...clients);
-			} else {
+			}
+			else {
 				availableClients.value = clients;
 			}
 
@@ -308,9 +398,11 @@ const loadClients = async (search?: string, offset = 0, append = false) => {
 			hasMoreClients.value = response.data.length === pageLimit;
 			totalClientsCount.value = response.meta?.total || availableClients.value.length;
 		}
-	} catch (error) {
+	}
+	catch (error) {
 		console.error('Error loading clients:', error);
-	} finally {
+	}
+	finally {
 		isLoading.value = false;
 	}
 };
@@ -336,9 +428,81 @@ watch(filterText, (newValue) => {
 	}, 300); // Debounce for 300ms
 });
 
-// Load initial clients on mount
+// Build filter string for groups API
+const buildGroupFilterString = (search?: string, offset = 0) => {
+	const fields = 'id,description,num_clients';
+	let filterString = `sort=description&fields[client_groups]=${fields}&page[limit]=${pageLimit}&page[offset]=${offset}`;
+
+	if (search && search.trim()) {
+		// For wildcards, convert * to % for the API
+		const searchTerm = search.replace(/\*/g, '%');
+		filterString += `&filter[description]=${encodeURIComponent(searchTerm)}`;
+	}
+
+	return filterString;
+};
+
+// Load groups from API
+const loadGroups = async (search?: string, offset = 0, append = false) => {
+	const { $api } = useNuxtApp();
+
+	try {
+		isLoadingGroups.value = true;
+		const filterString = buildGroupFilterString(search, offset);
+		const response = await $api.groups.listGroupsWithFilter(filterString);
+
+		if (response?.data) {
+			const groups = response.data.map((group: any) => ({
+				id: group.id,
+				description: group.description || group.id,
+				num_clients: group.num_clients || 0,
+			}));
+
+			if (append) {
+				availableGroups.value.push(...groups);
+			}
+			else {
+				availableGroups.value = groups;
+			}
+
+			// Check if there are more groups to load
+			hasMoreGroups.value = response.data.length === pageLimit;
+			totalGroupsCount.value = response.meta?.total || availableGroups.value.length;
+		}
+	}
+	catch (error) {
+		console.error('Error loading groups:', error);
+	}
+	finally {
+		isLoadingGroups.value = false;
+	}
+};
+
+// Load more groups (pagination)
+const loadMoreGroups = async () => {
+	currentGroupOffset.value += pageLimit;
+	await loadGroups(groupFilterText.value, currentGroupOffset.value, true);
+};
+
+// Computed filtered groups - returns API results since filtering is done server-side
+const filteredGroups = computed(() => {
+	return availableGroups.value;
+});
+
+// Watch for group filter changes
+let groupFilterTimeout: NodeJS.Timeout;
+watch(groupFilterText, (newValue) => {
+	clearTimeout(groupFilterTimeout);
+	groupFilterTimeout = setTimeout(async () => {
+		currentGroupOffset.value = 0;
+		await loadGroups(newValue);
+	}, 300); // Debounce for 300ms
+});
+
+// Load initial clients and groups on mount
 onMounted(() => {
 	loadClients();
+	loadGroups();
 });
 
 // Helper function to get client name by ID
@@ -347,12 +511,19 @@ const getClientNameById = (clientId: string) => {
 	return client?.name || clientId;
 };
 
-// Methods
+// Helper function to get group name by ID
+const getGroupNameById = (groupId: string) => {
+	const group = availableGroups.value.find(g => g.id === groupId);
+	return group?.description || groupId;
+};
+
+// Client methods
 const toggleClient = (clientId: string) => {
 	const index = selectedClients.value.indexOf(clientId);
 	if (index > -1) {
 		selectedClients.value.splice(index, 1);
-	} else {
+	}
+	else {
 		selectedClients.value.push(clientId);
 	}
 };
@@ -361,6 +532,24 @@ const removeClient = (clientId: string) => {
 	const index = selectedClients.value.indexOf(clientId);
 	if (index > -1) {
 		selectedClients.value.splice(index, 1);
+	}
+};
+
+// Group methods
+const toggleGroup = (groupId: string) => {
+	const index = selectedGroups.value.indexOf(groupId);
+	if (index > -1) {
+		selectedGroups.value.splice(index, 1);
+	}
+	else {
+		selectedGroups.value.push(groupId);
+	}
+};
+
+const removeGroup = (groupId: string) => {
+	const index = selectedGroups.value.indexOf(groupId);
+	if (index > -1) {
+		selectedGroups.value.splice(index, 1);
 	}
 };
 
