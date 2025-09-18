@@ -444,6 +444,16 @@ export interface ScriptResponse {
 	data: Script[];
 	meta: Meta;
 }
+
+export interface Tag {
+	tag: string;
+	client_ids: string[];
+}
+export interface ClientTagsResponse {
+	data: Tag[];
+	meta: Meta;
+}
+
 export type QueryParams = {
 	[key: string]: string | number | boolean | undefined | null;
 };

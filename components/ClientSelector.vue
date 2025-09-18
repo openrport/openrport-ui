@@ -277,30 +277,238 @@
 								</div>
 							</TabsContent>
 							<TabsContent value="clients-matching">
-								<div class="p-6">
-									<h3 class="text-lg font-medium text-theme-inverted mb-4">
-										Clients Matching
-									</h3>
-									<p class="text-theme-inverted-lighter mb-4">
-										Define criteria to match clients:
-									</p>
-									<!-- Clients matching criteria content goes here -->
-									<div class="text-center text-theme-inverted-lighter">
-										Clients matching criteria interface will be implemented here
+								<div class="absolute inset-0 flex h-full w-full flex-col space-y-4 pt-24">
+									<!-- Header Section -->
+									<div class="flex space-x-12">
+										<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
+											<div class="flex flex h-12 w-full items-center justify-between">
+												<h3 class="text-primary">
+													Your selection
+												</h3>
+												<span class="w-3/12 rounded-full bg-primary text-center text-white">
+													{{ matchingSelectedClients.length }} clients selected
+												</span>
+											</div>
+										</div>
+										<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
+											<div class="flex flex h-12 w-full items-center justify-between">
+												<h3 class="text-primary">
+													All clients ({{ matchingFilteredClients.length }})
+												</h3>
+												<button
+													type="button"
+													class="inline-flex items-center duration-200 focus:outline-none rounded-full p-3"
+													@click="showColumnModal = true"
+												>
+													<span class="flex items-center justify-center">
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															width="24px"
+															height="24px"
+															viewBox="0 0 24 24"
+															class="icon"
+														>
+															<path
+																fill="currentColor"
+																d="M6 13h12v-2H6M3 6v2h18V6M10 18h4v-2h-4v2Z"
+															/>
+														</svg>
+													</span>
+												</button>
+											</div>
+										</div>
+									</div>
+
+									<!-- Table Section -->
+									<div class="border-theme-light-inverted absolute relative mt-4 overflow-auto rounded border px-4 pt-2 w-full">
+										<div class="overflow-x-auto overflow-y-hidden">
+											<table class="min-w-full">
+												<thead class="sticky">
+													<tr>
+														<!-- Checkbox column -->
+														<th
+															class="w-5 max-w-[50px] text-left table-cell px-3 pt-4 text-sm text-theme-th"
+															scope="col"
+														>
+															<span class="truncate" />
+														</th>
+
+														<!-- Dynamic columns -->
+														<th
+															v-for="column in visibleColumns"
+															:key="column.key"
+															class="text-left min-w-[120px] table-cell px-3 pt-4 text-sm text-theme-th"
+															scope="col"
+														>
+															<span class="truncate">{{ column.label }}</span>
+															<div class="flex flex-col">
+																<div class="relative mt-1 flex w-full flex-col">
+																	<input
+																		:id="`filter-${column.key}`"
+																		v-model="columnFilters[column.key]"
+																		class="primary input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
+																		placeholder=" "
+																		type="text"
+																		autocomplete="off"
+																		@keyup.enter="applyFilters"
+																	>
+																	<label
+																		:for="`filter-${column.key}`"
+																		class="hidden absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
+																	>
+																		Match
+																	</label>
+																</div>
+															</div>
+														</th>
+													</tr>
+													<tr>
+														<th />
+														<th
+															:colspan="visibleColumns.length"
+															class="border-theme-light-inverted whitespace-nowrap border-b px-3 pb-4 pt-1 text-left text-xxs font-normal"
+														>
+															All filters support wildcards (no regex)
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr
+														v-for="client in matchingFilteredClients"
+														:key="client.id"
+														class="border-theme-light-inverted group border-b"
+													>
+														<!-- Checkbox column -->
+														<td class="table-cell px-3 py-4 text-sm text-theme-inverted-lighter w-5 max-w-[50px] text-left">
+															<div class="flex flex-col">
+																<label class="flex cursor-pointer select-none items-center justify-start text-sm text-theme-label">
+																	<input
+																		type="checkbox"
+																		:checked="matchingSelectedClients.includes(client.id)"
+																		class="mr-2 h-[16px] w-[16px] cursor-pointer rounded border-none bg-transparent ring-2 ring-gray-300 focus:ring-gray-300 focus:ring-offset-0 primary-text"
+																		@change="toggleMatchingClient(client.id)"
+																	>
+																</label>
+															</div>
+														</td>
+
+														<!-- Dynamic columns -->
+														<td
+															v-for="column in visibleColumns"
+															:key="column.key"
+															class="table-cell px-3 py-4 text-sm text-theme-inverted-lighter text-left"
+														>
+															{{ getClientFieldValue(client, column.key) }}
+														</td>
+													</tr>
+													<tr>
+														<td
+															class="py-4"
+															colspan="2"
+														/>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="bg-theme-table-footer" />
 									</div>
 								</div>
+
+								<!-- Column Selector Modal -->
+								<ColumnSelectorModal
+									v-model="showColumnModal"
+									:selected-columns="selectedColumns"
+									:available-columns="availableTableColumns"
+									@update:selected-columns="updateSelectedColumns"
+								/>
 							</TabsContent>
 							<TabsContent value="clients-by-tags">
-								<div class="p-6">
-									<h3 class="text-lg font-medium text-theme-inverted mb-4">
-										Clients by Tags
-									</h3>
-									<p class="text-theme-inverted-lighter mb-4">
-										Select clients based on tags:
-									</p>
-									<!-- Clients by tags selection content goes here -->
-									<div class="text-center text-theme-inverted-lighter">
-										Clients by tags selection interface will be implemented here
+								<div class="absolute inset-0 flex h-full w-full space-x-12 pt-24">
+									<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
+										<div class="flex flex h-12 w-full items-center justify-between">
+											<h3 class="text-primary">
+												Your selection
+											</h3>
+											<span class="w-3/12 rounded-full bg-primary text-center text-white">
+												{{ selectedTags.length }} tags selected
+											</span>
+										</div>
+										<div class="absolute inset-0 top-12 w-full flex-1 space-y-4 overflow-auto bg-theme-dark p-4">
+											<div
+												v-for="tagName in selectedTags"
+												:key="tagName"
+												class="flex items-center justify-between p-2 bg-theme-light rounded"
+											>
+												<span class="text-theme-inverted text-sm">{{ getTagDisplayName(tagName) }}</span>
+												<button
+													class="text-red-500 hover:text-red-700"
+													@click="removeTag(tagName)"
+												>
+													×
+												</button>
+											</div>
+										</div>
+									</div>
+									<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
+										<div class="flex flex h-12 w-full items-center justify-between">
+											<h3 class="text-primary">
+												All tags ({{ totalTagsCount > availableTags.length ? `${availableTags.length}/${totalTagsCount}` : availableTags.length }})
+											</h3>
+											<div class="flex flex-col w-1/2">
+												<div class="relative mt-1 flex w-full flex-col">
+													<input
+														id="tagFilter"
+														v-model="tagFilterText"
+														class="primary input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
+														placeholder=" "
+														type="text"
+														autocomplete="off"
+													>
+													<label
+														class="bg-theme peer-focus:text-theme-inverted absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
+														for="tagFilter"
+													>
+														Filter (wildcards supported)
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="absolute inset-0 top-12 w-full flex-1 space-y-4 overflow-auto bg-theme-dark p-4">
+											<div
+												v-for="tag in filteredTags"
+												:key="tag.tag"
+											>
+												<div class="flex flex-col">
+													<label class="flex cursor-pointer select-none items-center justify-start text-sm text-theme-label">
+														<input
+															type="checkbox"
+															:checked="selectedTags.includes(tag.tag)"
+															class="mr-2 h-[16px] w-[16px] cursor-pointer rounded border-none bg-transparent ring-2 ring-gray-300 focus:ring-gray-300 focus:ring-offset-0 primary-text"
+															@change="toggleTag(tag.tag)"
+														>
+														{{ tag.tag }} ({{ tag.client_count }})
+													</label>
+												</div>
+											</div>
+
+											<!-- Load More Button -->
+											<button
+												v-if="hasMoreTags && !isLoadingTags"
+												class="hover:opacity-80 px-6 py-3 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none block w-full bg-primary"
+												type="button"
+												@click="loadMoreTags"
+											>
+												Load More
+											</button>
+
+											<!-- Loading indicator -->
+											<div
+												v-if="isLoadingTags"
+												class="flex items-center justify-center p-4"
+											>
+												<span class="text-theme-label">Loading...</span>
+											</div>
+										</div>
 									</div>
 								</div>
 							</TabsContent>
@@ -319,6 +527,7 @@ import {
 	TabsList,
 	TabsTrigger,
 } from '@/components/ui/tabs';
+import ColumnSelectorModal from '@/components/custom/modal-filter/ColumnSelectorModal.vue';
 
 interface Props {
 	title: 'commands' | 'scripts';
@@ -357,6 +566,59 @@ const hasMoreGroups = ref(false);
 // API groups data
 const availableGroups = ref<Array<{ id: string; description: string; num_clients: number }>>([]);
 const totalGroupsCount = ref(0);
+
+// Clients Matching state
+const matchingSelectedClients = ref<string[]>([]);
+const matchingClients = ref<any[]>([]);
+const isLoadingMatching = ref(false);
+const columnFilters = ref<Record<string, string>>({});
+const showColumnModal = ref(false);
+const selectedColumns = ref<string[]>(['hostname', 'name', 'id', 'os_family', 'ipv4']);
+
+// Available table columns
+const availableTableColumns = [
+	{ key: 'hostname', label: 'Host Name' },
+	{ key: 'name', label: 'Client Name' },
+	{ key: 'id', label: 'ID' },
+	{ key: 'os_full_name', label: 'OS Full Name' },
+	{ key: 'os_kernel', label: 'OS Kernel' },
+	{ key: 'os_arch', label: 'OS Arch' },
+	{ key: 'os_family', label: 'OS Family' },
+	{ key: 'os_version', label: 'OS Version' },
+	{ key: 'os_virtualization_role', label: 'OS Virtualization Role' },
+	{ key: 'os_virtualization_system', label: 'OS Virtualization System' },
+	{ key: 'ipv4', label: 'IPv4 Addresses' },
+	{ key: 'ipv6', label: 'IPv6 Addresses' },
+	{ key: 'version', label: 'RPort version' },
+	{ key: 'updates_status', label: 'Updates' },
+	{ key: 'client_auth_id', label: 'Security Updates' },
+];
+
+// Computed visible columns
+const visibleColumns = computed(() => {
+	return availableTableColumns.filter(col => selectedColumns.value.includes(col.key));
+});
+
+// Computed filtered clients for matching tab
+const matchingFilteredClients = computed(() => {
+	return matchingClients.value;
+});
+
+// Tags selection state
+const selectedTags = ref<string[]>([]);
+const tagFilterText = ref('');
+const isLoadingTags = ref(false);
+const currentTagOffset = ref(0);
+const hasMoreTags = ref(false);
+
+// API tags data
+const availableTags = ref<Array<{ tag: string; client_ids: string[]; client_count: number }>>([]);
+const totalTagsCount = ref(0);
+
+// Computed filtered tags
+const filteredTags = computed(() => {
+	return availableTags.value;
+});
 
 // Build the filter string for the API
 const buildFilterString = (search?: string, offset = 0) => {
@@ -499,10 +761,176 @@ watch(groupFilterText, (newValue) => {
 	}, 300); // Debounce for 300ms
 });
 
-// Load initial clients and groups on mount
-onMounted(() => {
-	loadClients();
-	loadGroups();
+// Build filter string for matching clients API
+const buildMatchingFilterString = () => {
+	const fields = 'id,name,os_full_name,os,os_arch,os_family,os_version,os_virtualization_role,os_virtualization_system,os_kernel,hostname,ipv4,ipv6,version,address,updates_status,client_auth_id,connection_state';
+	let filterString = `sort=name&fields[clients]=${fields}&page[limit]=20&page[offset]=0`;
+
+	// Add column filters
+	Object.entries(columnFilters.value).forEach(([key, value]) => {
+		if (value && value.trim()) {
+			// Convert wildcards * to % for API
+			const searchTerm = value.replace(/\*/g, '%');
+			filterString += `&filter[${key}]=${encodeURIComponent(searchTerm)}`;
+		}
+	});
+
+	return filterString;
+};
+
+// Load matching clients with column filters
+const loadMatchingClients = async () => {
+	const { $api } = useNuxtApp();
+
+	try {
+		isLoadingMatching.value = true;
+		const filterString = buildMatchingFilterString();
+		const response = await $api.clients.listClientsWithFilter(filterString);
+
+		if (response?.data) {
+			matchingClients.value = response.data;
+		}
+	}
+	catch (error) {
+		console.error('Error loading matching clients:', error);
+	}
+	finally {
+		isLoadingMatching.value = false;
+	}
+};
+
+// Apply filters when user presses Enter
+const applyFilters = () => {
+	loadMatchingClients();
+};
+
+// Get client field value for table display
+const getClientFieldValue = (client: any, fieldKey: string) => {
+	switch (fieldKey) {
+		case 'ipv4':
+			return Array.isArray(client.ipv4) ? client.ipv4.join(',') : client.ipv4 || '';
+		case 'ipv6':
+			return Array.isArray(client.ipv6) ? client.ipv6.join(',') : client.ipv6 || '';
+		default:
+			return client[fieldKey] || '';
+	}
+};
+
+// Toggle matching client selection
+const toggleMatchingClient = (clientId: string) => {
+	const index = matchingSelectedClients.value.indexOf(clientId);
+	if (index > -1) {
+		matchingSelectedClients.value.splice(index, 1);
+	}
+	else {
+		matchingSelectedClients.value.push(clientId);
+	}
+};
+
+// Update selected columns
+const updateSelectedColumns = (newColumns: string[]) => {
+	selectedColumns.value = newColumns;
+};
+
+// Build filter string for tags API
+const buildTagFilterString = (search?: string, offset = 0) => {
+	let filterString = `page[limit]=${pageLimit}&page[offset]=${offset}`;
+
+	if (search && search.trim()) {
+		// For wildcards, convert * to % for the API
+		const searchTerm = search.replace(/\*/g, '%');
+		filterString += `&filter[tag]=${encodeURIComponent(searchTerm)}`;
+	}
+
+	return filterString;
+};
+
+// Load tags from API
+const loadTags = async (search?: string, offset = 0, append = false) => {
+	const { $api } = useNuxtApp();
+
+	try {
+		isLoadingTags.value = true;
+		const filterString = buildTagFilterString(search, offset);
+		const response = await $api.clients.listTags(filterString);
+
+		if (response?.data) {
+			const tags = response.data.map((tag: any) => ({
+				tag: tag.tag,
+				client_ids: tag.client_ids,
+				client_count: tag.client_ids.length,
+			}));
+
+			if (append) {
+				availableTags.value.push(...tags);
+			} else {
+				availableTags.value = tags;
+			}
+
+			// Check if there are more tags to load
+			hasMoreTags.value = response.data.length === pageLimit;
+			totalTagsCount.value = response.meta?.count || availableTags.value.length;
+		}
+	} catch (error) {
+		console.error('Error loading tags:', error);
+	} finally {
+		isLoadingTags.value = false;
+	}
+};
+
+// Load more tags (pagination)
+const loadMoreTags = async () => {
+	currentTagOffset.value += pageLimit;
+	await loadTags(tagFilterText.value, currentTagOffset.value, true);
+};
+
+// Watch for tag filter changes
+let tagFilterTimeout: NodeJS.Timeout;
+watch(tagFilterText, (newValue) => {
+	clearTimeout(tagFilterTimeout);
+	tagFilterTimeout = setTimeout(async () => {
+		currentTagOffset.value = 0;
+		await loadTags(newValue);
+	}, 300); // Debounce for 300ms
+});
+
+// Helper function to get tag display name
+const getTagDisplayName = (tagName: string) => {
+	const tag = availableTags.value.find(t => t.tag === tagName);
+	return tag ? `${tag.tag} (${tag.client_count})` : tagName;
+};
+
+// Tag methods
+const toggleTag = (tagName: string) => {
+	const index = selectedTags.value.indexOf(tagName);
+	if (index > -1) {
+		selectedTags.value.splice(index, 1);
+	} else {
+		selectedTags.value.push(tagName);
+	}
+};
+
+const removeTag = (tagName: string) => {
+	const index = selectedTags.value.indexOf(tagName);
+	if (index > -1) {
+		selectedTags.value.splice(index, 1);
+	}
+};
+
+// Watch for tab changes to load data only when needed
+watch(selectedTab, (newTab) => {
+	if (newTab === 'individual-clients' && availableClients.value.length === 0) {
+		loadClients();
+	}
+	else if (newTab === 'client-groups' && availableGroups.value.length === 0) {
+		loadGroups();
+	}
+	else if (newTab === 'clients-matching' && matchingClients.value.length === 0) {
+		loadMatchingClients();
+	}
+	else if (newTab === 'clients-by-tags' && availableTags.value.length === 0) {
+		loadTags();
+	}
 });
 
 // Helper function to get client name by ID

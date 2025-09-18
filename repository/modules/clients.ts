@@ -6,12 +6,13 @@ import type {
 	Client,
 	StoredTunnel, StoredTunnelResponse,
 	Tunnel, TunnelPayload,
-	TunnelResponse,
+	TunnelResponse, ClientTagsResponse,
 } from '~/types';
 import { toQueryString } from '~/lib/utils';
 
 class ClientsModule extends HttpFactory {
 	private RESOURCE = '/api/v1/clients';
+	private RESOURCE_TAGS = '/api/v1/client-tags';
 
 	async show(id: string): Promise<ClientResponse> {
 		return this.call<ClientResponse>(
@@ -105,6 +106,14 @@ class ClientsModule extends HttpFactory {
 				labels: client.labels,
 			},
 		);
+	}
+
+	async listTags(filter?: string): Promise<ClientTagsResponse> {
+		let url = `${this.RESOURCE_TAGS}?page[limit]=20&page[offset]=0`;
+		if (filter) {
+			url += `&${filter}`;
+		}
+		return this.call<ClientTagsResponse>('GET', url, undefined);
 	}
 }
 
