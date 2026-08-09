@@ -8,27 +8,20 @@ export const useTokenStore = defineStore('token', {
 		loading: false,
 		errors: [] as Array<string>,
 		two_fa: {} as TwoFa,
-		twoFaToken: null as string,
+		twoFaToken: null as string | null,
 	}),
 	actions: {
 		async getLoginToken(credentials: ILoginInput) {
 			const { $api } = useNuxtApp();
 			this.loading = true;
-			const token = useCookie<string>('token');
-			const is_authenticated = useCookie<boolean>('is_authenticated');
 			try {
 				const response = await $api.auth.login(credentials);
-				if (response?.data.token) {
-					if (response?.data?.two_fa !== null) {
-						this.twoFaToken = response.data.token;
-						this.two_fa = response.data.two_fa;
-						this.showTwoFa = true;
-					}
-					else {
-						token.value = response.data.token;
-						is_authenticated.value = true;
-						this.authenticated = true;
-					}
+				if (response?.data?.two_fa !== null) {
+					this.twoFaToken = response.data.token;
+					this.two_fa = response.data.two_fa;
+					this.showTwoFa = true;
+				} else {
+					this.authenticated = true;
 				}
 				this.loading = false;
 			}
@@ -49,14 +42,17 @@ export const useTokenStore = defineStore('token', {
 		async verifyTwoFa(credentials: ILoginInput, code: string) {
 			const { $api } = useNuxtApp();
 			this.loading = true;
-			const token = useCookie<string>('token');
-			const is_authenticated = useCookie<boolean>('is_authenticated');
+			if (!this.twoFaToken) {
+				this.$state.errors = ['No verification token found. Please sign in again.'];
+				this.loading = false;
+				return;
+			}
 			try {
 				const response = await $api.auth.verify2fa(credentials, this.twoFaToken, code);
 				if (response?.data.token) {
-					token.value = response.data.token;
-					is_authenticated.value = true;
 					this.authenticated = true;
+					this.showTwoFa = false;
+					this.twoFaToken = null;
 				}
 				this.loading = false;
 			}
@@ -70,12 +66,17 @@ export const useTokenStore = defineStore('token', {
 		async getProvider() {
 
 		},
-		logOut() {
-			const token = useCookie('token');
-			const is_authenticated = useCookie<boolean>('is_authenticated');
+		async logOut() {
+			const { $api } = useNuxtApp();
+			try {
+				await $api.auth.logout();
+			}
+			catch (_error: any) {
+				// keep local logout state even if server session is already gone
+			}
 			this.authenticated = false;
-			token.value = null;
-			is_authenticated.value = false;
+			this.showTwoFa = false;
+			this.twoFaToken = null;
 		},
 	},
 });

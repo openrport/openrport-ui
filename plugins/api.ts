@@ -22,26 +22,25 @@ interface IApiInstance {
 	tunnels: TunnelsModule;
 }
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
 	const config = useRuntimeConfig();
-	const userAuth = useCookie('token');
-	const is_authenticated = useCookie<boolean>('is_authenticated');
+	const authStore = useTokenStore();
 	const fetchOptions: FetchOptions = {
 		baseURL: config.public.apiUrl,
+		credentials: 'include',
 	};
 	const apiFetchOptions: FetchOptions = {
 		baseURL: config.public.apiUrl,
+		credentials: 'include',
 		headers: {
 			Accept: 'application/json',
-			Authorization: `Bearer ${userAuth.value}`,
 		},
-		onRequestError({ request, options, error }): void | Promise<void> {
+		onRequestError({ request, options: _options, error }) {
 			console.log('[fetch request error]', request, error);
 		},
-		async onResponseError({ request, response, options }): void | Promise<void> {
+		async onResponseError({ request: _request, response, options: _options }) {
 			if (response.status === 401) {
-				userAuth.value = null;
-				is_authenticated.value = false;
+				authStore.authenticated = false;
 				await navigateTo('/auth');
 			}
 		},

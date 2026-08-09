@@ -4,8 +4,7 @@ const getHostFromUrl = (fullUrl: string) => {
 };
 export const useCommandExecution = () => {
 	const config = useRuntimeConfig();
-	const userAuth = useCookie('token');
-	const wsUrl = `wss://${getHostFromUrl(config.public.apiUrl)}/api/v1/ws/commands?access_token=${userAuth.value}`;
+	const wsUrl = `wss://${getHostFromUrl(config.public.apiUrl)}/api/v1/ws/commands`;
 	let ws: WebSocket | null = null;
 	const results = ref<any[]>([]);
 	const isConnected = ref(false);
