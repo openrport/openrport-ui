@@ -2,8 +2,7 @@ import { getHostFromUrl } from '~/utils/url';
 
 export const useScriptExecution = () => {
 	const config = useRuntimeConfig();
-	const userAuth = useCookie('token');
-	const wsUrl = `wss://${getHostFromUrl(config.public.apiUrl)}/api/v1/ws/scripts?access_token=${userAuth.value}`;
+	const wsUrl = `wss://${getHostFromUrl(config.public.apiUrl)}/api/v1/ws/scripts`;
 	let ws: WebSocket | null = null;
 	const results = ref<any[]>([]);
 	const isConnected = ref(false);

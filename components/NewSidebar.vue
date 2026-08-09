@@ -372,8 +372,8 @@ const toggleNavBar = () => {
 	isNavBarOpen.value = !isNavBarOpen.value;
 };
 
-const logout = () => {
-	store.logOut();
+const logout = async () => {
+	await store.logOut();
 	router.push('/auth');
 };
 </script>

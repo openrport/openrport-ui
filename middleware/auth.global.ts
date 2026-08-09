@@ -1,21 +1,40 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-	// const isLoggedIn = false;
-	// if (isLoggedIn) {
-	//     return navigateTo(to.fullPath);
-	// }
-	// return navigateTo("/auth")
-	const { authenticated } = storeToRefs(useTokenStore());
-	const token = useCookie<string>('token');
-
-	if (token.value) {
-		authenticated.value = true;
+export default defineNuxtRouteMiddleware((to: any, _from: any) => {
+	if (process.server) {
+		return;
 	}
 
-	if (token.value && to?.name === 'auth') {
-		return navigateTo('/');
-	}
-	if (!token.value && to?.name !== 'auth') {
-		abortNavigation();
-		return navigateTo('/auth');
-	}
+	const store = useTokenStore();
+	const { authenticated } = storeToRefs(store);
+	const isAuthRoute = to.path === '/auth';
+	const isOAuthCallbackRoute = to.path.startsWith('/oauth/callback');
+
+	return (async () => {
+		if (isOAuthCallbackRoute) {
+			return;
+		}
+
+		if (!authenticated.value) {
+			try {
+				const config = useRuntimeConfig();
+				await $fetch('/api/v1/status', {
+					method: 'GET',
+					baseURL: config.public.apiUrl,
+					credentials: 'include',
+				});
+				authenticated.value = true;
+			}
+			catch {
+				authenticated.value = false;
+			}
+		}
+
+		if (authenticated.value && isAuthRoute) {
+			return navigateTo('/');
+		}
+
+		if (!authenticated.value && !isAuthRoute) {
+			abortNavigation();
+			return navigateTo('/auth');
+		}
+	})();
 });
