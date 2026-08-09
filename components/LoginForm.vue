@@ -1,5 +1,6 @@
 <template>
 	<form
+		v-if="isBuiltInAuth"
 		class="w-full max-w-[400px]"
 		autocomplete="off"
 		novalidate
@@ -137,6 +138,39 @@
 		</div>
 	</form>
 
+	<div
+		v-else
+		class="w-full max-w-[400px]"
+	>
+		<h1 class="pb-4 text-3xl">
+			Sign in
+		</h1>
+		<p class="pb-6 text-sm text-theme-label">
+			{{ oauthMessage }}
+		</p>
+		<div
+			v-show="errors.length > 0"
+			class="mt-1 rounded bg-red-50 p-2.5"
+		>
+			<div class="flex items-center">
+				<div class="ml-3 mt-1 flex-grow">
+					<p class="text-sm font-medium text-red-800">
+						{{ errors[0] }}
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="mt-6 flex items-center justify-start">
+			<button
+				class="inline-flex items-center rounded bg-primary px-6 py-3 text-sm text-white duration-200 hover:opacity-80 focus:outline-none"
+				type="button"
+				@click="loginWithOAuth"
+			>
+				Continue with {{ providerName }}
+			</button>
+		</div>
+	</div>
+
 	<!--
                 <span class="input-group-text">
                           <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip">-- Download SVG icon from http://tabler-icons.io/i/eye -
@@ -154,22 +188,51 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import type { ILoginInput } from '~/types';
+import { computed, ref } from 'vue';
+import type { AuthProviderInfo, ILoginInput } from '~/types';
 
 const store = useTokenStore();
 
 const { errors, loading } = storeToRefs(store);
+const providerState = useState<{ data?: AuthProviderInfo } | null>('provider', () => null);
 const user = ref<ILoginInput>({
 	username: 'admin',
 	password: '',
 	remember_me: '3600',
 });
 const emit = defineEmits(['login']);
+const isBuiltInAuth = computed(() => providerState.value?.data?.auth_provider !== 'microsoft' && providerState.value?.data?.auth_provider !== 'google' && providerState.value?.data?.auth_provider !== 'github' && providerState.value?.data?.auth_provider !== 'auth0');
+const providerName = computed(() => providerState.value?.data?.auth_provider ?? 'OAuth');
+const oauthMessage = computed(() => `Use your ${providerName.value} account to sign in.`);
+
 const login = async () => {
 	const credentials: ILoginInput = {
 		...user.value,
 	};
 	emit('login', credentials);
+};
+
+const loginWithOAuth = async () => {
+	const { $api } = useNuxtApp();
+	const settingsUri = providerState.value?.data?.settings_uri;
+	if (!settingsUri) {
+		store.errors = ['OAuth settings are not available.'];
+		return;
+	}
+
+	try {
+		store.loading = true;
+		const response = await $api.auth.settings(settingsUri);
+		await navigateTo(response.data.details.authorize_url, {
+			external: true,
+		});
+		return;
+	}
+	catch (error: any) {
+		store.errors = ['OAuth login could not be started.'];
+	}
+	finally {
+		store.loading = false;
+	}
 };
 </script>

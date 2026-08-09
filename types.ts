@@ -132,6 +132,29 @@ export interface TwoFa {
 export interface ApiLoginResponse {
 	data: ILoginResponse;
 }
+export interface AuthProviderResponse {
+	data: AuthProviderInfo;
+}
+export interface AuthProviderInfo {
+	auth_provider: string;
+	settings_uri: string;
+	device_settings_uri: string;
+	max_token_lifetime: number;
+}
+export interface AuthSettingsResponse {
+	data: AuthSettings;
+}
+export interface AuthSettings {
+	auth_provider: string;
+	details: OAuthLoginDetails;
+}
+export interface OAuthLoginDetails {
+	message: string;
+	authorize_url: string;
+	login_uri: string;
+	state: string;
+	expiry: string;
+}
 export interface ILoginResponse {
 	token: string;
 	two_fa: TwoFa;
