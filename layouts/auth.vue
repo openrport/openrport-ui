@@ -32,12 +32,10 @@
 </template>
 
 <script setup lang="ts">
-// import {getProvider} from "~/composables/useAuth";
-//
-// getProvider();
 const provider = useState('provider');
+const config = useRuntimeConfig();
 
 await callOnce(async () => {
-
+	provider.value = await getProvider(config.public.apiUrl);
 });
 </script>

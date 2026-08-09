@@ -1,7 +1,6 @@
 import type { FetchOptions } from 'ofetch';
-import { FetchError } from 'ofetch';
-import { HttpFactory, ApiResponse } from '~/repository/factory';
-import type { ApiLoginResponse, ILoginInput, ILoginResponse } from '~/types';
+import { HttpFactory } from '~/repository/factory';
+import type { ApiLoginResponse, AuthProviderResponse, AuthSettingsResponse, ILoginInput } from '~/types';
 
 class AuthModule extends HttpFactory {
 	private RESOURCE = '/api/v1/login';
@@ -23,25 +22,26 @@ class AuthModule extends HttpFactory {
 	}
 
 	async provider(): Promise<any> {
-		return this.call<any>(
+		return this.call<AuthProviderResponse>(
 			'GET',
-			'api/v1/provider',
+			'/api/v1/auth/provider',
+			undefined,
+		);
+	}
+
+	async settings(settingsUri: string): Promise<AuthSettingsResponse> {
+		return this.call<AuthSettingsResponse>(
+			'GET',
+			settingsUri,
 			undefined,
 		);
 	}
 
 	async logout(): Promise<any> {
-		const fetchOptions: FetchOptions<'json'> = {
-			headers: {
-				'Authorization': `Basic ${token}`,
-				'Content-Type': 'application/json',
-			},
-		};
 		return this.call<any>(
 			'DELETE',
 			'api/v1/logout',
 			undefined,
-			fetchOptions,
 		);
 	}
 

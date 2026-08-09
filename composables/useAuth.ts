@@ -1,11 +1,11 @@
-export async function getProvider() {
-	try {
-		const result = await $fetch('/api/v1/provider', {
-			method: 'GET',
-		});
-		useState('provider').value = result;
+export async function getProvider(apiUrl: string) {
+	const response = await fetch(`${apiUrl}/api/v1/auth/provider`, {
+		method: 'GET',
+	});
+
+	if (!response.ok) {
+		throw new Error(`failed to get auth provider: ${response.status}`);
 	}
-	catch (e: any) {
-		console.log('error : ', e.toString());
-	}
+
+	return response.json();
 }
