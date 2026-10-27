@@ -46,9 +46,13 @@ class ClientsModule extends HttpFactory {
 		);
 	}
 
-	async listByGroup(id: string): Promise<ClientsResponse> {
+	// "all" lists every client, "favorites" the given favorite IDs, anything else is a client group
+	async listByGroup(id: string, favoriteIds: string[] = []): Promise<ClientsResponse> {
 		let params = `?sort=name&fields[clients]=id,name,os,os_family,os_kernel,os_full_name,ipv4,disconnected_at,tags&page[limit]=20&page[offset]=0`;
-		if (id !== 'all') {
+		if (id === 'favorites') {
+			params += `&filter[id]=${favoriteIds.map(encodeURIComponent).join(',')}`;
+		}
+		else if (id !== 'all') {
 			params += `&filter[groups]=${id}`;
 		}
 		return this.call(
