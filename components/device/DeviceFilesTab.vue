@@ -14,14 +14,14 @@
 						width="20px"
 						height="20px"
 						viewBox="0 0 24 24"
-						class="icon absolute top-1/2 left-2.5 -trangray-y-1/2 transform text-theme-label"
+						class="icon absolute top-1/2 left-2.5 -translate-y-1/2 transform text-theme-label"
 					>
 						<path
 							fill="currentColor"
 							d="M9 16h6v-6h4l-7-7l-7 7h4v6zm3-10.17L14.17 8H13v6h-2V8H9.83L12 5.83zM5 18h14v2H5z"
 						/></svg><!----><label
 						for="file"
-						class="absolute top-1/2 z-10 origin-[0] transform bg-theme py-0 px-1 text-sm font-normal text-theme-label duration-300 left-8 -trangray-y-1/2"
+						class="absolute top-1/2 z-10 origin-[0] transform bg-theme py-0 px-1 text-sm font-normal text-theme-label duration-300 left-8 -translate-y-1/2"
 					>Local file to be uploaded</label><!---->
 				</div>
 				<div class="flex flex-col mb-4">
@@ -33,7 +33,7 @@
 							type="text"
 							autocomplete="off"
 						><label
-							class="absolute left-1.5 top-1.5 z-10 origin-[0] -trangray-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-trangray-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-trangray-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
+							class="absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
 							for="RnW14XEFRT"
 						>Remote path (folder + file name, e.g. /tmp/test.txt,
 							C:\Windows\temp\test.txt)</label>
@@ -50,7 +50,7 @@
 							value="1"
 						>
 						<div
-							class="after:border-theme-border peer-checked:bg-blue-600 peer-checked:after:border-white bg-black bg-opacity-30 peer h-6 w-11 rounded-full after:absolute after:top-0.5 after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:bg-white after:transition-all after:content-[''] peer-checked:after:trangray-x-full peer-focus:ring-0"
+							class="after:border-theme-border peer-checked:bg-blue-600 peer-checked:after:border-white bg-black bg-opacity-30 peer h-6 w-11 rounded-full after:absolute after:top-0.5 after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-focus:ring-0"
 						/></label>
 				</div>
 				<div
@@ -63,7 +63,7 @@
 							value="1"
 						>
 						<div
-							class="after:border-theme-border peer-checked:bg-blue-600 peer-checked:after:border-white bg-black bg-opacity-30 peer h-6 w-11 rounded-full after:absolute after:top-0.5 after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:bg-white after:transition-all after:content-[''] peer-checked:after:trangray-x-full peer-focus:ring-0"
+							class="after:border-theme-border peer-checked:bg-blue-600 peer-checked:after:border-white bg-black bg-opacity-30 peer h-6 w-11 rounded-full after:absolute after:top-0.5 after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-focus:ring-0"
 						/></label>
 				</div>
 				<div
@@ -112,7 +112,7 @@
 								type="text"
 								autocomplete="off"
 							><label
-								class="absolute left-1.5 top-1.5 z-10 origin-[0] -trangray-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-trangray-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-trangray-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
+								class="absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
 								for="2oGR1W3hIL"
 							>Mode (optional)</label>
 						</div>
@@ -161,7 +161,7 @@
 								type="text"
 								autocomplete="off"
 							><label
-								class="absolute left-1.5 top-1.5 z-10 origin-[0] -trangray-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-trangray-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-trangray-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
+								class="absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
 								for="3cPWo0AEGh"
 							>User (optional)</label>
 						</div>
@@ -176,7 +176,7 @@
 								type="text"
 								autocomplete="off"
 							><label
-								class="absolute left-1.5 top-1.5 z-10 origin-[0] -trangray-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-trangray-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-trangray-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
+								class="absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
 								for="zhW7rlIlkK"
 							>Group (optional)</label>
 						</div>

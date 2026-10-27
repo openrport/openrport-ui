@@ -18,7 +18,7 @@
 					<img
 						src="/login.svg"
 						alt=""
-						class="relative w-full trangray-x-28 transform pr-1"
+						class="relative w-full translate-x-28 transform pr-1"
 						height="100"
 						width="100"
 					>
