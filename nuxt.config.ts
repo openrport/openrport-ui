@@ -1,3 +1,5 @@
+import { version } from './package.json';
+
 export default defineNuxtConfig({
 	devtools: { enabled: true },
 
@@ -81,6 +83,7 @@ export default defineNuxtConfig({
 		public: {
 			appEnv: process.env.NUXT_APP_ENV,
 			apiUrl: process.env.NUXT_API_URL,
+			appVersion: version,
 		},
 	},
 

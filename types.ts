@@ -229,6 +229,9 @@ export interface UserPayload {
 export interface UserGroup {
 	name: string;
 	permissions: Permissions;
+	// Rport-plus extended permissions; null when unset
+	tunnels_restricted?: Record<string, unknown> | null;
+	commands_restricted?: { allow?: string[]; deny?: string[] } | null;
 }
 
 export interface UserGroupResponse {
