@@ -200,37 +200,39 @@
 												<DeviceInventoryTab
 													:device="device"
 													:metrics="metrics"
+													:mountpoints="mountpoints"
+													@reload-usage="reloadUsage"
 												/>
 											</TabsContent>
 											<TabsContent value="tunnels">
-												<DeviceTunnelsTab
+												<LazyDeviceTunnelsTab
 													:id="device.id"
 													@addtunnel="tunnelStore.openAddTunel()"
 												/>
 											</TabsContent>
 											<TabsContent value="meta-data">
-												<DeviceMetaDataTab />
+												<LazyDeviceMetaDataTab />
 											</TabsContent>
 											<TabsContent value="documents">
-												<DeviceDocumentsTab />
+												<LazyDeviceDocumentsTab />
 											</TabsContent>
 											<TabsContent value="commands">
-												<DeviceCommandsTab :id="device.id" />
+												<LazyDeviceCommandsTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="scripts">
-												<DeviceScriptsTab :id="device.id" />
+												<LazyDeviceScriptsTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="monitoring">
-												<DeviceMonitoringTab />
+												<LazyDeviceMonitoringTab />
 											</TabsContent>
 											<TabsContent value="files">
-												<DeviceFilesTab />
+												<LazyDeviceFilesTab />
 											</TabsContent>
 											<TabsContent value="audit">
-												<DeviceAuditTab />
+												<LazyDeviceAuditTab />
 											</TabsContent>
 											<TabsContent value="schedules">
-												<DeviceSchedulesTab />
+												<LazyDeviceSchedulesTab />
 											</TabsContent>
 										</div>
 									</div>
@@ -365,7 +367,7 @@ const selectedTab = ref('inventory');
 
 const { isAddingTunnel } = storeToRefs(tunnelStore);
 
-const { device, metrics } = useClientDetail();
+const { device, metrics, mountpoints, reloadUsage } = useClientDetail();
 const {
 	translateX,
 	tabsListRef,

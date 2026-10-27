@@ -68,7 +68,8 @@ export interface ClientMetric {
 }
 
 export interface ClientMountpoint {
-	mountpoints: any;
+	// "free_b.<path>" and "total_b.<path>" byte counts per mount point
+	mountpoints: Record<string, number>;
 	timestamp: string;
 }
 export interface Meta {
@@ -83,7 +84,7 @@ export interface ClientMetricsResponse {
 	meta: Meta;
 }
 export interface ClientMountpointsResponse {
-	data: ClientMountpoint;
+	data: ClientMountpoint[];
 	meta: Meta;
 }
 export interface ClientGroup {

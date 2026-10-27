@@ -12,6 +12,8 @@
 			<DeviceBenchmarkCard
 				:device="device"
 				:metrics="metrics"
+				:mountpoints="mountpoints"
+				@reload="emit('reloadUsage')"
 			/>
 			<DeviceIPAddresses
 				:ipv4="device?.ipv4"
@@ -24,14 +26,20 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
 	device: {
 		type: Object,
 		required: true,
 	},
 	metrics: {
 		type: Array,
-		default: [],
+		default: () => [],
+	},
+	mountpoints: {
+		type: Array,
+		default: () => [],
 	},
 });
+
+const emit = defineEmits(['reloadUsage']);
 </script>

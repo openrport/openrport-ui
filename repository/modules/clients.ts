@@ -1,6 +1,7 @@
 import { HttpFactory } from '~/repository/factory';
 import type {
 	ClientMetricsResponse,
+	ClientMountpointsResponse,
 	ClientResponse,
 	ClientsResponse,
 	Client,
@@ -69,6 +70,10 @@ class ClientsModule extends HttpFactory {
 			`${this.RESOURCE}/${id}/metrics`,
 			undefined,
 		);
+	}
+
+	async mountpoints(id: string): Promise<ClientMountpointsResponse> {
+		return this.call('GET', `${this.RESOURCE}/${id}/mountpoints`, undefined);
 	}
 
 	async tunnels(id: string): Promise<Tunnel[]> {
