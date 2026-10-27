@@ -186,6 +186,12 @@ export interface Profile {
 	effective_user_permissions: Permissions;
 	group_permissions_enabled: boolean;
 }
+export interface ProfileUpdatePayload {
+	username: string;
+	two_fa_send_to: string;
+	password?: string;
+	old_password?: string;
+}
 export interface UserListResponse {
 	data: User[];
 }

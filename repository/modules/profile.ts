@@ -1,5 +1,5 @@
 import { HttpFactory, HttpMethod } from '~/repository/factory';
-import type { APITokenPayload, APITokenResponse, APITokensResponse, IpResponse, Profile, ProfileResponse } from '~/types';
+import type { APITokenPayload, APITokenResponse, APITokensResponse, IpResponse, Profile, ProfileResponse, ProfileUpdatePayload } from '~/types';
 
 class ProfileModule extends HttpFactory {
 	private RESOURCE = 'api/v1/me';
@@ -11,6 +11,15 @@ class ProfileModule extends HttpFactory {
 			undefined,
 		);
 		return response.data;
+	}
+
+	// Only the fields that change are sent, e.g. { username, two_fa_send_to, password, old_password }
+	async updateMe(payload: ProfileUpdatePayload): Promise<ProfileResponse> {
+		return this.call<ProfileResponse>(
+			HttpMethod.PUT,
+			`${this.RESOURCE}`,
+			payload,
+		);
 	}
 
 	async apiTokens(): Promise<APITokensResponse> {
