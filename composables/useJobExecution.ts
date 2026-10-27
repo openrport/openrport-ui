@@ -65,6 +65,11 @@ export const encodeScript = (script: string) => {
 	return btoa(binary);
 };
 
+export const decodeScript = (encoded: string) => {
+	const binary = atob(encoded);
+	return new TextDecoder().decode(Uint8Array.from(binary, char => char.charCodeAt(0)));
+};
+
 export const useJobExecution = (mode: ExecutionMode) => {
 	const config = useRuntimeConfig();
 	const userAuth = useCookie('token');
