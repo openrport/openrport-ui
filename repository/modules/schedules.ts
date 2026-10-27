@@ -9,11 +9,12 @@ interface Paged<T> {
 class SchedulesModule extends HttpFactory {
 	private RESOURCE = '/api/v1/schedules';
 
-	async list(offset = 0, limit = 20): Promise<Paged<Schedule>> {
+	async list(offset = 0, limit = 20, clientId = ''): Promise<Paged<Schedule>> {
+		const clientFilter = clientId ? `&filter[client_ids]=${encodeURIComponent(clientId)}` : '';
 		// The schedules list nests the page inside "data": { data: { data: [...], meta } }
 		const response = await this.call<{ data: Paged<Schedule> }>(
 			'GET',
-			`${this.RESOURCE}?page[limit]=${limit}&page[offset]=${offset}`,
+			`${this.RESOURCE}?page[limit]=${limit}&page[offset]=${offset}${clientFilter}`,
 			undefined,
 		);
 		return response.data;

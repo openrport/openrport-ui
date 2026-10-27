@@ -229,10 +229,10 @@
 												<LazyDeviceFilesTab />
 											</TabsContent>
 											<TabsContent value="audit">
-												<LazyDeviceAuditTab />
+												<LazyDeviceAuditTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="schedules">
-												<LazyDeviceSchedulesTab />
+												<LazyDeviceSchedulesTab :id="device.id" />
 											</TabsContent>
 										</div>
 									</div>
