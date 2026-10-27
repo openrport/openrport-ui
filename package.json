@@ -53,6 +53,7 @@
     "@tabler/core": "^1.0.0-beta20",
     "@tabler/icons-vue": "^2.47.0",
     "@tinymce/tinymce-vue": "^5.1.1",
+    "@toast-ui/editor": "3.2.2",
     "@vueform/multiselect": "^2.6.7",
     "@vueuse/core": "^10.11.0",
     "apexcharts": "3.54.1",

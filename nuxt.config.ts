@@ -84,10 +84,10 @@ export default defineNuxtConfig({
 		},
 	},
 
-	// The monitoring charts import apexcharts lazily; pre-bundling it avoids a dev reload on first use
+	// Libraries imported lazily by the device tabs; pre-bundling them avoids a dev reload on first use
 	vite: {
 		optimizeDeps: {
-			include: ['apexcharts'],
+			include: ['apexcharts', '@toast-ui/editor'],
 		},
 	},
 

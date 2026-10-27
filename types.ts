@@ -92,6 +92,26 @@ export interface ClientGraphMetric {
 	timestamp: string;
 	[graph: string]: string | Record<string, number>;
 }
+export type VaultEntryType = 'text' | 'secret' | 'markdown' | string;
+export interface VaultEntry {
+	id: number;
+	client_id: string;
+	required_group: string;
+	key: string;
+	value?: string;
+	type: VaultEntryType;
+	created_at?: string;
+	created_by?: string;
+	updated_at?: string;
+	updated_by?: string;
+}
+export interface VaultEntryPayload {
+	client_id: string;
+	required_group?: string;
+	key: string;
+	value: string;
+	type: VaultEntryType;
+}
 export interface ClientProcess {
 	pid: number;
 	parent_pid: number;

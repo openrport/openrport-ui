@@ -211,10 +211,10 @@
 												/>
 											</TabsContent>
 											<TabsContent value="meta-data">
-												<LazyDeviceMetaDataTab />
+												<LazyDeviceMetaDataTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="documents">
-												<LazyDeviceDocumentsTab />
+												<LazyDeviceDocumentsTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="commands">
 												<LazyDeviceCommandsTab :id="device.id" />
