@@ -56,7 +56,7 @@ interface WsJobMessage {
 }
 
 // Base64 encode that keeps non-latin1 characters intact
-const encodeScript = (script: string) => {
+export const encodeScript = (script: string) => {
 	const bytes = new TextEncoder().encode(script);
 	let binary = '';
 	bytes.forEach((byte) => {

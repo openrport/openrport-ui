@@ -20,13 +20,22 @@
 				</div>
 				<div class="mt-5 flex h-full flex-col pb-24">
 					<div class="primary relative grid grid-cols-7">
+						<div
+							v-if="libraryLoading"
+							class="absolute inset-0 z-30 flex items-center justify-center bg-theme bg-opacity-70"
+						>
+							<IconLoader2
+								:size="36"
+								class="primary-text animate-spin"
+							/>
+						</div>
 						<div class="bg-primary-800 col-span-2">
 							<div class="max-h-[550px] min-h-[550px] overflow-y-auto px-6 py-4">
 								<div class="flex flex-col">
 									<div class="relative mt-1 flex w-full flex-col">
 										<input
 											id="scriptName"
-											v-model="scriptName"
+											v-model="form.name"
 											:class="inputClass"
 											placeholder=" "
 											type="text"
@@ -38,12 +47,12 @@
 										>Script name</label>
 									</div>
 								</div>
-								<ExecutionTags v-model="scriptTags" />
+								<ExecutionTags v-model="form.tags" />
 								<div class="flex flex-col mt-1">
 									<div class="relative mt-1 flex w-full flex-col">
 										<input
 											id="scriptCwd"
-											v-model="cwd"
+											v-model="form.cwd"
 											:class="inputClass"
 											placeholder=" "
 											type="text"
@@ -59,7 +68,7 @@
 									<div class="relative mt-1 flex w-full flex-col">
 										<select
 											id="scriptInterpreter"
-											v-model="interpreter"
+											v-model="form.interpreter"
 											class="border-white focus:border-white focus:border-1 peer order-2 block h-10 w-full rounded border-theme-border bg-transparent shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
 										>
 											<option
@@ -81,7 +90,7 @@
 									<div class="relative mt-1 flex w-full flex-col">
 										<input
 											id="scriptTimeout"
-											v-model.number="timeoutSec"
+											v-model.number="form.timeout_sec"
 											:class="inputClass"
 											placeholder="300"
 											type="number"
@@ -97,7 +106,7 @@
 								<div class="mt-4 flex justify-center">
 									<label class="relative inline-flex cursor-pointer items-center text-theme-label">
 										<input
-											v-model="isSudo"
+											v-model="form.is_sudo"
 											type="checkbox"
 											class="peer sr-only"
 										>
@@ -109,24 +118,23 @@
 										</span>
 									</label>
 								</div>
+								<LibraryMeta
+									v-if="loaded"
+									:created-by="form.created_by"
+									:created-at="form.created_at"
+									:updated-by="form.updated_by"
+									:updated-at="form.updated_at"
+								/>
 							</div>
-							<div class="flex h-[55px] items-center justify-center border-t border-[#133B66]">
-								<div class="grid grid-cols-3 rounded-l-md">
-									<button
-										class="cursor-not-allowed hover:opacity-100 px-4 py-2 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none col-span-3 secondary"
-										disabled
-										type="button"
-									>
-										Save
-									</button>
-								</div>
-								<button
-									class="hover:opacity-80 px-4 py-2 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none ml-2 bg-white bg-opacity-10"
-									type="button"
-								>
-									Load
-								</button>
-							</div>
+							<LibraryActions
+								kind="scripts"
+								:loaded="loaded"
+								:can-save="canSave"
+								@save="save"
+								@save-as-new="saveAsNew"
+								@remove="remove"
+								@open="openEntry"
+							/>
 						</div>
 						<div class="col-span-5">
 							<div
@@ -134,7 +142,7 @@
 								@keydown.meta.enter.prevent="execute"
 								@keydown.ctrl.enter.prevent="execute"
 							>
-								<command-editor v-model="script" />
+								<command-editor v-model="form.content" />
 							</div>
 							<ExecutionToolbar
 								v-model:abort-on-error="abortOnError"
@@ -142,14 +150,15 @@
 								:disabled="isExecutingDisabled"
 								:loading="loading"
 								@execute="execute"
+								@schedule="scheduleOpen = true"
 							/>
 						</div>
 					</div>
 					<div
-						v-if="executeError"
+						v-if="loadError || executeError"
 						class="mt-4 rounded bg-red-50 p-2.5 text-sm font-medium text-red-800"
 					>
-						{{ executeError }}
+						{{ loadError || executeError }}
 					</div>
 					<ClientSelector
 						title="scripts"
@@ -161,6 +170,10 @@
 						:jobs="jobs"
 						class="mt-5"
 					/>
+					<ScheduleDialog
+						v-model="scheduleOpen"
+						:execution="scheduleExecution"
+					/>
 				</div>
 			</div>
 		</div>
@@ -168,10 +181,16 @@
 </template>
 
 <script setup lang="ts">
+import { IconLoader2 } from '@tabler/icons-vue';
 import ExecutionTags from '~/components/custom/ExecutionTags.vue';
 import ExecutionToolbar from '~/components/ExecutionToolbar.vue';
-import { useJobExecution } from '~/composables/useJobExecution';
+import LibraryActions from '~/components/library/LibraryActions.vue';
+import LibraryMeta from '~/components/library/LibraryMeta.vue';
+import ScheduleDialog from '~/components/library/ScheduleDialog.vue';
+import { encodeScript, useJobExecution } from '~/composables/useJobExecution';
 import { useClientSelectionTargets } from '~/composables/useClientSelectionTargets';
+import { useLibraryEditor } from '~/composables/useLibraryEditor';
+import type { SchedulePayload } from '~/types';
 
 useHead({ title: 'Scripts' });
 
@@ -184,34 +203,52 @@ const interpreters = [
 	{ value: 'tacoscript', label: 'Tacoscript (Experimental)' },
 ];
 
-const scriptName = ref('');
-const scriptTags = ref<string[]>([]);
-const script = ref('');
-const cwd = ref('');
-const interpreter = ref('systemDefaultShell');
-const timeoutSec = ref(300);
-const isSudo = ref(false);
 const abortOnError = ref(true);
 const executeConcurrently = ref(false);
+const scheduleOpen = ref(false);
 
+const {
+	form,
+	loaded,
+	loading: libraryLoading,
+	loadError,
+	canSave,
+	save,
+	saveAsNew,
+	remove,
+	openEntry,
+} = useLibraryEditor('scripts', 'systemDefaultShell');
 const { jobs, loading, executeError, executeMultipleClients, clearJobs } = useJobExecution('scripts');
-const { hasSelection, targets, selectorListeners } = useClientSelectionTargets(clearJobs);
+const { hasSelection, targets, scheduleTargets, selectorListeners } = useClientSelectionTargets(clearJobs);
 
-const isExecutingDisabled = computed(() => !hasSelection.value || !script.value.trim());
+const isExecutingDisabled = computed(() => !hasSelection.value || !form.content.trim());
+
+// Same interpreter normalisation as the websocket execution
+const scheduleExecution = computed<Omit<SchedulePayload, 'name' | 'schedule' | 'overlaps'>>(() => ({
+	type: 'script',
+	script: encodeScript(form.content),
+	interpreter: form.interpreter.replace(/(\.exe|shOrShebang|systemDefaultShell)/g, ''),
+	cwd: form.cwd,
+	is_sudo: form.is_sudo,
+	timeout_sec: Number(form.timeout_sec) || 300,
+	execute_concurrently: executeConcurrently.value,
+	abort_on_error: abortOnError.value,
+	...scheduleTargets.value,
+}));
 
 const execute = async () => {
 	if (isExecutingDisabled.value || loading.value || !targets.value) {
 		return;
 	}
 	await executeMultipleClients({
-		script: script.value,
-		interpreter: interpreter.value,
-		is_sudo: isSudo.value,
-		cwd: cwd.value,
+		script: form.content,
+		interpreter: form.interpreter,
+		is_sudo: form.is_sudo,
+		cwd: form.cwd,
 		...targets.value,
 		execute_concurrently: executeConcurrently.value,
 		abort_on_error: abortOnError.value,
-		timeout_sec: timeoutSec.value || 300,
+		timeout_sec: Number(form.timeout_sec) || 300,
 	});
 };
 </script>

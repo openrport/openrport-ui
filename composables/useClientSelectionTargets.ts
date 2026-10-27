@@ -1,4 +1,4 @@
-import type { ClientGroup, Tag } from '~/types';
+import type { ClientGroup, SchedulePayload, Tag } from '~/types';
 import type { ClientSelectionTab } from '~/components/ClientSelector.vue';
 import type { JobClientTags } from '~/composables/useJobExecution';
 
@@ -69,6 +69,21 @@ export const useClientSelectionTargets = (onTabChange?: () => void) => {
 		}
 	});
 
+	// Schedules run later, so groups and tags stay dynamic instead of being resolved to client ids
+	const scheduleTargets = computed<Pick<SchedulePayload, 'client_ids' | 'group_ids' | 'tags'> | null>(() => {
+		if (!hasSelection.value) {
+			return null;
+		}
+		switch (activeTab.value) {
+			case 'client-groups':
+				return { group_ids: Object.keys(groups.value) };
+			case 'clients-by-tags':
+				return { tags: { tags: Object.keys(tags.value), operator: 'AND' } };
+			default:
+				return { client_ids: targets.value?.client_ids || [] };
+		}
+	});
+
 	const selectorListeners = {
 		'onChanged:tab': changeTab,
 		'onUpdate:clientIds': (ids: string[]) => {
@@ -85,5 +100,5 @@ export const useClientSelectionTargets = (onTabChange?: () => void) => {
 		},
 	};
 
-	return { activeTab, hasSelection, targets, selectorListeners };
+	return { activeTab, hasSelection, targets, scheduleTargets, selectorListeners };
 };

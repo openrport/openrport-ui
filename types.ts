@@ -499,3 +499,27 @@ export interface Result {
 	stderr: string;
 	summary: string;
 }
+
+export interface SchedulePayload {
+	name: string;
+	schedule: string;
+	type: 'command' | 'script';
+	overlaps: boolean;
+	client_ids?: string[] | null;
+	group_ids?: string[] | null;
+	tags?: { tags: string[]; operator: 'AND' | 'OR' } | null;
+	command?: string;
+	script?: string;
+	interpreter?: string;
+	cwd?: string;
+	is_sudo?: boolean;
+	timeout_sec?: number;
+	execute_concurrently?: boolean;
+	abort_on_error?: boolean;
+}
+
+export interface Schedule extends SchedulePayload {
+	id: string;
+	created_at: string;
+	created_by: string;
+}

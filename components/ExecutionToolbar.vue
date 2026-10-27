@@ -2,9 +2,11 @@
 	<div class="flex h-[55px] items-center justify-between border-t border-[#133B66] bg-[#224A75] p-2 shadow-md">
 		<div>
 			<button
-				class="cursor-not-allowed hover:opacity-100 px-4 py-2 text-sm text-black rounded inline-flex items-center duration-200 focus:outline-none bg-gray-100 opacity-50"
-				disabled
+				:class="['px-4 py-2 text-sm text-black rounded inline-flex items-center duration-200 focus:outline-none bg-slate-100',
+					disabled ? 'cursor-not-allowed opacity-50' : 'hover:opacity-80']"
+				:disabled="disabled"
 				type="button"
+				@click="emit('schedule')"
 			>
 				<IconClock
 					:size="24"
@@ -43,7 +45,7 @@
 					:size="24"
 					class="mr-2 animate-spin"
 				/>
-				<IconPlayerPlay
+				<IconCircleCaretRight
 					v-else
 					:size="24"
 					class="mr-2"
@@ -55,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconClock, IconLoader2, IconPlayerPlay } from '@tabler/icons-vue';
+import { IconCircleCaretRight, IconClock, IconLoader2 } from '@tabler/icons-vue';
 
 defineProps<{
 	disabled: boolean;
@@ -64,6 +66,7 @@ defineProps<{
 
 const emit = defineEmits<{
 	execute: [];
+	schedule: [];
 }>();
 
 const abortOnError = defineModel<boolean>('abortOnError', { default: true });

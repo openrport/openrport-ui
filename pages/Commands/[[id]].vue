@@ -20,13 +20,22 @@
 				</div>
 				<div class="mt-5 flex h-full flex-col pb-24">
 					<div class="primary relative grid grid-cols-7">
+						<div
+							v-if="libraryLoading"
+							class="absolute inset-0 z-30 flex items-center justify-center bg-theme bg-opacity-70"
+						>
+							<IconLoader2
+								:size="36"
+								class="primary-text animate-spin"
+							/>
+						</div>
 						<div class="primary col-span-2">
 							<div class="max-h-[550px] min-h-[550px] overflow-y-auto px-6 py-4">
 								<div class="flex flex-col">
 									<div class="relative mt-1 flex w-full flex-col">
 										<input
 											id="commandName"
-											v-model="commandName"
+											v-model="form.name"
 											class="border-white text-white focus:border-white input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
 											placeholder=" "
 											type="text"
@@ -38,12 +47,12 @@
 										>Command name</label>
 									</div>
 								</div>
-								<ExecutionTags v-model="commandTags" />
+								<ExecutionTags v-model="form.tags" />
 								<div class="flex flex-col mt-1">
 									<div class="relative mt-1 flex w-full flex-col">
 										<input
 											id="commandTimeout"
-											v-model.number="timeoutSec"
+											v-model.number="form.timeout_sec"
 											class="border-white text-white focus:border-white input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
 											placeholder="300"
 											type="number"
@@ -56,24 +65,23 @@
 										>Time out (seconds)</label>
 									</div>
 								</div>
+								<LibraryMeta
+									v-if="loaded"
+									:created-by="form.created_by"
+									:created-at="form.created_at"
+									:updated-by="form.updated_by"
+									:updated-at="form.updated_at"
+								/>
 							</div>
-							<div class="flex h-[55px] items-center justify-center border-t border-[#133B66]">
-								<div class="grid grid-cols-3 rounded-l-md">
-									<button
-										class="cursor-not-allowed hover:opacity-100 px-4 py-2 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none col-span-3 secondary"
-										disabled
-										type="button"
-									>
-										Save
-									</button>
-								</div>
-								<button
-									class="hover:opacity-80 px-4 py-2 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none ml-2 bg-white bg-opacity-10"
-									type="button"
-								>
-									Load
-								</button>
-							</div>
+							<LibraryActions
+								kind="commands"
+								:loaded="loaded"
+								:can-save="canSave"
+								@save="save"
+								@save-as-new="saveAsNew"
+								@remove="remove"
+								@open="openEntry"
+							/>
 						</div>
 						<div class="col-span-5">
 							<div
@@ -81,7 +89,7 @@
 								@keydown.meta.enter.prevent="execute"
 								@keydown.ctrl.enter.prevent="execute"
 							>
-								<command-editor v-model="command" />
+								<command-editor v-model="form.content" />
 							</div>
 							<ExecutionToolbar
 								v-model:abort-on-error="abortOnError"
@@ -89,14 +97,15 @@
 								:disabled="isExecutingDisabled"
 								:loading="loading"
 								@execute="execute"
+								@schedule="scheduleOpen = true"
 							/>
 						</div>
 					</div>
 					<div
-						v-if="executeError"
+						v-if="loadError || executeError"
 						class="mt-4 rounded bg-red-50 p-2.5 text-sm font-medium text-red-800"
 					>
-						{{ executeError }}
+						{{ loadError || executeError }}
 					</div>
 					<ClientSelector
 						title="commands"
@@ -108,6 +117,10 @@
 						:jobs="jobs"
 						class="mt-5"
 					/>
+					<ScheduleDialog
+						v-model="scheduleOpen"
+						:execution="scheduleExecution"
+					/>
 				</div>
 			</div>
 		</div>
@@ -115,35 +128,58 @@
 </template>
 
 <script setup lang="ts">
+import { IconLoader2 } from '@tabler/icons-vue';
 import ExecutionTags from '~/components/custom/ExecutionTags.vue';
 import ExecutionToolbar from '~/components/ExecutionToolbar.vue';
+import LibraryActions from '~/components/library/LibraryActions.vue';
+import LibraryMeta from '~/components/library/LibraryMeta.vue';
+import ScheduleDialog from '~/components/library/ScheduleDialog.vue';
 import { useJobExecution } from '~/composables/useJobExecution';
 import { useClientSelectionTargets } from '~/composables/useClientSelectionTargets';
+import { useLibraryEditor } from '~/composables/useLibraryEditor';
+import type { SchedulePayload } from '~/types';
 
 useHead({ title: 'Commands' });
 
-const commandName = ref('');
-const commandTags = ref<string[]>([]);
-const command = ref('');
-const timeoutSec = ref(300);
 const abortOnError = ref(true);
 const executeConcurrently = ref(false);
+const scheduleOpen = ref(false);
 
+const {
+	form,
+	loaded,
+	loading: libraryLoading,
+	loadError,
+	canSave,
+	save,
+	saveAsNew,
+	remove,
+	openEntry,
+} = useLibraryEditor('commands');
 const { jobs, loading, executeError, executeMultipleClients, clearJobs } = useJobExecution('commands');
-const { hasSelection, targets, selectorListeners } = useClientSelectionTargets(clearJobs);
+const { hasSelection, targets, scheduleTargets, selectorListeners } = useClientSelectionTargets(clearJobs);
 
-const isExecutingDisabled = computed(() => !hasSelection.value || !command.value.trim());
+const isExecutingDisabled = computed(() => !hasSelection.value || !form.content.trim());
+
+const scheduleExecution = computed<Omit<SchedulePayload, 'name' | 'schedule' | 'overlaps'>>(() => ({
+	type: 'command',
+	command: form.content,
+	timeout_sec: Number(form.timeout_sec) || 300,
+	execute_concurrently: executeConcurrently.value,
+	abort_on_error: abortOnError.value,
+	...scheduleTargets.value,
+}));
 
 const execute = async () => {
 	if (isExecutingDisabled.value || loading.value || !targets.value) {
 		return;
 	}
 	await executeMultipleClients({
-		command: command.value,
+		command: form.content,
 		...targets.value,
 		execute_concurrently: executeConcurrently.value,
 		abort_on_error: abortOnError.value,
-		timeout_sec: timeoutSec.value || 300,
+		timeout_sec: Number(form.timeout_sec) || 300,
 	});
 };
 </script>
