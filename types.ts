@@ -518,8 +518,53 @@ export interface SchedulePayload {
 	abort_on_error?: boolean;
 }
 
+export interface ScheduleLastExecution {
+	started_at: string | null;
+	client_count: number | null;
+	success_count: number | null;
+	status: string | null;
+	summary: string | null;
+}
+
 export interface Schedule extends SchedulePayload {
 	id: string;
 	created_at: string;
 	created_by: string;
+	last_execution: ScheduleLastExecution | null;
+}
+
+// A multi-client job started by a schedule (GET /commands?filter[schedule_id]=...)
+export interface ScheduleExecution {
+	jid: string;
+	started_at: string;
+	created_by: string;
+	schedule_id: string;
+}
+
+// One client's job of an execution (GET /commands/{jid}/jobs)
+export interface ScheduleExecutionJob {
+	jid: string;
+	status: string;
+	started_at: string;
+	client_id: string;
+}
+
+export interface AuditLog {
+	timestamp: string;
+	username: string;
+	remote_ip: string;
+	application: string;
+	action: string;
+	affected_id: string;
+	client_id: string;
+	client_hostname: string;
+	// JSON encoded request/response bodies
+	request: string;
+	response: string;
+}
+
+export interface AuditLogFilter {
+	timestamp: string;
+	username: string;
+	application: string;
 }

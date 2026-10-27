@@ -23,7 +23,8 @@
 		</button>
 		<div
 			v-if="menuOpen"
-			class="absolute left-0 top-full z-30 mt-1 flex w-36 flex-col rounded bg-white py-1 text-sm text-gray-800 shadow-lg"
+			:class="['absolute z-30 flex w-36 flex-col rounded bg-white', dropUp ? 'bottom-full right-0 mb-1' : 'left-0 top-full mt-1']"
+			class="py-1 text-sm text-gray-800 shadow-lg"
 		>
 			<button
 				class="px-3 py-1.5 text-left hover:bg-gray-100"
@@ -50,6 +51,8 @@ import { onClickOutside } from '@vueuse/core';
 const props = defineProps<{
 	disabled: boolean;
 	saveOnly: boolean;
+	// Opens the save menu above the button, e.g. in a dialog footer
+	dropUp?: boolean;
 }>();
 
 const emit = defineEmits<{
