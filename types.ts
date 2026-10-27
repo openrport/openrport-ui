@@ -568,3 +568,9 @@ export interface AuditLogFilter {
 	username: string;
 	application: string;
 }
+
+export interface VaultAdminStatus {
+	// "setup-completed" once the vault has a passphrase
+	init: string;
+	status: 'locked' | 'unlocked' | string;
+}
