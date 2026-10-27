@@ -12,6 +12,7 @@ import TunnelsModule from '~/repository/modules/tunnels';
 import LibraryModule from '~/repository/modules/library';
 import SchedulesModule from '~/repository/modules/schedules';
 import AuditLogModule from '~/repository/modules/auditlog';
+import VaultAdminModule from '~/repository/modules/vault-admin';
 
 interface IApiInstance {
 	auth: AuthModule;
@@ -26,6 +27,7 @@ interface IApiInstance {
 	library: LibraryModule;
 	schedules: SchedulesModule;
 	auditLog: AuditLogModule;
+	vaultAdmin: VaultAdminModule;
 }
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -67,6 +69,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 		library: new LibraryModule(apiFetcher),
 		schedules: new SchedulesModule(apiFetcher),
 		auditLog: new AuditLogModule(apiFetcher),
+		vaultAdmin: new VaultAdminModule(apiFetcher),
 	};
 
 	return {
