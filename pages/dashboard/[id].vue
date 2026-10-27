@@ -223,10 +223,16 @@
 												<LazyDeviceScriptsTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="monitoring">
-												<LazyDeviceMonitoringTab />
+												<LazyDeviceMonitoringTab
+													v-if="device?.id"
+													:client="device"
+												/>
 											</TabsContent>
 											<TabsContent value="files">
-												<LazyDeviceFilesTab />
+												<LazyDeviceFilesTab
+													v-if="device?.id"
+													:client="device"
+												/>
 											</TabsContent>
 											<TabsContent value="audit">
 												<LazyDeviceAuditTab :id="device.id" />

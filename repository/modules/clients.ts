@@ -1,7 +1,9 @@
 import { HttpFactory } from '~/repository/factory';
 import type {
+	ClientGraphMetric,
 	ClientMetricsResponse,
 	ClientMountpointsResponse,
+	ClientProcessesResponse,
 	ClientResponse,
 	ClientsResponse,
 	Client,
@@ -115,6 +117,23 @@ class ClientsModule extends HttpFactory {
 				tags: client.tags,
 				labels: client.labels,
 			},
+		);
+	}
+
+	async graphMetrics(id: string, graph: string, since: string, until: string): Promise<{ data: ClientGraphMetric[] }> {
+		return this.call<{ data: ClientGraphMetric[] }>(
+			'GET',
+			`${this.RESOURCE}/${id}/graph-metrics/${graph}?filter[timestamp][since]=${since}&filter[timestamp][until]=${until}&sort=timestamp`,
+			undefined,
+		);
+	}
+
+	// One process snapshot per page, newest first, for the given UTC day
+	async processes(id: string, day: string, offset = 0): Promise<ClientProcessesResponse> {
+		return this.call<ClientProcessesResponse>(
+			'GET',
+			`${this.RESOURCE}/${id}/processes?filter[timestamp][since]=${day}T00:00:00Z&filter[timestamp][until]=${day}T23:59:59Z&page[limit]=1&page[offset]=${offset}`,
+			undefined,
 		);
 	}
 

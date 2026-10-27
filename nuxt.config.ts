@@ -84,6 +84,13 @@ export default defineNuxtConfig({
 		},
 	},
 
+	// The monitoring charts import apexcharts lazily; pre-bundling it avoids a dev reload on first use
+	vite: {
+		optimizeDeps: {
+			include: ['apexcharts'],
+		},
+	},
+
 	ssr: false,
 	compatibilityDate: '2025-03-25',
 });

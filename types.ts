@@ -87,6 +87,23 @@ export interface ClientMountpointsResponse {
 	data: ClientMountpoint[];
 	meta: Meta;
 }
+// e.g. { timestamp, cpu_usage_percent: { avg, min, max } } or { timestamp, net_usage_bps_lan: { in_avg, ..., out_max } }
+export interface ClientGraphMetric {
+	timestamp: string;
+	[graph: string]: string | Record<string, number>;
+}
+export interface ClientProcess {
+	pid: number;
+	parent_pid: number;
+	name: string;
+	cmdline: string;
+	state: string;
+	memory_usage_percent: number;
+}
+export interface ClientProcessesResponse {
+	data: Array<{ timestamp: string; processes: ClientProcess[] }>;
+	meta: Meta;
+}
 export interface ClientGroup {
 	id: string;
 	description: string;
