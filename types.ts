@@ -548,3 +548,23 @@ export interface ScheduleExecutionJob {
 	started_at: string;
 	client_id: string;
 }
+
+export interface AuditLog {
+	timestamp: string;
+	username: string;
+	remote_ip: string;
+	application: string;
+	action: string;
+	affected_id: string;
+	client_id: string;
+	client_hostname: string;
+	// JSON encoded request/response bodies
+	request: string;
+	response: string;
+}
+
+export interface AuditLogFilter {
+	timestamp: string;
+	username: string;
+	application: string;
+}
