@@ -53,7 +53,7 @@ export interface Client {
 	ipv4: string[];
 	ipv6?: string[];
 	tags: any[];
-	allowed_user_groups?: null;
+	allowed_user_groups?: string[] | null;
 	tunnels?: any[];
 	updates_status?: UpdatesStatus;
 	client_configuration?: any;

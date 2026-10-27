@@ -72,6 +72,11 @@ class ClientsModule extends HttpFactory {
 		);
 	}
 
+	// Administrators always keep access, so they are never part of this list
+	async updateAllowedUserGroups(id: string, groups: string[]): Promise<unknown> {
+		return this.call('POST', `${this.RESOURCE}/${id}/acl`, { allowed_user_groups: groups });
+	}
+
 	async mountpoints(id: string): Promise<ClientMountpointsResponse> {
 		return this.call('GET', `${this.RESOURCE}/${id}/mountpoints`, undefined);
 	}

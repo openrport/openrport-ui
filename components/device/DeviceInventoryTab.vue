@@ -20,7 +20,7 @@
 				:ipv6="device?.ipv6"
 			/>
 			<DeviceUpdateStatus :device="device" />
-			<DeviceAllowedUserGroups />
+			<DeviceAllowedUserGroups :client="device" />
 		</div>
 	</div>
 </template>
