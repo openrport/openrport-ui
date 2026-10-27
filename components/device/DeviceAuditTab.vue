@@ -35,7 +35,7 @@
 								type="text"
 							><label
 								data-v-8efdf101=""
-								class="absolute left-1 top-2 z-10 origin-[0] -trangray-y-4 scale-75 transform bg-theme px-2 text-sm text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-trangray-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-trangray-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-primary"
+								class="absolute left-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-theme px-2 text-sm text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-primary"
 								for="startDate"
 							>Audit starting date (UTC) </label><button
 								data-v-8efdf101=""

@@ -23,7 +23,7 @@
 									placeholder=" "
 									type="text"
 								><label
-									class="absolute left-1 top-2 z-10 origin-[0] -trangray-y-4 scale-75 transform bg-theme px-2 text-sm text-theme-inverted-lighter duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-trangray-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-trangray-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-primary"
+									class="absolute left-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-theme px-2 text-sm text-theme-inverted-lighter duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-primary"
 									for="startDate"
 								>Start date &amp; time (UTC) </label><button
 									type="button"
@@ -74,7 +74,7 @@
 									48h
 								</option>
 							</select><label
-								class="absolute left-1.5 top-1.5 z-10 origin-[0] -trangray-y-4 scale-75 transform px-1 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-trangray-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-trangray-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-theme-label order-1 text-sm font-medium"
+								class="absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-theme-label order-1 text-sm font-medium"
 								for="H7PwUkiM30"
 							>Period</label>
 						</div>
@@ -9835,7 +9835,7 @@
 									placeholder=" "
 									type="text"
 								><label
-									class="absolute left-1 top-2 z-10 origin-[0] -trangray-y-4 scale-75 transform bg-theme px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-trangray-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-trangray-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-primary"
+									class="absolute left-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-theme px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-primary"
 									for="startDate"
 								>Date &amp; time (UTC) </label><button
 									type="button"

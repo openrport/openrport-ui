@@ -62,6 +62,7 @@ import { IconLoader2, IconSearch } from '@tabler/icons-vue';
 import ActionDialog from '~/components/custom/dialog/ActionDialog.vue';
 import LibraryTree, { type LibraryTreeNode } from '~/components/library/LibraryTree.vue';
 import type { LibraryKind } from '~/repository/modules/library';
+import { buildLibraryTree, filterLibraryTree } from '~/utils/libraryTree';
 import type { Command, Script } from '~/types';
 
 const props = defineProps<{
@@ -97,41 +98,9 @@ watch(open, async (isOpen) => {
 	}
 });
 
-// Names like "linux/disk/usage" are shown as folders, like the reference library tree
-const tree = computed(() => {
-	const roots: LibraryTreeNode[] = [];
-	items.value.forEach((item) => {
-		const parts = item.name.toLowerCase().split('/');
-		let level = roots;
-		parts.forEach((part, index) => {
-			let node = level.find(candidate => candidate.name === part);
-			if (!node) {
-				node = {
-					name: part,
-					path: parts.slice(0, index + 1).join('/'),
-					id: index === parts.length - 1 ? item.id : null,
-					tags: item.tags,
-					created_by: item.created_by,
-					created_at: item.created_at,
-					children: [],
-				};
-				level.push(node);
-			}
-			level = node.children;
-		});
-	});
-	return roots;
-});
+const tree = computed(() => buildLibraryTree(items.value));
 
-const filterTree = (nodes: LibraryTreeNode[], term: string): LibraryTreeNode[] => nodes
-	.map((node) => {
-		const children = filterTree(node.children, term);
-		const matches = node.name.includes(term) || node.tags?.join(' ').toLowerCase().includes(term);
-		return matches || children.length ? { ...node, children } : null;
-	})
-	.filter((node): node is LibraryTreeNode => node !== null);
-
-const filteredTree = computed(() => filterTree(tree.value, search.value.toLowerCase()));
+const filteredTree = computed(() => filterLibraryTree(tree.value, search.value));
 
 const load = () => {
 	if (selected.value) {

@@ -191,7 +191,7 @@
 					<div class="relative z-10 w-full">
 						<!---->
 						<div
-							class="flow-root overflow-hidden border border-gray-100 ring-1 ring-black ring-opacity-10 dark:border-gray-600 sm:rounded-lg"
+							class="flow-root overflow-clip border border-gray-100 ring-1 ring-black ring-opacity-10 dark:border-gray-600 sm:rounded-lg"
 						>
 							<div class="overflow-auto relative z-10 -mb-2">
 								<div class="inline-block min-w-full align-middle">

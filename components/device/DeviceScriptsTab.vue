@@ -31,10 +31,10 @@ const handleScriptData = (data: {
 	scriptName: string;
 	tagsValue: string[];
 	workingDirectory: string;
-	timeoutInSecond: number;
+	timeoutInSeconds: number;
 	scriptContent: string;
 	useSudo: boolean;
 }) => {
-	executeScript(data.scriptContent, [props.id], [], data.workingDirectory, false, data.useSudo, data.timeoutInSecond);
+	executeScript(data.scriptContent, [props.id], [], data.workingDirectory, false, data.useSudo, data.timeoutInSeconds);
 };
 </script>
