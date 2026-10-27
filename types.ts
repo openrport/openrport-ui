@@ -325,8 +325,9 @@ export interface APIToken {
 	prefix: string;
 	scope: string;
 	name: string;
-	created_at: Date;
-	expires_at: Date;
+	created_at: string;
+	expires_at?: string | null;
+	token?: string;
 }
 export interface APITokensResponse {
 	data: APIToken[];
@@ -341,7 +342,7 @@ export interface IpResponse {
 	};
 }
 export interface APITokenPayload {
-	expires_at: Date;
+	expires_at?: string;
 	name: string;
 	scope: string;
 	prefix?: string;

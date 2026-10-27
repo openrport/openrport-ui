@@ -30,19 +30,21 @@ class ProfileModule extends HttpFactory {
 		);
 	}
 
+	// The token itself is only returned here, once
 	async create(payload: APITokenPayload): Promise<APITokenResponse> {
 		return this.call<APITokenResponse>(
 			HttpMethod.POST,
 			`${this.RESOURCE}/tokens`,
-			payload,
+			{ scope: payload.scope, name: payload.name, expires_at: payload.expires_at },
 		);
 	}
 
+	// The scope of a token cannot change
 	async update(payload: APITokenPayload): Promise<APITokenResponse> {
 		return this.call<APITokenResponse>(
 			HttpMethod.PUT,
 			`${this.RESOURCE}/tokens/${payload.prefix}`,
-			payload,
+			{ name: payload.name, expires_at: payload.expires_at },
 		);
 	}
 
