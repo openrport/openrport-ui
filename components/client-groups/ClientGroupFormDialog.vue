@@ -92,7 +92,7 @@
 									v-for="option in FILTER_TYPES"
 									:key="option.value"
 									:value="option.value"
-									:disabled="option.value !== filter.key && usedKeys.has(option.value)"
+									:disabled="option.value !== filter.key && blockedKeys.has(option.value)"
 								>
 									{{ option.text }}
 								</option>
@@ -317,7 +317,12 @@ const filters = ref<FilterRow[]>([]);
 const userGroups = ref<string[]>([]);
 const tags = ref<string[]>([]);
 
-const usedKeys = computed(() => new Set(filters.value.map(filter => filter.key)));
+// The server takes either "Has any tag" or "Has all tags" (params.tag.or / params.tag.and), never both
+const TAG_KEYS = ['tag', 'tag-and'];
+const blockedKeys = computed(() => {
+	const used = filters.value.map(filter => filter.key);
+	return new Set(used.some(key => TAG_KEYS.includes(key)) ? [...used, ...TAG_KEYS] : used);
+});
 const isPickList = (key: string) => ['tag', 'tag-and', 'connection_state'].includes(key);
 const cleanValues = (filter: FilterRow) => filter.values.map(value => value.trim()).filter(Boolean);
 const filtersInvalid = computed(() => filters.value.some(filter => !filter.key || !cleanValues(filter).length));
@@ -343,17 +348,13 @@ const toFilters = (params: ClientGroup['params']): FilterRow[] => Object.entries
 	return Array.isArray(value) && value.length ? [{ key, values: value.map(String) }] : [];
 });
 
-// "Has any tag" and "Has all tags" share params.tag, so they are merged rather than overwritten
-const toParams = () => filters.value.reduce<Record<string, unknown>>((params, filter) => {
+const toParams = () => Object.fromEntries(filters.value.map((filter) => {
 	const values = cleanValues(filter);
-	if (filter.key === 'tag' || filter.key === 'tag-and') {
-		params.tag = { ...(params.tag as object), [filter.key === 'tag' ? 'or' : 'and']: values };
+	if (TAG_KEYS.includes(filter.key)) {
+		return ['tag', { [filter.key === 'tag' ? 'or' : 'and']: values }];
 	}
-	else {
-		params[filter.key] = values;
-	}
-	return params;
-}, {});
+	return [filter.key, values];
+}));
 
 const changeKey = (index: number, key: string) => {
 	filters.value[index] = { key, values: isPickList(key) ? [] : [''] };
