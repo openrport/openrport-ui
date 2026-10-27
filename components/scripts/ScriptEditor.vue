@@ -84,7 +84,7 @@
 							value="1"
 						>
 						<div
-							class="after:border-secondary after:bg-secondary peer-checked:bg-secondary peer-checked:bg-opacity-30 peer-checked:after:border-secondary bg-gray-200 bg-opacity-30 peer h-6 w-11 rounded-full after:absolute after:top-0.5 after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:bg-white after:transition-all after:content-[''] peer-checked:after:trangray-x-full peer-focus:ring-0"
+							class="after:border-secondary after:bg-secondary peer-checked:bg-secondary peer-checked:bg-opacity-30 peer-checked:after:border-secondary bg-gray-200 bg-opacity-30 peer h-6 w-11 rounded-full after:absolute after:top-0.5 after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-focus:ring-0"
 						/>
 						<span class="ml-2 text-sm text-gray-300"> Use sudo <span class="text-xs">(Unix
 							only)</span>
@@ -199,7 +199,7 @@ const useSudo = ref<boolean>(false);
 const emitScriptData = () => {
 	emit('script-data', {
 		scriptName: scriptName.value,
-		tagsValue: tagsValue,
+		tagsValue: tagsValue.value,
 		workingDirectory: workingDirectory.value,
 		timeoutInSeconds: timeoutInSeconds.value,
 		scriptContent: scriptContent.value,

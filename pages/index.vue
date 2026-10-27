@@ -104,7 +104,7 @@
 											type="button"
 										><!----> Start </nuxt-link>
 										<div
-											class="mb-6 flex items-start md:absolute md:right-0 md:top-1/2 md:-trangray-y-1/2 md:transform"
+											class="mb-6 flex items-start md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 md:transform"
 										>
 											<div class="flex h-5 items-center">
 												<input

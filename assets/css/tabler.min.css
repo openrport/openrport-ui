@@ -9795,15 +9795,15 @@ fieldset:disabled .btn {
     right: 100% !important
 }
 
-.trangray-middle {
+.translate-middle {
     transform: translate(-50%, -50%) !important
 }
 
-.trangray-middle-x {
+.translate-middle-x {
     transform: translateX(-50%) !important
 }
 
-.trangray-middle-y {
+.translate-middle-y {
     transform: translateY(-50%) !important
 }
 
