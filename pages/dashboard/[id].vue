@@ -200,37 +200,45 @@
 												<DeviceInventoryTab
 													:device="device"
 													:metrics="metrics"
+													:mountpoints="mountpoints"
+													@reload-usage="reloadUsage"
 												/>
 											</TabsContent>
 											<TabsContent value="tunnels">
-												<DeviceTunnelsTab
+												<LazyDeviceTunnelsTab
 													:id="device.id"
 													@addtunnel="tunnelStore.openAddTunel()"
 												/>
 											</TabsContent>
 											<TabsContent value="meta-data">
-												<DeviceMetaDataTab />
+												<LazyDeviceMetaDataTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="documents">
-												<DeviceDocumentsTab />
+												<LazyDeviceDocumentsTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="commands">
-												<DeviceCommandsTab :id="device.id" />
+												<LazyDeviceCommandsTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="scripts">
-												<DeviceScriptsTab :id="device.id" />
+												<LazyDeviceScriptsTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="monitoring">
-												<DeviceMonitoringTab />
+												<LazyDeviceMonitoringTab
+													v-if="device?.id"
+													:client="device"
+												/>
 											</TabsContent>
 											<TabsContent value="files">
-												<DeviceFilesTab />
+												<LazyDeviceFilesTab
+													v-if="device?.id"
+													:client="device"
+												/>
 											</TabsContent>
 											<TabsContent value="audit">
-												<DeviceAuditTab />
+												<LazyDeviceAuditTab :id="device.id" />
 											</TabsContent>
 											<TabsContent value="schedules">
-												<DeviceSchedulesTab />
+												<LazyDeviceSchedulesTab :id="device.id" />
 											</TabsContent>
 										</div>
 									</div>
@@ -365,7 +373,7 @@ const selectedTab = ref('inventory');
 
 const { isAddingTunnel } = storeToRefs(tunnelStore);
 
-const { device, metrics } = useClientDetail();
+const { device, metrics, mountpoints, reloadUsage } = useClientDetail();
 const {
 	translateX,
 	tabsListRef,

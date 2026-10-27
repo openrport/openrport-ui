@@ -53,7 +53,7 @@ export interface Client {
 	ipv4: string[];
 	ipv6?: string[];
 	tags: any[];
-	allowed_user_groups?: null;
+	allowed_user_groups?: string[] | null;
 	tunnels?: any[];
 	updates_status?: UpdatesStatus;
 	client_configuration?: any;
@@ -68,7 +68,8 @@ export interface ClientMetric {
 }
 
 export interface ClientMountpoint {
-	mountpoints: any;
+	// "free_b.<path>" and "total_b.<path>" byte counts per mount point
+	mountpoints: Record<string, number>;
 	timestamp: string;
 }
 export interface Meta {
@@ -83,7 +84,44 @@ export interface ClientMetricsResponse {
 	meta: Meta;
 }
 export interface ClientMountpointsResponse {
-	data: ClientMountpoint;
+	data: ClientMountpoint[];
+	meta: Meta;
+}
+// e.g. { timestamp, cpu_usage_percent: { avg, min, max } } or { timestamp, net_usage_bps_lan: { in_avg, ..., out_max } }
+export interface ClientGraphMetric {
+	timestamp: string;
+	[graph: string]: string | Record<string, number>;
+}
+export type VaultEntryType = 'text' | 'secret' | 'markdown' | string;
+export interface VaultEntry {
+	id: number;
+	client_id: string;
+	required_group: string;
+	key: string;
+	value?: string;
+	type: VaultEntryType;
+	created_at?: string;
+	created_by?: string;
+	updated_at?: string;
+	updated_by?: string;
+}
+export interface VaultEntryPayload {
+	client_id: string;
+	required_group?: string;
+	key: string;
+	value: string;
+	type: VaultEntryType;
+}
+export interface ClientProcess {
+	pid: number;
+	parent_pid: number;
+	name: string;
+	cmdline: string;
+	state: string;
+	memory_usage_percent: number;
+}
+export interface ClientProcessesResponse {
+	data: Array<{ timestamp: string; processes: ClientProcess[] }>;
 	meta: Meta;
 }
 export interface ClientGroup {

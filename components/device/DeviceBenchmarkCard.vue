@@ -15,6 +15,7 @@
 				<button
 					class="bg-primary-800 hover:bg-primary-800 focus-visible:outline-primary-600 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:focus-visible:outline-gray-400 text-white disabled:text-gray-500 cursor-pointer rounded-md px-2.5 py-1.5 text-sm relative font-semibold shadow-sm transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
 					type="button"
+					@click="emit('reload')"
 				>
 					<!----><!----><span class="flex items-center justify-center gap-x-2"><!----><svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -79,17 +80,17 @@
 								</td>
 							</tr>
 							<tr
-								v-if="metrics.length > 0"
+								v-if="usage"
 								class="flex flex-col md:table-row"
 							>
 								<td class="w-full whitespace-nowrap p-1 font-medium tracking-tight text-primary md:w-fit md:min-w-min">
-									CPU Usage ( {{ cpu_usage_percent }} %):
+									CPU Usage ({{ usage?.cpu }}%):
 								</td>
 								<td class="w-full p-1">
 									<div class="h-3 w-full bg-gray-200">
 										<div
 											class="bg-primary h-full"
-											:style="{ width: `${cpu_usage_percent}%` }"
+											:style="{ width: `${usage?.cpu}%` }"
 										/>
 									</div>
 								</td>
@@ -99,44 +100,60 @@
 									Total Memory:
 								</td>
 								<td class="w-full p-1">
-									{{ bytesToSize(device?.mem_total) }}
+									{{ device?.mem_total ? formatFileSize(device.mem_total) : '' }}
 								</td>
 							</tr>
 							<tr
-								v-if="metrics.length > 0"
+								v-if="usage"
 								class="flex flex-col md:table-row"
 							>
 								<td class="w-full whitespace-nowrap p-1 font-medium tracking-tight text-primary md:w-fit md:min-w-min">
-									Memory Usage ({{ memory_usage_percent }}%):
+									Memory Usage ({{ usage?.memory }}%):
 								</td>
 								<td class="w-full p-1">
 									<div class="h-3 w-full bg-gray-200">
 										<div
 											class="bg-primary h-full"
-											:style="{ width: `${memory_usage_percent}%` }"
+											:style="{ width: `${usage?.memory}%` }"
 										/>
 									</div>
 								</td>
 							</tr>
 							<tr
-								v-if="metrics.length > 0"
+								v-if="usage"
 								class="flex flex-col md:table-row"
-								:style="{ width: `${io_usage_percent}%` }"
 							>
 								<td class="w-full whitespace-nowrap p-1 font-medium tracking-tight text-primary md:w-fit md:min-w-min">
-									IO Usage ({{ io_usage_percent }}%):
+									IO Usage ({{ usage?.io }}%):
 								</td>
 								<td class="w-full p-1">
 									<div class="h-3 w-full bg-gray-200">
 										<div
 											class="bg-primary h-full"
-											:style="{ width: `${io_usage_percent}%` }"
+											:style="{ width: `${usage?.io}%` }"
 										/>
 									</div>
+								</td>
+							</tr>
+							<tr
+								v-for="disk in disks"
+								:key="disk.path"
+								class="flex flex-col md:table-row"
+							>
+								<td class="w-full whitespace-nowrap p-1 font-medium tracking-tight text-primary md:w-fit md:min-w-min">
+									Disk Usage {{ disk.path }} ({{ disk.percentage }}%):
+								</td>
+								<td class="w-full p-1">
+									<div class="h-3 w-full bg-gray-200">
+										<div
+											class="bg-primary h-full"
+											:style="{ width: `${disk.percentage}%` }"
+										/>
+									</div>
+									<span>{{ disk.label }}</span>
 								</td>
 							</tr>
 						</tbody>
-						<!---->
 					</table>
 				</div>
 			</div>
@@ -146,7 +163,7 @@
 </template>
 
 <script setup>
-import { bytesToSize } from '../../lib/utils';
+import { formatDiskSize, formatFileSize } from '../../lib/utils';
 
 const props = defineProps({
 	device: {
@@ -155,25 +172,45 @@ const props = defineProps({
 	},
 	metrics: {
 		type: Array,
-		default: [],
+		default: () => [],
+	},
+	mountpoints: {
+		type: Array,
+		default: () => [],
 	},
 });
-const memory_usage_percent = computed(() => {
-	if (props.metrics.length <= 0) {
-		return 0;
+
+const emit = defineEmits(['reload']);
+
+// Like the reference, usage older than 3 minutes is not shown (e.g. disconnected clients)
+const MAX_AGE_MS = 3 * 60 * 1000;
+const latestFresh = (samples) => {
+	const latest = samples?.[0];
+	if (!latest || Date.now() - new Date(latest.timestamp).getTime() > MAX_AGE_MS) {
+		return null;
 	}
-	return parseFloat(String(props.metrics[0].memory_usage_percent)).toFixed(2);
+	return latest;
+};
+
+const percent = value => Number.parseFloat(String(value)).toFixed(1);
+
+const usage = computed(() => {
+	const latest = latestFresh(props.metrics);
+	return latest
+		? { cpu: percent(latest.cpu_usage_percent), memory: percent(latest.memory_usage_percent), io: percent(latest.io_usage_percent) }
+		: null;
 });
-const cpu_usage_percent = computed(() => {
-	if (props.metrics.length <= 0) {
-		return 0;
-	}
-	return parseFloat(String(props.metrics[0].cpu_usage_percent)).toFixed(2);
-});
-const io_usage_percent = computed(() => {
-	if (props.metrics.length <= 0) {
-		return 0;
-	}
-	return parseFloat(String(props.metrics[0].io_usage_percent)).toFixed(2);
+
+// Mount points come as "free_b.<path>" / "total_b.<path>" byte counts
+const disks = computed(() => {
+	const mountpoints = latestFresh(props.mountpoints)?.mountpoints || {};
+	return Object.keys(mountpoints)
+		.filter(key => key.startsWith('total_b.'))
+		.map((key) => {
+			const path = key.slice('total_b.'.length);
+			const total = mountpoints[key];
+			const used = total - (mountpoints[`free_b.${path}`] ?? 0);
+			return { path, percentage: ((used * 100) / total).toFixed(1), label: `${formatDiskSize(used)} of ${formatDiskSize(total)}` };
+		});
 });
 </script>

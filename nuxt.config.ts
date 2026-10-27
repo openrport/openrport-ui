@@ -84,6 +84,13 @@ export default defineNuxtConfig({
 		},
 	},
 
+	// Libraries imported lazily by the device tabs; pre-bundling them avoids a dev reload on first use
+	vite: {
+		optimizeDeps: {
+			include: ['apexcharts', '@toast-ui/editor'],
+		},
+	},
+
 	ssr: false,
 	compatibilityDate: '2025-03-25',
 });

@@ -110,15 +110,12 @@ import TagsLabelDialog from '~/components/device/TagsLabelDialog.vue';
 const props = defineProps({
 	client: {
 		type: Object,
-		default: () => [],
+		default: () => ({}),
 	},
 });
 const isModalOpen = ref(false);
-const internalClient = ref(props.client);
-
-watch(props.client, (newValue) => {
-	internalClient.value = newValue;
-});
+// Follows the client passed in, which is replaced when another client is opened
+const internalClient = computed(() => props.client);
 const labels = computed(() => {
 	const l = internalClient.value?.labels;
 	if (!l) return [];
@@ -132,8 +129,5 @@ const tags = computed(() => {
 });
 const openTagsLabel = () => {
 	isModalOpen.value = true;
-};
-const closeTagsLabel = () => {
-	isModalOpen.value = false;
 };
 </script>

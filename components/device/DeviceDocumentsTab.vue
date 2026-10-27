@@ -1,117 +1,412 @@
 <template>
-	<div class="h-full w-full flex-1">
+	<div class="mt-5 w-full p-1 pb-12">
+		<VaultLocked
+			v-if="unavailable || (pending && !ready)"
+			:loading="pending"
+		/>
 		<div
-			class="flex flex-1 flex-col divide-y divide-gray-50 overflow-hidden rounded-lg bg-white shadow dark:divide-gray-700 dark:bg-gray-900 mt-5"
+			v-else
+			:class="['relative flex w-full overflow-hidden rounded-lg border border-gray-200 bg-white transition-all duration-300 dark:border-gray-700 dark:bg-gray-900', sidebarOpen ? 'pl-64' : 'pl-0']"
 		>
-			<!---->
-			<div class="flex-1 px-4 py-5 text-gray-950 dark:text-gray-50 sm:p-6">
-				<div class="h-full w-full">
-					<!---->
-					<div
-						class="flex flex-1 flex-col divide-y divide-gray-50 overflow-hidden rounded-lg bg-white shadow dark:divide-gray-700 dark:bg-gray-900"
+			<div :class="['absolute left-0 top-0 z-30 flex h-12 items-center border-b border-gray-200 bg-gray-100 transition-all duration-300 dark:border-gray-700 dark:bg-gray-950', sidebarOpen ? 'w-64' : 'w-10']">
+				<button
+					class="flex h-10 w-10 items-center justify-center text-gray-600 dark:text-gray-300"
+					type="button"
+					:title="sidebarOpen ? 'Hide documents' : 'Show documents'"
+					@click="sidebarOpen = !sidebarOpen"
+				>
+					<IconMenu2 :size="22" />
+				</button>
+			</div>
+			<aside
+				v-show="sidebarOpen"
+				class="absolute bottom-0 left-0 top-0 flex w-64 flex-col border-r border-gray-200 bg-gray-100 pt-12 dark:border-gray-700 dark:bg-gray-950"
+			>
+				<ul class="flex-1 overflow-y-auto py-2">
+					<li
+						v-for="doc in documents"
+						:key="doc.id"
+						:class="['group relative flex min-h-[52px] items-center justify-between', { 'bg-gray-200 dark:bg-gray-800': doc.id === current?.id }]"
 					>
-						<!---->
-						<div class="flex-1 px-4 py-5 text-gray-950 dark:text-gray-50 sm:p-6">
-							<div class="h-full w-full">
-								<div class="flex flex-col items-center justify-center">
-									<div class="flex flex-col items-center justify-center">
-										<button
-											type="button"
-											class="inline-flex items-center duration-200 focus:outline-none rounded-full p-3 h-15 w-15 cursor-default justify-center rounded-full bg-theme shadow"
-										>
-											<span
-												class="flex items-center justify-center"
-												style="width: 24px; height: 24px;"
-											><svg
-												data-v-ca945699=""
-												xmlns="http://www.w3.org/2000/svg"
-												width="24px"
-												height="24px"
-												viewBox="0 0 24 24"
-												class="icon"
-											>
-												<path
-													fill="currentColor"
-													d="M22 18v4h-4v-3h-3v-3h-3l-2.26-2.26c-.55.17-1.13.26-1.74.26a6 6 0 0 1-6-6a6 6 0 0 1 6-6a6 6 0 0 1 6 6c0 .61-.09 1.19-.26 1.74L22 18M7 5a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2Z"
-												/>
-											</svg></span>
-										</button>
-										<div class="mt-4 p-1 text-3xl font-bold">
-											<h3>The vault is locked or not initialized.</h3>
-										</div>
-										<div class="mt-2 p-1 text-sm underline">
-											<a
-												href="https://kb.rport.io/activate-the-vault"
-												target="_blank"
-											> Learn
-												more </a>
-										</div><a
-											href="/vault"
-											class="mx-auto mt-4 inline-flex h-11 items-center rounded-full bg-secondary px-5 font-medium uppercase text-black-087 shadow"
-										>Unlock
-											vault </a>
-									</div>
-								</div>
-							</div>
-						</div><!---->
-					</div>
-					<div
-						class="fixed inset-0 z-50 overflow-y-auto transition"
-						style="display: none;"
+						<template v-if="renaming?.id === doc.id">
+							<input
+								v-model="renaming.key"
+								:class="sidebarInputClass"
+								placeholder="Document title"
+								type="text"
+								@keydown.enter="rename"
+								@keydown.esc="renaming = null"
+							>
+							<button
+								:class="[iconButtonClass, 'hover:bg-green-50 hover:text-green-700']"
+								type="button"
+								title="Save title"
+								@click="rename"
+							>
+								<IconCheck :size="16" />
+							</button>
+							<button
+								:class="[iconButtonClass, 'mr-1 hover:bg-red-50 hover:text-red-600']"
+								type="button"
+								title="Cancel"
+								@click="renaming = null"
+							>
+								<IconX :size="16" />
+							</button>
+						</template>
+						<template v-else>
+							<button
+								class="w-full truncate px-3 py-3 text-left text-sm"
+								type="button"
+								@click="select(doc)"
+							>
+								{{ doc.key }}
+							</button>
+							<DropdownMenu>
+								<DropdownMenuTrigger as-child>
+									<button
+										:class="[iconButtonClass, 'mr-2']"
+										type="button"
+										title="Actions"
+									>
+										<IconDotsVertical :size="16" />
+									</button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent class="w-36 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-950">
+									<DropdownMenuItem
+										:class="menuItemClass"
+										@click="renaming = { id: doc.id, key: doc.key }"
+									>
+										<IconPencil class="mr-2 h-4 w-4" />
+										<span>Rename</span>
+									</DropdownMenuItem>
+									<DropdownMenuItem
+										:class="menuItemClass"
+										@click="remove(doc)"
+									>
+										<IconTrash class="mr-2 h-4 w-4" />
+										<span>Delete</span>
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
+						</template>
+					</li>
+					<li
+						v-if="creating !== null"
+						class="flex items-center bg-gray-200 py-2 pl-2 dark:bg-gray-800"
 					>
-						<div class="fixed inset-0 bg-theme-backdrop/75 transition" />
-						<div
-							class="fixed inset-0 overflow-y-auto transition"
-							style="display: none;"
+						<input
+							v-model="creating"
+							:class="sidebarInputClass"
+							placeholder="Document title"
+							type="text"
+							@keydown.enter="create"
+							@keydown.esc="creating = null"
 						>
-							<div class="flex min-h-full items-center justify-center text-center">
-								<div
-									class="relative mx-4 transform overflow-hidden rounded bg-theme px-6 py-4 text-left shadow-xl sm:w-full sm:max-w-lg"
-								>
-									<div as="div">
-										<h3 class="mt-2 text-3xl font-medium leading-6 text-theme-inverted">
-											<span
-												class="text-sm font-medium text-gray-600"
-											>Unsaved changes</span>
-										</h3>
-									</div>
-									<div class="pt-4 pb-2">
-										<p class="text-sm font-medium text-gray-600">
-											You have unsaved changes in the
-											current document "". Do you want to discard or save them?
-										</p>
-									</div>
-									<div class="mt-5 flex justify-end">
-										<button
-											class="hover:opacity-80 px-4 py-2 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none primary plain mr-2"
-											type="button"
-										>
-											<!----><!----> Discard
-										</button><button
-											class="hover:opacity-80 px-4 py-2 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none primary"
-											type="button"
-										>
-											<!----><svg
-												data-v-ca945699=""
-												xmlns="http://www.w3.org/2000/svg"
-												width="16px"
-												height="16px"
-												viewBox="0 0 24 24"
-												class="icon mr-2"
-											>
-												<path
-													fill="currentColor"
-													d="M5 21q-.825 0-1.413-.588T3 19V5q0-.825.588-1.413T5 3h11.175q.4 0 .763.15t.637.425l2.85 2.85q.275.275.425.638t.15.762V19q0 .825-.588 1.413T19 21H5Zm7-3q1.25 0 2.125-.875T15 15q0-1.25-.875-2.125T12 12q-1.25 0-2.125.875T9 15q0 1.25.875 2.125T12 18Zm-5-8h7q.425 0 .713-.288T15 9V7q0-.425-.288-.713T14 6H7q-.425 0-.713.288T6 7v2q0 .425.288.713T7 10Z"
-												/>
-											</svg> Save
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+						<button
+							:class="[iconButtonClass, 'hover:bg-green-50 hover:text-green-700']"
+							:disabled="busy"
+							type="button"
+							title="Create document"
+							@click="create"
+						>
+							<IconLoader2
+								v-if="busy"
+								:size="16"
+								class="animate-spin"
+							/>
+							<IconCheck
+								v-else
+								:size="16"
+							/>
+						</button>
+						<button
+							:class="[iconButtonClass, 'mr-1 hover:bg-red-50 hover:text-red-600']"
+							type="button"
+							title="Cancel"
+							@click="creating = null"
+						>
+							<IconX :size="16" />
+						</button>
+					</li>
+				</ul>
+				<div class="p-2">
+					<button
+						class="flex h-10 w-full items-center justify-center gap-2 rounded bg-primary text-sm font-medium uppercase text-white shadow hover:opacity-80 disabled:opacity-50"
+						:disabled="creating !== null"
+						type="button"
+						@click="creating = ''"
+					>
+						<IconFilePlus :size="18" />
+						New Document
+					</button>
 				</div>
-			</div><!---->
+			</aside>
+			<div class="relative w-full min-w-0">
+				<MarkdownEditor
+					ref="editor"
+					v-model="content"
+					:disabled="!current"
+				>
+					<button
+						v-if="current && changed"
+						class="absolute bottom-11 right-3 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg hover:opacity-80"
+						:disabled="busy"
+						type="button"
+						title="Save document"
+						@click="save()"
+					>
+						<IconLoader2
+							v-if="busy"
+							:size="24"
+							class="animate-spin"
+						/>
+						<IconDeviceFloppy
+							v-else
+							:size="24"
+						/>
+					</button>
+				</MarkdownEditor>
+				<div
+					v-if="loadingDocument"
+					class="absolute inset-0 z-30 flex items-center justify-center bg-white bg-opacity-70 dark:bg-gray-900 dark:bg-opacity-70"
+				>
+					<IconLoader2
+						:size="36"
+						class="animate-spin text-gray-400"
+					/>
+				</div>
+			</div>
 		</div>
+
+		<ActionDialog
+			v-model="confirmOpen"
+			title="Unsaved changes"
+			size="sm:w-[480px]"
+		>
+			<p class="p-6 text-sm">
+				You have unsaved changes in the current document "{{ current?.key }}". Do you want to discard or save them?
+			</p>
+			<template #actions>
+				<button
+					class="ml-2 rounded bg-gray-100 px-4 py-2 text-sm text-gray-800 hover:bg-gray-200"
+					type="button"
+					@click="leaveCurrent(false)"
+				>
+					Discard
+				</button>
+				<button
+					class="ml-2 rounded bg-primary px-4 py-2 text-sm text-white hover:opacity-80"
+					type="button"
+					@click="leaveCurrent(true)"
+				>
+					Save
+				</button>
+			</template>
+		</ActionDialog>
 	</div>
 </template>
+
+<script setup lang="ts">
+import { IconCheck, IconDeviceFloppy, IconDotsVertical, IconFilePlus, IconLoader2, IconMenu2, IconPencil, IconTrash, IconX } from '@tabler/icons-vue';
+import ActionDialog from '~/components/custom/dialog/ActionDialog.vue';
+import MarkdownEditor from '~/components/device/MarkdownEditor.vue';
+import VaultLocked from '~/components/VaultLocked.vue';
+import { apiErrorText } from '~/composables/useScheduleTimingForm';
+import type { VaultEntry } from '~/types';
+
+const iconButtonClass = 'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-gray-500 hover:bg-gray-50';
+const sidebarInputClass = 'h-9 w-full min-w-0 rounded border border-gray-300 bg-white px-2 text-sm focus:outline-0 dark:bg-gray-900';
+const menuItemClass = 'group flex w-full cursor-pointer items-center rounded-md px-2 py-2 text-xs';
+
+const props = defineProps<{
+	id: string;
+}>();
+
+const { $api } = useNuxtApp();
+const snackbar = useSnackbar();
+const editor = ref<InstanceType<typeof MarkdownEditor> | null>(null);
+const sidebarOpen = ref(true);
+const unavailable = ref(false);
+const ready = ref(false);
+const busy = ref(false);
+const loadingDocument = ref(false);
+const confirmOpen = ref(false);
+const current = ref<VaultEntry | null>(null);
+const original = ref('');
+const content = ref('');
+const creating = ref<string | null>(null);
+const renaming = ref<{ id: number; key: string } | null>(null);
+// Document picked while the current one had unsaved changes
+const nextDocument = ref<VaultEntry | null>(null);
+
+const changed = computed(() => !!current.value && content.value !== original.value);
+
+const { data: documents, pending, refresh } = useLazyAsyncData(
+	`device-documents-${props.id}`,
+	async () => {
+		try {
+			const entries = await $api.vault.listWithValues(props.id);
+			unavailable.value = false;
+			return entries.filter(entry => entry.type === 'markdown');
+		}
+		catch {
+			unavailable.value = true;
+			return [];
+		}
+		finally {
+			ready.value = true;
+		}
+	},
+	{ default: () => [] as VaultEntry[] },
+);
+
+const show = (doc: VaultEntry | null) => {
+	current.value = doc;
+	original.value = doc?.value || '';
+	content.value = original.value;
+	editor.value?.setMarkdown(original.value);
+};
+
+const open = async (doc: VaultEntry) => {
+	loadingDocument.value = true;
+	try {
+		const { data } = await $api.vault.show(doc.id);
+		show(data);
+	}
+	catch (error) {
+		snackbar.add({ type: 'error', text: apiErrorText(error) || 'Document could not be loaded.' });
+	}
+	finally {
+		loadingDocument.value = false;
+	}
+};
+
+// Like the reference, the first document opens once the list is loaded
+watch(documents, async (list) => {
+	if (!list.some(doc => doc.id === current.value?.id)) {
+		if (list.length) {
+			await nextTick();
+			await open(list[0]);
+		}
+		else {
+			show(null);
+		}
+	}
+});
+
+const select = (doc: VaultEntry) => {
+	if (doc.id === current.value?.id) {
+		return;
+	}
+	if (changed.value) {
+		nextDocument.value = doc;
+		confirmOpen.value = true;
+		return;
+	}
+	open(doc);
+};
+
+const save = async () => {
+	const doc = current.value;
+	if (!doc) {
+		return false;
+	}
+	busy.value = true;
+	try {
+		await $api.vault.update(doc.id, {
+			client_id: doc.client_id,
+			required_group: doc.required_group,
+			type: doc.type,
+			key: doc.key,
+			value: content.value,
+		});
+		original.value = content.value;
+		snackbar.add({ type: 'success', text: 'Document was successfully updated.' });
+		return true;
+	}
+	catch (error) {
+		snackbar.add({ type: 'error', text: apiErrorText(error) || 'Document could not be saved.' });
+		return false;
+	}
+	finally {
+		busy.value = false;
+	}
+};
+
+const leaveCurrent = async (keep: boolean) => {
+	confirmOpen.value = false;
+	if (keep && !await save()) {
+		return;
+	}
+	const doc = nextDocument.value;
+	nextDocument.value = null;
+	if (doc) {
+		await open(doc);
+	}
+};
+
+const create = async () => {
+	const key = creating.value?.trim();
+	if (!key || busy.value) {
+		return;
+	}
+	busy.value = true;
+	try {
+		const { data } = await $api.vault.create({ client_id: props.id, required_group: '', type: 'markdown', key, value: `# ${key}` });
+		creating.value = null;
+		snackbar.add({ type: 'success', text: 'Document was successfully created.' });
+		await refresh();
+		const created = documents.value.find(doc => doc.id === data?.id);
+		if (created) {
+			select(created);
+		}
+	}
+	catch (error) {
+		snackbar.add({ type: 'error', text: apiErrorText(error) || 'Document could not be created.' });
+	}
+	finally {
+		busy.value = false;
+	}
+};
+
+const rename = async () => {
+	const target = renaming.value;
+	const doc = documents.value.find(item => item.id === target?.id);
+	if (!target || !doc || !target.key.trim()) {
+		return;
+	}
+	try {
+		// The current document keeps its unsaved text; only the title changes
+		await $api.vault.update(doc.id, {
+			client_id: doc.client_id,
+			required_group: doc.required_group,
+			type: doc.type,
+			key: target.key.trim(),
+			value: doc.id === current.value?.id ? original.value : doc.value || '',
+		});
+		snackbar.add({ type: 'success', text: 'Document was successfully updated.' });
+		renaming.value = null;
+		if (current.value?.id === doc.id) {
+			current.value = { ...current.value, key: target.key.trim() };
+		}
+		await refresh();
+	}
+	catch (error) {
+		snackbar.add({ type: 'error', text: apiErrorText(error) || 'Document could not be updated.' });
+	}
+};
+
+const remove = async (doc: VaultEntry) => {
+	try {
+		await $api.vault.delete(doc.id);
+		if (doc.id === current.value?.id) {
+			show(null);
+		}
+		await refresh();
+	}
+	catch (error) {
+		snackbar.add({ type: 'error', text: apiErrorText(error) || 'Document could not be deleted.' });
+	}
+};
+</script>

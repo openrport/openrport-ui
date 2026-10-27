@@ -1,41 +1,37 @@
 <template>
-	<div class="card">
-		<div class="card-body">
-			<div class="card">
-				<div class="card-body">
-					<div class="jumbotron text-center">
-						<IconCircleKey
-							:size="60"
-							stroke-width="1"
-						/>
-						<p class="display-6">
-							The vault is locked or not initialized.
-						</p>
-						<div class="my-3">
-							<a href="#">Learn more</a>
-						</div>
-						<p class="lead">
-							<a
-								class="btn btn-lime btn-lg rounded-pill"
-								href="#"
-								role="button"
-							>Unlock vault</a>
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
+	<div class="flex flex-col items-center justify-center rounded-lg bg-white px-4 py-12 text-center shadow dark:bg-gray-900">
+		<IconLoader2
+			v-if="loading"
+			:size="32"
+			class="animate-spin text-gray-400"
+		/>
+		<template v-else>
+			<span class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-50 shadow dark:bg-gray-800">
+				<IconKey :size="24" />
+			</span>
+			<h3 class="mt-4 p-1 text-3xl font-bold text-gray-900 dark:text-gray-50">
+				The vault is locked or not initialized.
+			</h3>
+			<a
+				class="mt-2 p-1 text-sm underline"
+				href="https://kb.openrport.io/activate-the-vault"
+				target="_blank"
+				rel="noopener"
+			>Learn more</a>
+			<NuxtLink
+				class="mt-4 inline-flex h-11 items-center rounded-full bg-primary px-5 text-sm font-medium uppercase text-white shadow hover:opacity-80"
+				to="/Vault"
+			>
+				Unlock vault
+			</NuxtLink>
+		</template>
 	</div>
 </template>
 
-<script>
-import { IconCircleKey } from '@tabler/icons-vue';
+<script setup lang="ts">
+import { IconKey, IconLoader2 } from '@tabler/icons-vue';
 
-export default {
-	components: {
-		IconCircleKey,
-	},
-};
+defineProps<{
+	loading?: boolean;
+}>();
 </script>
-
-<style></style>

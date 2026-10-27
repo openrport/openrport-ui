@@ -63,3 +63,19 @@ export function toQueryString(params: QueryParams | TunnelPayload): string {
 		.join('&');
 	return queryParams ? `?${queryParams}` : '';
 }
+
+// Same output as the `filesize` defaults used by the reference UI: base 1000, two decimals ("33.31 GB")
+export function formatFileSize(bytes: number): string {
+	if (!bytes) {
+		return '0 B';
+	}
+	const units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB'];
+	const exponent = Math.min(Math.floor(Math.log(bytes) / Math.log(1000)), units.length - 1);
+	return `${Math.round((bytes / 1000 ** exponent) * 100) / 100} ${units[exponent]}`;
+}
+
+// Disk sizes as the reference shows them: binary GB with one decimal, TB above 1024 GB
+export function formatDiskSize(bytes: number): string {
+	const gigabytes = bytes / 1073741824;
+	return gigabytes >= 1024 ? `${(gigabytes / 1024).toFixed(1)}TB` : `${gigabytes.toFixed(1)}GB`;
+}

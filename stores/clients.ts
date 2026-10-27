@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { Client, ClientGroup, ClientMetric, ClientsResponse } from '~/types';
+import type { Client, ClientGroup, ClientMetric, ClientMountpoint, ClientsResponse } from '~/types';
 
 export const useClientStore = defineStore('clients', {
 	state: () => ({
@@ -7,6 +7,7 @@ export const useClientStore = defineStore('clients', {
 		groups: [] as Array<ClientGroup>,
 		currentClient: {} as Client,
 		currentMetrics: [] as Array<ClientMetric>,
+		currentMountpoints: [] as Array<ClientMountpoint>,
 	}),
 	getters: {
 		getClients(state) {
@@ -53,17 +54,32 @@ export const useClientStore = defineStore('clients', {
 				console.error('Error fetching clients:', e);
 			}
 		},
+		// The client and its usage data are independent, so they load in parallel like the reference UI
 		async loadClientById(clientId: string) {
 			const { $api } = useNuxtApp();
+			if (this.currentClient.id !== clientId) {
+				// Never show the previously opened client while the new one loads
+				this.$state.currentClient = {} as Client;
+				this.$state.currentMetrics = [];
+				this.$state.currentMountpoints = [];
+			}
+			const usage = this.loadClientUsage(clientId);
 			try {
-				const data = await $api.clients.show(clientId);
-				this.$state.currentClient = <Client>data.data;
-				const metricsData = await $api.clients.metrics(clientId as string);
-				this.$state.currentMetrics = <ClientMetric[]>metricsData.data;
+				this.$state.currentClient = <Client>(await $api.clients.show(clientId)).data;
 			}
 			catch (e) {
 				console.error('Error fetching client:', e);
 			}
+			await usage;
+		},
+		async loadClientUsage(clientId: string) {
+			const { $api } = useNuxtApp();
+			const [metrics, mountpoints] = await Promise.allSettled([
+				$api.clients.metrics(clientId),
+				$api.clients.mountpoints(clientId),
+			]);
+			this.$state.currentMetrics = metrics.status === 'fulfilled' ? metrics.value.data : [];
+			this.$state.currentMountpoints = mountpoints.status === 'fulfilled' ? mountpoints.value.data : [];
 		},
 		updateClient(client: Partial<Client>) {
 			this.$state.currentClient = {
