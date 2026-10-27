@@ -221,7 +221,9 @@ export interface User {
 export interface UserPayload {
 	username: string;
 	groups: string[];
-	password: string;
+	password?: string;
+	password_expired?: boolean;
+	two_fa_send_to?: string;
 }
 
 export interface UserGroup {
@@ -310,9 +312,9 @@ export interface StoredTunnelResponse {
 	meta: Meta;
 }
 export interface UserSession {
-	expires_at: Date;
+	expires_at: string;
 	ip_address: string;
-	last_access_at: Date;
+	last_access_at: string;
 	session_id: number;
 	user_agent: string;
 	username: string;
