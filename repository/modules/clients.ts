@@ -108,12 +108,8 @@ class ClientsModule extends HttpFactory {
 		);
 	}
 
-	async listTags(filter?: string): Promise<ClientTagsResponse> {
-		let url = `${this.RESOURCE_TAGS}?page[limit]=20&page[offset]=0`;
-		if (filter) {
-			url += `&${filter}`;
-		}
-		return this.call<ClientTagsResponse>('GET', url, undefined);
+	async listTags(filter = 'page[limit]=20&page[offset]=0'): Promise<ClientTagsResponse> {
+		return this.call<ClientTagsResponse>('GET', `${this.RESOURCE_TAGS}?${filter}`, undefined);
 	}
 }
 

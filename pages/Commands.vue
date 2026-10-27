@@ -25,6 +25,8 @@
 								<div class="flex flex-col">
 									<div class="relative mt-1 flex w-full flex-col">
 										<input
+											id="commandName"
+											v-model="commandName"
 											class="border-white text-white focus:border-white input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
 											placeholder=" "
 											type="text"
@@ -32,38 +34,25 @@
 										>
 										<label
 											class="order-1 flex pb-1 pl-1 text-white text-sm font-normal"
-											for="43HNJXPf8x"
+											for="commandName"
 										>Command name</label>
 									</div>
 								</div>
-								<div
-									data-v-e6ecae96=""
-									class="flex flex-col mt-1"
-								>
-									<label
-										data-v-e6ecae96=""
-										class="text-sm font-normal text-white"
-									>Tags</label>
-									<div
-										class="mt-1 flex min-h-[40px] flex-wrap overflow-hidden rounded border border-white"
-									>
-										<input
-											class="flex-auto border-none bg-transparent p-2 text-sm text-white placeholder-gray-300 outline-none"
-											placeholder="Add a tag by typing"
-										>
-									</div>
-								</div>
+								<ExecutionTags v-model="commandTags" />
 								<div class="flex flex-col mt-1">
 									<div class="relative mt-1 flex w-full flex-col">
 										<input
+											id="commandTimeout"
+											v-model.number="timeoutSec"
 											class="border-white text-white focus:border-white input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
 											placeholder="300"
 											type="number"
+											min="1"
 											autocomplete="off"
 										>
 										<label
 											class="order-1 flex pb-1 pl-1 text-white text-sm font-normal"
-											for="3hSWIT7FZG"
+											for="commandTimeout"
 										>Time out (seconds)</label>
 									</div>
 								</div>
@@ -72,7 +61,7 @@
 								<div class="grid grid-cols-3 rounded-l-md">
 									<button
 										class="cursor-not-allowed hover:opacity-100 px-4 py-2 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none col-span-3 secondary"
-										disabled=""
+										disabled
 										type="button"
 									>
 										Save
@@ -88,85 +77,74 @@
 						</div>
 						<div class="col-span-5">
 							<div
-								class="command-editor max-h-[550px] min-h-[550px] overflow-auto overflow-auto bg-[#224A75] text-xs text-gray-200"
+								class="command-editor max-h-[550px] min-h-[550px] overflow-auto bg-[#224A75] text-xs text-gray-200"
+								@keydown.meta.enter.prevent="execute"
+								@keydown.ctrl.enter.prevent="execute"
 							>
-								<command-editor />
+								<command-editor v-model="command" />
 							</div>
-							<div
-								class="flex h-[55px] items-center justify-between border-t border-[#133B66] bg-[#224A75] p-2 shadow-md"
-							>
-								<div>
-									<button
-										class="cursor-not-allowed hover:opacity-100 px-4 py-2 text-sm text-black rounded inline-flex items-center duration-200 focus:outline-none bg-gray-100 opacity-50"
-										disabled=""
-										type="button"
-									>
-										<svg
-											data-v-ca945699=""
-											xmlns="http://www.w3.org/2000/svg"
-											width="24px"
-											height="24px"
-											viewBox="0 0 24 24"
-											class="icon mr-2"
-										>
-											<path
-												fill="currentColor"
-												d="M12 20c4.4 0 8-3.6 8-8s-3.6-8-8-8s-8 3.6-8 8s3.6 8 8 8m0-18c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12S6.5 2 12 2m5 11.9l-.7 1.3l-5.3-2.9V7h1.5v4.4l4.5 2.5Z"
-											/>
-										</svg><span class="pr-2">Schedule</span>
-									</button>
-								</div>
-								<div class="flex items-center">
-									<div class="flex flex-col mr-6">
-										<label
-											class="flex cursor-pointer select-none items-center justify-start text-sm text-gray-200"
-										><input
-											type="checkbox"
-											class="mr-2 h-[16px] w-[16px] cursor-pointer rounded border-none bg-transparent ring-2 ring-gray-300 focus:ring-gray-300 focus:ring-offset-0 text-transparent"
-										>Abort
-											on error</label>
-									</div>
-									<div class="flex flex-col mr-6">
-										<label
-											class="flex cursor-pointer select-none items-center justify-start text-sm text-gray-200"
-										><input
-											type="checkbox"
-											class="mr-2 h-[16px] w-[16px] cursor-pointer rounded border-none bg-transparent ring-2 ring-gray-300 focus:ring-gray-300 focus:ring-offset-0 text-transparent"
-										>Execute
-											concurrently</label>
-									</div><span class="mr-4 text-xs text-gray-300">
-										(CMD + ENTER) </span><button
-										class="hover:opacity-80 px-4 py-2 text-sm text-black rounded inline-flex items-center duration-200 focus:outline-none bg-[#C6F94C]"
-										type="button"
-									>
-										<svg
-											data-v-ca945699=""
-											xmlns="http://www.w3.org/2000/svg"
-											width="24px"
-											height="24px"
-											viewBox="0 0 24 24"
-											class="icon mr-2"
-										>
-											<path
-												fill="currentColor"
-												d="M9.5 9.325v5.35q0 .6.525.875t1.025-.05l4.15-2.65q.475-.275.475-.85t-.475-.85L11.05 8.5q-.5-.325-1.025-.05t-.525.875ZM12 22q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22Zm0-10Zm0 8q3.325 0 5.663-2.337T20 12q0-3.325-2.337-5.663T12 4Q8.675 4 6.337 6.337T4 12q0 3.325 2.337 5.663T12 20Z"
-											/>
-										</svg><span class="pr-2">Execute</span>
-									</button>
-								</div>
-							</div>
+							<ExecutionToolbar
+								v-model:abort-on-error="abortOnError"
+								v-model:execute-concurrently="executeConcurrently"
+								:disabled="isExecutingDisabled"
+								:loading="loading"
+								@execute="execute"
+							/>
 						</div>
 					</div>
-					<ClientSelector title="commands" />
+					<div
+						v-if="executeError"
+						class="mt-4 rounded bg-red-50 p-2.5 text-sm font-medium text-red-800"
+					>
+						{{ executeError }}
+					</div>
+					<ClientSelector
+						title="commands"
+						class="my-12"
+						v-bind="selectorListeners"
+					/>
+					<ExecutedResults
+						v-if="Object.keys(jobs).length > 0"
+						:jobs="jobs"
+						class="mt-5"
+					/>
 				</div>
 			</div>
 		</div>
 	</new-page-wrapper>
 </template>
 
-<script>
-export default {
+<script setup lang="ts">
+import ExecutionTags from '~/components/custom/ExecutionTags.vue';
+import ExecutionToolbar from '~/components/ExecutionToolbar.vue';
+import { useJobExecution } from '~/composables/useJobExecution';
+import { useClientSelectionTargets } from '~/composables/useClientSelectionTargets';
 
+useHead({ title: 'Commands' });
+
+const commandName = ref('');
+const commandTags = ref<string[]>([]);
+const command = ref('');
+const timeoutSec = ref(300);
+const abortOnError = ref(true);
+const executeConcurrently = ref(false);
+
+const { jobs, loading, executeError, executeMultipleClients, clearJobs } = useJobExecution('commands');
+const { hasSelection, targets, selectorListeners } = useClientSelectionTargets(clearJobs);
+
+const isExecutingDisabled = computed(() => !hasSelection.value || !command.value.trim());
+
+const execute = async () => {
+	if (isExecutingDisabled.value || loading.value || !targets.value) {
+		return;
+	}
+	await executeMultipleClients({
+		command: command.value,
+		...targets.value,
+		execute_concurrently: executeConcurrently.value,
+		abort_on_error: abortOnError.value,
+		timeout_sec: timeoutSec.value || 300,
+	});
 };
 </script>
 

@@ -197,6 +197,10 @@ input::placeholder,textarea::placeholder {
 .bg-transparent {
     background-color: transparent !important;
 }
+/* Keep the checked fill on checkboxes/radios that use bg-transparent for their unchecked state */
+[type=checkbox].bg-transparent:checked,[type=radio].bg-transparent:checked {
+    background-color: currentColor !important;
+}
 .bg-theme-backdrop\/75 {
     background-color: #6b7280bf;
 }

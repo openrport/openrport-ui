@@ -1,94 +1,49 @@
 <template>
 	<div class="relative max-h-[1720px] min-h-[480px] flex-1">
-		<Tabs v-model="selectedTab">
+		<Tabs
+			:model-value="selectedTab"
+			@update:model-value="changeTab"
+		>
 			<div class="relative z-20 text-center text-sm font-bold text-muted after:absolute after:-left-0 after:-right-0 after:bottom-0 after:h-px after:bg-theme-border after:content-['']">
 				<TabsList class="relative shrink-0 flex border-b border-mauve6">
 					<ul class="relative flex justify-start w-full gap-0 -mb-px transition flex-nowrap">
 						<TabsTrigger
+							v-for="tab in tabs"
+							:key="tab.key"
 							as="li"
-							value="individual-clients"
+							:value="tab.key"
+							:title="tab.tooltip"
 							class="w-1/4 cursor-pointer whitespace-nowrap border-b-[3px] border-transparent hover:border-primary"
 						>
 							<span class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600 space-x-1">
-								<IndividualClientsIcon />
-								<span>Individual Clients</span>
-							</span>
-						</TabsTrigger>
-						<TabsTrigger
-							as="li"
-							value="client-groups"
-							class="w-1/4 cursor-pointer whitespace-nowrap border-b-[3px] border-transparent hover:border-primary"
-						>
-							<span class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600 space-x-1">
-								<ClientGroupsIcon />
-								<span>Client Groups</span>
-							</span>
-						</TabsTrigger>
-						<TabsTrigger
-							as="li"
-							value="clients-matching"
-							class="w-1/4 cursor-pointer whitespace-nowrap border-b-[3px] border-transparent hover:border-primary"
-						>
-							<span class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600 space-x-1">
-								<ClientsMatchingIcon />
-								<span>Clients Matching</span>
-							</span>
-						</TabsTrigger>
-						<TabsTrigger
-							as="li"
-							value="clients-by-tags"
-							class="w-1/4 cursor-pointer whitespace-nowrap border-b-[3px] border-transparent hover:border-primary"
-						>
-							<span class="flex items-center justify-center w-full px-8 py-4 rounded-t-lg text-theme-inverted-lighter text-gray-600 hover:text-primary-600 space-x-1">
-								<ClientsByTagsIcon />
-								<span>Clients by tags</span>
+								<component :is="tab.icon" />
+								<span>{{ tab.label }}</span>
 							</span>
 						</TabsTrigger>
 					</ul>
 				</TabsList>
 			</div>
-			<div class="absolute inset-0 z-0 w-full pt-12 top-20">
+			<div class="absolute inset-0 z-0 w-full">
 				<div class="flex h-full flex-nowrap">
 					<div class="flex-1 w-full h-full">
 						<div class="px-1 text-sm font-normal">
 							<!-- Default overview content when no tab is selected -->
 							<div
-								v-if="!selectedTab || selectedTab === 'overview'"
+								v-if="!selectedTab"
 								class="absolute inset-0 flex flex-col items-center justify-center space-y-2 bg-theme-dark/80"
 							>
 								<span class="text-primary">{{ displayText }}</span>
 								<div class="flex w-1/4 flex-col items-center justify-center space-y-2">
 									<button
+										v-for="tab in tabs"
+										:key="tab.key"
 										class="hover:opacity-80 px-6 py-3 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none flex w-full items-start justify-start space-x-2 bg-primary"
 										type="button"
-										@click="selectedTab = 'individual-clients'"
+										:title="tab.tooltip"
+										@click="changeTab(tab.key)"
 									>
-										<IndividualClientsIcon />
-										<span>Individual Clients</span>
-									</button>
-									<button
-										class="hover:opacity-80 px-6 py-3 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none flex w-full items-start justify-start space-x-2 bg-primary"
-										type="button"
-										@click="selectedTab = 'client-groups'"
-									>
-										<ClientGroupsIcon />
-										<span>Client Groups</span>
-									</button>
-									<button
-										class="hover:opacity-80 px-6 py-3 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none flex w-full items-start justify-start space-x-2 bg-primary"
-										type="button"
-										@click="selectedTab = 'clients-matching'"
-									>
-										<ClientsMatchingIcon />
-										<span>Clients Matching</span>
-									</button>
-									<button
-										class="hover:opacity-80 px-6 py-3 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none flex w-full items-start justify-start space-x-2 bg-primary"
-										type="button"
-										@click="selectedTab = 'clients-by-tags'"
-									>
-										<ClientsByTagsIcon />
-										<span>Clients by tags</span>
+										<component :is="tab.icon" />
+										<span>{{ tab.label }}</span>
 									</button>
 								</div>
 							</div>
@@ -96,47 +51,47 @@
 								<div class="absolute inset-0 z-0 h-full w-full">
 									<div class="absolute inset-0 flex h-full w-full space-x-12 pt-24">
 										<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
-											<div class="flex flex h-12 w-full items-center justify-between">
+											<div class="flex h-12 w-full items-center justify-between">
 												<h3 class="text-primary">
 													Your selection
 												</h3>
 												<span class="w-3/12 rounded-full bg-primary text-center text-white">
-													{{ selectedClients.length }} clients selected
+													{{ sortedSelectedClients.length }} clients selected
 												</span>
 											</div>
 											<div class="absolute inset-0 top-12 w-full flex-1 space-y-4 overflow-auto bg-theme-dark p-4">
-												<div
-													v-for="clientId in selectedClients"
-													:key="clientId"
-													class="flex items-center justify-between p-2 bg-theme-light rounded"
+												<label
+													v-for="client in sortedSelectedClients"
+													:key="client.id"
+													class="flex cursor-pointer select-none items-center justify-start text-sm text-theme-label"
 												>
-													<span class="text-theme-inverted text-sm">{{ getClientNameById(clientId) }}</span>
-													<button
-														class="text-red-500 hover:text-red-700"
-														@click="removeClient(clientId)"
+													<input
+														type="checkbox"
+														checked
+														:class="checkboxClass"
+														@change="toggleClient(client)"
 													>
-														×
-													</button>
-												</div>
+													{{ client.name }}
+												</label>
 											</div>
 										</div>
 										<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
-											<div class="flex flex h-12 w-full items-center justify-between">
+											<div class="flex h-12 w-full items-center justify-between">
 												<h3 class="text-primary">
-													Connected clients ({{ totalClientsCount > availableClients.length ? `${availableClients.length}/${totalClientsCount}` : availableClients.length }})
+													Connected clients ({{ clientsList.count }})
 												</h3>
 												<div class="flex flex-col w-1/2">
 													<div class="relative mt-1 flex w-full flex-col">
 														<input
 															id="clientFilter"
-															v-model="filterText"
-															class="primary input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
+															v-model="clientsList.search"
+															:class="filterInputClass"
 															placeholder=" "
 															type="text"
 															autocomplete="off"
 														>
 														<label
-															class="bg-theme peer-focus:text-theme-inverted absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
+															:class="filterLabelClass"
 															for="clientFilter"
 														>
 															Filter (wildcards supported)
@@ -145,40 +100,23 @@
 												</div>
 											</div>
 											<div class="absolute inset-0 top-12 w-full flex-1 space-y-4 overflow-auto bg-theme-dark p-4">
-												<div
-													v-for="client in filteredClients"
+												<label
+													v-for="client in clientsList.items"
 													:key="client.id"
+													class="flex cursor-pointer select-none items-center justify-start text-sm text-theme-label"
 												>
-													<div class="flex flex-col">
-														<label class="flex cursor-pointer select-none items-center justify-start text-sm text-theme-label">
-															<input
-																type="checkbox"
-																:checked="selectedClients.includes(client.id)"
-																class="mr-2 h-[16px] w-[16px] cursor-pointer rounded border-none bg-transparent ring-2 ring-gray-300 focus:ring-gray-300 focus:ring-offset-0 primary-text"
-																@change="toggleClient(client.id)"
-															>
-															{{ client.name }}
-														</label>
-													</div>
-												</div>
-
-												<!-- Load More Button -->
-												<button
-													v-if="hasMoreClients && !isLoading"
-													class="hover:opacity-80 px-6 py-3 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none block w-full bg-primary"
-													type="button"
-													@click="loadMoreClients"
-												>
-													Load More
-												</button>
-
-												<!-- Loading indicator -->
-												<div
-													v-if="isLoading"
-													class="flex items-center justify-center p-4"
-												>
-													<span class="text-theme-label">Loading...</span>
-												</div>
+													<input
+														type="checkbox"
+														:checked="!!selectedClients[client.id]"
+														:class="checkboxClass"
+														@change="toggleClient(client)"
+													>
+													{{ client.name }}
+												</label>
+												<LoadMore
+													:list="clientsList"
+													@load-more="loadClients(true)"
+												/>
 											</div>
 										</div>
 									</div>
@@ -188,47 +126,47 @@
 								<div class="absolute inset-0 z-0 h-full w-full">
 									<div class="absolute inset-0 flex h-full w-full space-x-12 pt-24">
 										<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
-											<div class="flex flex h-12 w-full items-center justify-between">
+											<div class="flex h-12 w-full items-center justify-between">
 												<h3 class="text-primary">
 													Your selection
 												</h3>
 												<span class="w-3/12 rounded-full bg-primary text-center text-white">
-													{{ selectedGroups.length }} groups selected
+													{{ sortedSelectedGroups.length }} groups selected
 												</span>
 											</div>
 											<div class="absolute inset-0 top-12 w-full flex-1 space-y-4 overflow-auto bg-theme-dark p-4">
-												<div
-													v-for="groupId in selectedGroups"
-													:key="groupId"
-													class="flex items-center justify-between p-2 bg-theme-light rounded"
+												<label
+													v-for="group in sortedSelectedGroups"
+													:key="group.id"
+													class="flex cursor-pointer select-none items-center justify-start text-sm text-theme-label"
 												>
-													<span class="text-theme-inverted text-sm">{{ getGroupNameById(groupId) }}</span>
-													<button
-														class="text-red-500 hover:text-red-700"
-														@click="removeGroup(groupId)"
+													<input
+														type="checkbox"
+														checked
+														:class="checkboxClass"
+														@change="toggleGroup(group)"
 													>
-														×
-													</button>
-												</div>
+													{{ group.description }} ({{ group.id }})
+												</label>
 											</div>
 										</div>
 										<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
-											<div class="flex flex h-12 w-full items-center justify-between">
+											<div class="flex h-12 w-full items-center justify-between">
 												<h3 class="text-primary">
-													Available groups ({{ totalGroupsCount > availableGroups.length ? `${availableGroups.length}/${totalGroupsCount}` : availableGroups.length }})
+													All groups ({{ groupsList.count }})
 												</h3>
 												<div class="flex flex-col w-1/2">
 													<div class="relative mt-1 flex w-full flex-col">
 														<input
 															id="groupFilter"
-															v-model="groupFilterText"
-															class="primary input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
+															v-model="groupsList.search"
+															:class="filterInputClass"
 															placeholder=" "
 															type="text"
 															autocomplete="off"
 														>
 														<label
-															class="bg-theme peer-focus:text-theme-inverted absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
+															:class="filterLabelClass"
 															for="groupFilter"
 														>
 															Filter (wildcards supported)
@@ -237,40 +175,23 @@
 												</div>
 											</div>
 											<div class="absolute inset-0 top-12 w-full flex-1 space-y-4 overflow-auto bg-theme-dark p-4">
-												<div
-													v-for="group in filteredGroups"
+												<label
+													v-for="group in groupsList.items"
 													:key="group.id"
+													class="flex cursor-pointer select-none items-center justify-start text-sm text-theme-label"
 												>
-													<div class="flex flex-col">
-														<label class="flex cursor-pointer select-none items-center justify-start text-sm text-theme-label">
-															<input
-																type="checkbox"
-																:checked="selectedGroups.includes(group.id)"
-																class="mr-2 h-[16px] w-[16px] cursor-pointer rounded border-none bg-transparent ring-2 ring-gray-300 focus:ring-gray-300 focus:ring-offset-0 primary-text"
-																@change="toggleGroup(group.id)"
-															>
-															{{ group.description }} ({{ group.num_clients }} clients)
-														</label>
-													</div>
-												</div>
-
-												<!-- Load More Button -->
-												<button
-													v-if="hasMoreGroups && !isLoadingGroups"
-													class="hover:opacity-80 px-6 py-3 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none block w-full bg-primary"
-													type="button"
-													@click="loadMoreGroups"
-												>
-													Load More
-												</button>
-
-												<!-- Loading indicator -->
-												<div
-													v-if="isLoadingGroups"
-													class="flex items-center justify-center p-4"
-												>
-													<span class="text-theme-label">Loading...</span>
-												</div>
+													<input
+														type="checkbox"
+														:checked="!!selectedGroups[group.id]"
+														:class="checkboxClass"
+														@change="toggleGroup(group)"
+													>
+													{{ group.description }} ({{ group.id }})
+												</label>
+												<LoadMore
+													:list="groupsList"
+													@load-more="loadGroups(true)"
+												/>
 											</div>
 										</div>
 									</div>
@@ -278,62 +199,43 @@
 							</TabsContent>
 							<TabsContent value="clients-matching">
 								<div class="absolute inset-0 flex h-full w-full flex-col space-y-4 pt-24">
-									<!-- Header Section -->
 									<div class="flex space-x-12">
 										<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
-											<div class="flex flex h-12 w-full items-center justify-between">
+											<div class="flex h-12 w-full items-center justify-between">
 												<h3 class="text-primary">
 													Your selection
 												</h3>
 												<span class="w-3/12 rounded-full bg-primary text-center text-white">
-													{{ matchingSelectedClients.length }} clients selected
+													{{ Object.keys(selectedMatched).length }} clients selected
 												</span>
 											</div>
 										</div>
 										<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
-											<div class="flex flex h-12 w-full items-center justify-between">
+											<div class="flex h-12 w-full items-center justify-between">
 												<h3 class="text-primary">
-													All clients ({{ matchingFilteredClients.length }})
+													All clients ({{ matchingList.count }})
 												</h3>
 												<button
 													type="button"
 													class="inline-flex items-center duration-200 focus:outline-none rounded-full p-3"
+													title="Select columns"
 													@click="showColumnModal = true"
 												>
-													<span class="flex items-center justify-center">
-														<svg
-															xmlns="http://www.w3.org/2000/svg"
-															width="24px"
-															height="24px"
-															viewBox="0 0 24 24"
-															class="icon"
-														>
-															<path
-																fill="currentColor"
-																d="M6 13h12v-2H6M3 6v2h18V6M10 18h4v-2h-4v2Z"
-															/>
-														</svg>
-													</span>
+													<IconFilter :size="24" />
 												</button>
 											</div>
 										</div>
 									</div>
 
-									<!-- Table Section -->
-									<div class="border-theme-light-inverted absolute relative mt-4 overflow-auto rounded border px-4 pt-2 w-full">
+									<div class="border-theme-light-inverted relative mt-4 overflow-auto rounded border px-4 pt-2 w-full">
 										<div class="overflow-x-auto overflow-y-hidden">
 											<table class="min-w-full">
 												<thead class="sticky">
 													<tr>
-														<!-- Checkbox column -->
 														<th
 															class="w-5 max-w-[50px] text-left table-cell px-3 pt-4 text-sm text-theme-th"
 															scope="col"
-														>
-															<span class="truncate" />
-														</th>
-
-														<!-- Dynamic columns -->
+														/>
 														<th
 															v-for="column in visibleColumns"
 															:key="column.key"
@@ -341,25 +243,16 @@
 															scope="col"
 														>
 															<span class="truncate">{{ column.label }}</span>
-															<div class="flex flex-col">
-																<div class="relative mt-1 flex w-full flex-col">
-																	<input
-																		:id="`filter-${column.key}`"
-																		v-model="columnFilters[column.key]"
-																		class="primary input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
-																		placeholder=" "
-																		type="text"
-																		autocomplete="off"
-																		@keyup.enter="applyFilters"
-																	>
-																	<label
-																		:for="`filter-${column.key}`"
-																		class="hidden absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
-																	>
-																		Match
-																	</label>
-																</div>
-															</div>
+															<input
+																v-if="column.filterable"
+																:id="`filter-${column.key}`"
+																v-model="columnFilters[column.key]"
+																:class="filterInputClass"
+																class="mt-1"
+																type="text"
+																autocomplete="off"
+																@keyup.enter="loadMatchingClients()"
+															>
 														</th>
 													</tr>
 													<tr>
@@ -374,25 +267,18 @@
 												</thead>
 												<tbody>
 													<tr
-														v-for="client in matchingFilteredClients"
+														v-for="client in matchingList.items"
 														:key="client.id"
 														class="border-theme-light-inverted group border-b"
 													>
-														<!-- Checkbox column -->
 														<td class="table-cell px-3 py-4 text-sm text-theme-inverted-lighter w-5 max-w-[50px] text-left">
-															<div class="flex flex-col">
-																<label class="flex cursor-pointer select-none items-center justify-start text-sm text-theme-label">
-																	<input
-																		type="checkbox"
-																		:checked="matchingSelectedClients.includes(client.id)"
-																		class="mr-2 h-[16px] w-[16px] cursor-pointer rounded border-none bg-transparent ring-2 ring-gray-300 focus:ring-gray-300 focus:ring-offset-0 primary-text"
-																		@change="toggleMatchingClient(client.id)"
-																	>
-																</label>
-															</div>
+															<input
+																type="checkbox"
+																:checked="!!selectedMatched[client.id]"
+																:class="checkboxClass"
+																@change="toggleMatchedClient(client)"
+															>
 														</td>
-
-														<!-- Dynamic columns -->
 														<td
 															v-for="column in visibleColumns"
 															:key="column.key"
@@ -401,20 +287,17 @@
 															{{ getClientFieldValue(client, column.key) }}
 														</td>
 													</tr>
-													<tr>
-														<td
-															class="py-4"
-															colspan="2"
-														/>
-													</tr>
 												</tbody>
 											</table>
 										</div>
-										<div class="bg-theme-table-footer" />
+										<LoadMore
+											:list="matchingList"
+											class="my-4"
+											@load-more="loadMatchingClients(true)"
+										/>
 									</div>
 								</div>
 
-								<!-- Column Selector Modal -->
 								<ColumnSelectorModal
 									v-model="showColumnModal"
 									:selected-columns="selectedColumns"
@@ -425,47 +308,47 @@
 							<TabsContent value="clients-by-tags">
 								<div class="absolute inset-0 flex h-full w-full space-x-12 pt-24">
 									<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
-										<div class="flex flex h-12 w-full items-center justify-between">
+										<div class="flex h-12 w-full items-center justify-between">
 											<h3 class="text-primary">
 												Your selection
 											</h3>
 											<span class="w-3/12 rounded-full bg-primary text-center text-white">
-												{{ selectedTags.length }} tags selected
+												{{ sortedSelectedTags.length }} tags selected
 											</span>
 										</div>
 										<div class="absolute inset-0 top-12 w-full flex-1 space-y-4 overflow-auto bg-theme-dark p-4">
-											<div
-												v-for="tagName in selectedTags"
-												:key="tagName"
-												class="flex items-center justify-between p-2 bg-theme-light rounded"
+											<label
+												v-for="tag in sortedSelectedTags"
+												:key="tag.tag"
+												class="flex cursor-pointer select-none items-center justify-start text-sm text-theme-label"
 											>
-												<span class="text-theme-inverted text-sm">{{ getTagDisplayName(tagName) }}</span>
-												<button
-													class="text-red-500 hover:text-red-700"
-													@click="removeTag(tagName)"
+												<input
+													type="checkbox"
+													checked
+													:class="checkboxClass"
+													@change="toggleTag(tag)"
 												>
-													×
-												</button>
-											</div>
+												{{ tag.tag }} ({{ tag.client_ids.length }})
+											</label>
 										</div>
 									</div>
 									<div class="relative flex h-full w-full flex-col items-center justify-start space-y-4">
-										<div class="flex flex h-12 w-full items-center justify-between">
+										<div class="flex h-12 w-full items-center justify-between">
 											<h3 class="text-primary">
-												All tags ({{ totalTagsCount > availableTags.length ? `${availableTags.length}/${totalTagsCount}` : availableTags.length }})
+												All tags ({{ tagsList.count }})
 											</h3>
 											<div class="flex flex-col w-1/2">
 												<div class="relative mt-1 flex w-full flex-col">
 													<input
 														id="tagFilter"
-														v-model="tagFilterText"
-														class="primary input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm"
+														v-model="tagsList.search"
+														:class="filterInputClass"
 														placeholder=" "
 														type="text"
 														autocomplete="off"
 													>
 													<label
-														class="bg-theme peer-focus:text-theme-inverted absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal"
+														:class="filterLabelClass"
 														for="tagFilter"
 													>
 														Filter (wildcards supported)
@@ -474,40 +357,23 @@
 											</div>
 										</div>
 										<div class="absolute inset-0 top-12 w-full flex-1 space-y-4 overflow-auto bg-theme-dark p-4">
-											<div
-												v-for="tag in filteredTags"
+											<label
+												v-for="tag in tagsList.items"
 												:key="tag.tag"
+												class="flex cursor-pointer select-none items-center justify-start text-sm text-theme-label"
 											>
-												<div class="flex flex-col">
-													<label class="flex cursor-pointer select-none items-center justify-start text-sm text-theme-label">
-														<input
-															type="checkbox"
-															:checked="selectedTags.includes(tag.tag)"
-															class="mr-2 h-[16px] w-[16px] cursor-pointer rounded border-none bg-transparent ring-2 ring-gray-300 focus:ring-gray-300 focus:ring-offset-0 primary-text"
-															@change="toggleTag(tag.tag)"
-														>
-														{{ tag.tag }} ({{ tag.client_count }})
-													</label>
-												</div>
-											</div>
-
-											<!-- Load More Button -->
-											<button
-												v-if="hasMoreTags && !isLoadingTags"
-												class="hover:opacity-80 px-6 py-3 text-sm text-white rounded inline-flex items-center duration-200 focus:outline-none block w-full bg-primary"
-												type="button"
-												@click="loadMoreTags"
-											>
-												Load More
-											</button>
-
-											<!-- Loading indicator -->
-											<div
-												v-if="isLoadingTags"
-												class="flex items-center justify-center p-4"
-											>
-												<span class="text-theme-label">Loading...</span>
-											</div>
+												<input
+													type="checkbox"
+													:checked="!!selectedTags[tag.tag]"
+													:class="checkboxClass"
+													@change="toggleTag(tag)"
+												>
+												{{ tag.tag }} ({{ tag.client_ids.length }})
+											</label>
+											<LoadMore
+												:list="tagsList"
+												@load-more="loadTags(true)"
+											/>
 										</div>
 									</div>
 								</div>
@@ -521,6 +387,7 @@
 </template>
 
 <script setup lang="ts">
+import { IconFilter } from '@tabler/icons-vue';
 import {
 	Tabs,
 	TabsContent,
@@ -528,458 +395,304 @@ import {
 	TabsTrigger,
 } from '@/components/ui/tabs';
 import ColumnSelectorModal from '@/components/custom/modal-filter/ColumnSelectorModal.vue';
+import type { Client, ClientGroup, Tag } from '~/types';
 
-interface Props {
-	title: 'commands' | 'scripts';
+export type ClientSelectionTab = 'individual-clients' | 'client-groups' | 'clients-matching' | 'clients-by-tags';
+
+interface PagedList<T> {
+	items: T[];
+	count: number;
+	offset: number;
+	search: string;
+	loading: boolean;
+	// Guards against slower, outdated responses overwriting newer ones
+	requestId: number;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<{
+	title?: 'commands' | 'scripts';
+}>(), {
 	title: 'commands',
 });
 
-const selectedTab = ref('');
+const emit = defineEmits<{
+	'changed:tab': [tab: ClientSelectionTab];
+	'update:clientIds': [clientIds: string[]];
+	'update:groupIds': [groups: Record<string, ClientGroup>];
+	'update:matchedIds': [clientIds: string[]];
+	'update:tags': [tags: Record<string, Tag>];
+}>();
 
-// Dynamic text based on title prop
-const displayText = computed(() => {
-	return `Execute ${props.title} on many clients concurrently. The client list will be defined by:`;
-});
+const PAGE_LIMIT = 20;
+// The client-tags endpoint supports no server side filters, so filtering fetches the maximum page
+const TAGS_MAX_LIMIT = 500;
+const CLIENT_FIELDS = 'id,name,os_full_name,os,os_arch,os_family,os_version,os_virtualization_role,os_virtualization_system,os_kernel,hostname,ipv4,ipv6,version,address,updates_status,client_auth_id,connection_state';
 
-// Client selection state
-const selectedClients = ref<string[]>([]);
-const filterText = ref('');
-const isLoading = ref(false);
-const currentOffset = ref(0);
-const pageLimit = 20;
-const hasMoreClients = ref(false);
+const checkboxClass = 'mr-2 h-[16px] w-[16px] cursor-pointer rounded border-none bg-transparent ring-2 ring-gray-300 focus:ring-gray-300 focus:ring-offset-0 primary-text';
+const filterInputClass = 'primary input-text focus:border-1 peer order-2 block h-10 w-full rounded bg-transparent text-theme-inverted shadow-sm focus:outline-0 focus:ring-0 sm:text-sm';
+const filterLabelClass = 'bg-theme peer-focus:text-theme-inverted absolute left-1.5 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform px-1 text-theme-label duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1 text-theme-label peer-focus:text-primary bg-theme text-sm font-normal';
 
-// API client data
-const availableClients = ref<Array<{ id: string; name: string }>>([]);
-const totalClientsCount = ref(0);
+const executionType = computed(() => props.title === 'commands' ? 'command' : 'script');
+const displayText = computed(() => `Execute ${props.title} on many clients concurrently. The client list will be defined by:`);
 
-// Groups selection state
-const selectedGroups = ref<string[]>([]);
-const groupFilterText = ref('');
-const isLoadingGroups = ref(false);
-const currentGroupOffset = ref(0);
-const hasMoreGroups = ref(false);
+const tabs = computed(() => [
+	{ key: 'individual-clients' as const, label: 'Individual Clients', icon: IndividualClientsIcon, tooltip: `Manually select the clients where ${executionType.value} is executed.` },
+	{ key: 'client-groups' as const, label: 'Client Groups', icon: ClientGroupsIcon, tooltip: `Manually select the client groups where ${executionType.value} is executed.` },
+	{ key: 'clients-matching' as const, label: 'Clients Matching', icon: ClientsMatchingIcon, tooltip: `Execute a ${executionType.value} on one or many clients where criteria is matching a regular expressions.` },
+	{ key: 'clients-by-tags' as const, label: 'Clients by tags', icon: ClientsByTagsIcon, tooltip: `Execute a ${executionType.value} on one or many clients by tags.` },
+]);
 
-// API groups data
-const availableGroups = ref<Array<{ id: string; description: string; num_clients: number }>>([]);
-const totalGroupsCount = ref(0);
+function newList<T>(): PagedList<T> {
+	return { items: [], count: 0, offset: 0, search: '', loading: false, requestId: 0 };
+}
 
-// Clients Matching state
-const matchingSelectedClients = ref<string[]>([]);
-const matchingClients = ref<any[]>([]);
-const isLoadingMatching = ref(false);
-const columnFilters = ref<Record<string, string>>({});
+const selectedTab = ref<ClientSelectionTab | ''>('');
+const clientsList = reactive(newList<Client>()) as PagedList<Client>;
+const groupsList = reactive(newList<ClientGroup>()) as PagedList<ClientGroup>;
+const matchingList = reactive(newList<Client>()) as PagedList<Client>;
+const tagsList = reactive(newList<Tag>()) as PagedList<Tag>;
+
+const selectedClients = ref<Record<string, Client>>({});
+const selectedGroups = ref<Record<string, ClientGroup>>({});
+const selectedMatched = ref<Record<string, Client>>({});
+const selectedTags = ref<Record<string, Tag>>({});
+
+const byName = (a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name);
+const sortedSelectedClients = computed(() => Object.values(selectedClients.value).sort(byName));
+const sortedSelectedGroups = computed(() => Object.values(selectedGroups.value).sort((a, b) => a.description.localeCompare(b.description)));
+const sortedSelectedTags = computed(() => Object.values(selectedTags.value).sort((a, b) => a.tag.localeCompare(b.tag)));
+
+// Clients Matching table columns
+const availableTableColumns = [
+	{ key: 'hostname', label: 'Host Name', filterable: true },
+	{ key: 'name', label: 'Client Name', filterable: true },
+	{ key: 'id', label: 'ID', filterable: true },
+	{ key: 'os_full_name', label: 'OS Full Name', filterable: true },
+	{ key: 'os_kernel', label: 'OS Kernel', filterable: true },
+	{ key: 'os_arch', label: 'OS Arch', filterable: true },
+	{ key: 'os_family', label: 'OS Family', filterable: true },
+	{ key: 'os_version', label: 'OS Version', filterable: true },
+	{ key: 'os_virtualization_role', label: 'OS Virtualization Role', filterable: true },
+	{ key: 'os_virtualization_system', label: 'OS Virtualization System', filterable: true },
+	{ key: 'ipv4', label: 'IPv4 Addresses', filterable: true },
+	{ key: 'ipv6', label: 'IPv6 Addresses', filterable: true },
+	{ key: 'version', label: 'RPort version', filterable: true },
+	// Derived from updates_status, which the API cannot filter on
+	{ key: 'updates', label: 'Updates', filterable: false },
+	{ key: 'security_updates', label: 'Security Updates', filterable: false },
+];
 const showColumnModal = ref(false);
 const selectedColumns = ref<string[]>(['hostname', 'name', 'id', 'os_family', 'ipv4']);
+const columnFilters = ref<Record<string, string>>({});
+const visibleColumns = computed(() => availableTableColumns.filter(column => selectedColumns.value.includes(column.key)));
 
-// Available table columns
-const availableTableColumns = [
-	{ key: 'hostname', label: 'Host Name' },
-	{ key: 'name', label: 'Client Name' },
-	{ key: 'id', label: 'ID' },
-	{ key: 'os_full_name', label: 'OS Full Name' },
-	{ key: 'os_kernel', label: 'OS Kernel' },
-	{ key: 'os_arch', label: 'OS Arch' },
-	{ key: 'os_family', label: 'OS Family' },
-	{ key: 'os_version', label: 'OS Version' },
-	{ key: 'os_virtualization_role', label: 'OS Virtualization Role' },
-	{ key: 'os_virtualization_system', label: 'OS Virtualization System' },
-	{ key: 'ipv4', label: 'IPv4 Addresses' },
-	{ key: 'ipv6', label: 'IPv6 Addresses' },
-	{ key: 'version', label: 'RPort version' },
-	{ key: 'updates_status', label: 'Updates' },
-	{ key: 'client_auth_id', label: 'Security Updates' },
-];
+const toQuery = (params: Record<string, string | number>) => Object.entries(params)
+	.map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+	.join('&');
 
-// Computed visible columns
-const visibleColumns = computed(() => {
-	return availableTableColumns.filter(col => selectedColumns.value.includes(col.key));
-});
-
-// Computed filtered clients for matching tab
-const matchingFilteredClients = computed(() => {
-	return matchingClients.value;
-});
-
-// Tags selection state
-const selectedTags = ref<string[]>([]);
-const tagFilterText = ref('');
-const isLoadingTags = ref(false);
-const currentTagOffset = ref(0);
-const hasMoreTags = ref(false);
-
-// API tags data
-const availableTags = ref<Array<{ tag: string; client_ids: string[]; client_count: number }>>([]);
-const totalTagsCount = ref(0);
-
-// Computed filtered tags
-const filteredTags = computed(() => {
-	return availableTags.value;
-});
-
-// Build the filter string for the API
-const buildFilterString = (search?: string, offset = 0) => {
-	const fields = 'id,name,os_full_name,os,os_arch,os_family,os_version,os_virtualization_role,os_virtualization_system,os_kernel,hostname,ipv4,ipv6,version,address,updates_status,client_auth_id,connection_state';
-	let filterString = `sort=name&fields[clients]=${fields}&page[limit]=${pageLimit}&page[offset]=${offset}`;
-
-	if (search && search.trim()) {
-		// For wildcards, convert * to % for the API
-		const searchTerm = search.replace(/\*/g, '%');
-		filterString += `&filter[name]=${encodeURIComponent(searchTerm)}`;
-	}
-
-	return filterString;
-};
-
-// Load clients from API
-const loadClients = async (search?: string, offset = 0, append = false) => {
-	const { $api } = useNuxtApp();
-
+// Loads a page into the list; `append` keeps already loaded items for "Load More"
+async function loadPage<T>(
+	list: PagedList<T>,
+	append: boolean,
+	fetchPage: (offset: number) => Promise<{ data: T[]; meta?: { count: number } }>,
+) {
+	const requestId = ++list.requestId;
+	const offset = append ? list.offset + PAGE_LIMIT : 0;
+	list.loading = true;
 	try {
-		isLoading.value = true;
-		const filterString = buildFilterString(search, offset);
-		const response = await $api.clients.listClientsWithFilter(filterString);
-
-		if (response?.data) {
-			const clients = response.data.map((client: any) => ({
-				id: client.id,
-				name: client.name || client.id,
-			}));
-
-			if (append) {
-				availableClients.value.push(...clients);
-			}
-			else {
-				availableClients.value = clients;
-			}
-
-			// Check if there are more clients to load
-			hasMoreClients.value = response.data.length === pageLimit;
-			totalClientsCount.value = response.meta?.total || availableClients.value.length;
+		const response = await fetchPage(offset);
+		if (requestId !== list.requestId) {
+			return;
 		}
+		list.items = append ? [...list.items, ...response.data] : response.data;
+		list.count = response.meta?.count ?? list.items.length;
+		list.offset = offset;
 	}
 	catch (error) {
-		console.error('Error loading clients:', error);
+		console.error('Error loading client selection list:', error);
 	}
 	finally {
-		isLoading.value = false;
+		if (requestId === list.requestId) {
+			list.loading = false;
+		}
 	}
-};
+}
 
-// Load more clients (pagination)
-const loadMoreClients = async () => {
-	currentOffset.value += pageLimit;
-	await loadClients(filterText.value, currentOffset.value, true);
-};
-
-// Computed filtered clients - now just returns the API results since filtering is done server-side
-const filteredClients = computed(() => {
-	return availableClients.value;
-});
-
-// Watch for filter changes and reload data
-let filterTimeout: NodeJS.Timeout;
-watch(filterText, (newValue) => {
-	clearTimeout(filterTimeout);
-	filterTimeout = setTimeout(async () => {
-		currentOffset.value = 0;
-		await loadClients(newValue);
-	}, 300); // Debounce for 300ms
-});
-
-// Build filter string for groups API
-const buildGroupFilterString = (search?: string, offset = 0) => {
-	const fields = 'id,description,num_clients';
-	let filterString = `sort=description&fields[client_groups]=${fields}&page[limit]=${pageLimit}&page[offset]=${offset}`;
-
-	if (search && search.trim()) {
-		// For wildcards, convert * to % for the API
-		const searchTerm = search.replace(/\*/g, '%');
-		filterString += `&filter[description]=${encodeURIComponent(searchTerm)}`;
-	}
-
-	return filterString;
-};
-
-// Load groups from API
-const loadGroups = async (search?: string, offset = 0, append = false) => {
+const loadClients = (append = false) => {
 	const { $api } = useNuxtApp();
-
-	try {
-		isLoadingGroups.value = true;
-		const filterString = buildGroupFilterString(search, offset);
-		const response = await $api.groups.listGroupsWithFilter(filterString);
-
-		if (response?.data) {
-			const groups = response.data.map((group: any) => ({
-				id: group.id,
-				description: group.description || group.id,
-				num_clients: group.num_clients || 0,
-			}));
-
-			if (append) {
-				availableGroups.value.push(...groups);
-			}
-			else {
-				availableGroups.value = groups;
-			}
-
-			// Check if there are more groups to load
-			hasMoreGroups.value = response.data.length === pageLimit;
-			totalGroupsCount.value = response.meta?.total || availableGroups.value.length;
+	return loadPage(clientsList, append, (offset) => {
+		const params: Record<string, string | number> = {
+			'sort': 'name',
+			'fields[clients]': CLIENT_FIELDS,
+			'page[limit]': PAGE_LIMIT,
+			'page[offset]': offset,
+			'filter[connection_state]': 'connected',
+		};
+		if (clientsList.search) {
+			params['filter[*]'] = clientsList.search;
 		}
-	}
-	catch (error) {
-		console.error('Error loading groups:', error);
-	}
-	finally {
-		isLoadingGroups.value = false;
-	}
-};
-
-// Load more groups (pagination)
-const loadMoreGroups = async () => {
-	currentGroupOffset.value += pageLimit;
-	await loadGroups(groupFilterText.value, currentGroupOffset.value, true);
-};
-
-// Computed filtered groups - returns API results since filtering is done server-side
-const filteredGroups = computed(() => {
-	return availableGroups.value;
-});
-
-// Watch for group filter changes
-let groupFilterTimeout: NodeJS.Timeout;
-watch(groupFilterText, (newValue) => {
-	clearTimeout(groupFilterTimeout);
-	groupFilterTimeout = setTimeout(async () => {
-		currentGroupOffset.value = 0;
-		await loadGroups(newValue);
-	}, 300); // Debounce for 300ms
-});
-
-// Build filter string for matching clients API
-const buildMatchingFilterString = () => {
-	const fields = 'id,name,os_full_name,os,os_arch,os_family,os_version,os_virtualization_role,os_virtualization_system,os_kernel,hostname,ipv4,ipv6,version,address,updates_status,client_auth_id,connection_state';
-	let filterString = `sort=name&fields[clients]=${fields}&page[limit]=20&page[offset]=0`;
-
-	// Add column filters
-	Object.entries(columnFilters.value).forEach(([key, value]) => {
-		if (value && value.trim()) {
-			// Convert wildcards * to % for API
-			const searchTerm = value.replace(/\*/g, '%');
-			filterString += `&filter[${key}]=${encodeURIComponent(searchTerm)}`;
-		}
+		return $api.clients.listClientsWithFilter(toQuery(params));
 	});
-
-	return filterString;
 };
 
-// Load matching clients with column filters
-const loadMatchingClients = async () => {
+const loadGroups = (append = false) => {
 	const { $api } = useNuxtApp();
-
-	try {
-		isLoadingMatching.value = true;
-		const filterString = buildMatchingFilterString();
-		const response = await $api.clients.listClientsWithFilter(filterString);
-
-		if (response?.data) {
-			matchingClients.value = response.data;
+	return loadPage(groupsList, append, (offset) => {
+		const params: Record<string, string | number> = {
+			'fields[client_groups]': 'id,description,client_ids,num_clients',
+			'page[limit]': PAGE_LIMIT,
+			'page[offset]': offset,
+		};
+		if (groupsList.search) {
+			params['filter[*]'] = groupsList.search;
 		}
-	}
-	catch (error) {
-		console.error('Error loading matching clients:', error);
-	}
-	finally {
-		isLoadingMatching.value = false;
-	}
+		return $api.groups.listGroupsWithFilter(toQuery(params));
+	});
 };
 
-// Apply filters when user presses Enter
-const applyFilters = () => {
-	loadMatchingClients();
-};
-
-// Get client field value for table display
-const getClientFieldValue = (client: any, fieldKey: string) => {
-	switch (fieldKey) {
-		case 'ipv4':
-			return Array.isArray(client.ipv4) ? client.ipv4.join(',') : client.ipv4 || '';
-		case 'ipv6':
-			return Array.isArray(client.ipv6) ? client.ipv6.join(',') : client.ipv6 || '';
-		default:
-			return client[fieldKey] || '';
-	}
-};
-
-// Toggle matching client selection
-const toggleMatchingClient = (clientId: string) => {
-	const index = matchingSelectedClients.value.indexOf(clientId);
-	if (index > -1) {
-		matchingSelectedClients.value.splice(index, 1);
-	}
-	else {
-		matchingSelectedClients.value.push(clientId);
-	}
-};
-
-// Update selected columns
-const updateSelectedColumns = (newColumns: string[]) => {
-	selectedColumns.value = newColumns;
-};
-
-// Build filter string for tags API
-const buildTagFilterString = (search?: string, offset = 0) => {
-	let filterString = `page[limit]=${pageLimit}&page[offset]=${offset}`;
-
-	if (search && search.trim()) {
-		// For wildcards, convert * to % for the API
-		const searchTerm = search.replace(/\*/g, '%');
-		filterString += `&filter[tag]=${encodeURIComponent(searchTerm)}`;
-	}
-
-	return filterString;
-};
-
-// Load tags from API
-const loadTags = async (search?: string, offset = 0, append = false) => {
+const loadMatchingClients = (append = false) => {
 	const { $api } = useNuxtApp();
-
-	try {
-		isLoadingTags.value = true;
-		const filterString = buildTagFilterString(search, offset);
-		const response = await $api.clients.listTags(filterString);
-
-		if (response?.data) {
-			const tags = response.data.map((tag: any) => ({
-				tag: tag.tag,
-				client_ids: tag.client_ids,
-				client_count: tag.client_ids.length,
-			}));
-
-			if (append) {
-				availableTags.value.push(...tags);
-			} else {
-				availableTags.value = tags;
+	return loadPage(matchingList, append, (offset) => {
+		const params: Record<string, string | number> = {
+			'sort': 'name',
+			'fields[clients]': CLIENT_FIELDS,
+			'page[limit]': PAGE_LIMIT,
+			'page[offset]': offset,
+			'filter[connection_state]': 'connected',
+		};
+		visibleColumns.value.forEach((column) => {
+			const value = columnFilters.value[column.key]?.trim();
+			if (column.filterable && value) {
+				params[`filter[${column.key}]`] = `${value}*`;
 			}
+		});
+		return $api.clients.listClientsWithFilter(toQuery(params));
+	});
+};
 
-			// Check if there are more tags to load
-			hasMoreTags.value = response.data.length === pageLimit;
-			totalTagsCount.value = response.meta?.count || availableTags.value.length;
+// Same semantics as the API wildcard filter: case-insensitive full match where * matches anything
+const wildcardMatcher = (pattern: string) => {
+	const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*?');
+	return new RegExp(`^${escaped}$`, 'i');
+};
+
+const loadTags = (append = false) => {
+	const { $api } = useNuxtApp();
+	const search = tagsList.search.trim();
+	return loadPage(tagsList, append, async (offset) => {
+		if (!search) {
+			return $api.clients.listTags(toQuery({ 'page[limit]': PAGE_LIMIT, 'page[offset]': offset }));
 		}
-	} catch (error) {
-		console.error('Error loading tags:', error);
-	} finally {
-		isLoadingTags.value = false;
+		const response = await $api.clients.listTags(toQuery({ 'page[limit]': TAGS_MAX_LIMIT, 'page[offset]': 0 }));
+		const matcher = wildcardMatcher(search);
+		const data = response.data.filter(tag => matcher.test(tag.tag));
+		return { data, meta: { count: data.length } };
+	});
+};
+
+const loaders: Record<ClientSelectionTab, () => Promise<void>> = {
+	'individual-clients': loadClients,
+	'client-groups': loadGroups,
+	'clients-matching': loadMatchingClients,
+	'clients-by-tags': loadTags,
+};
+
+const resetSelection = () => {
+	selectedClients.value = {};
+	selectedGroups.value = {};
+	selectedMatched.value = {};
+	selectedTags.value = {};
+};
+
+// Only one selection mode is active at a time; switching tabs clears every selection
+const changeTab = (tab: string | number) => {
+	const key = tab as ClientSelectionTab;
+	selectedTab.value = key;
+	resetSelection();
+	emit('changed:tab', key);
+	loaders[key]();
+};
+
+const watchSearch = (list: PagedList<unknown>, load: () => Promise<void>) => {
+	let timer: ReturnType<typeof setTimeout> | undefined;
+	watch(() => list.search, () => {
+		clearTimeout(timer);
+		timer = setTimeout(load, 300);
+	});
+};
+watchSearch(clientsList, loadClients);
+watchSearch(groupsList, loadGroups);
+watchSearch(tagsList, loadTags);
+
+function toggleEntry<T>(selection: Ref<Record<string, T>>, key: string, item: T) {
+	selection.value = key in selection.value
+		? Object.fromEntries(Object.entries(selection.value).filter(([entryKey]) => entryKey !== key))
+		: { ...selection.value, [key]: item };
+}
+
+const toggleClient = (client: Client) => {
+	toggleEntry(selectedClients, client.id, client);
+	emit('update:clientIds', Object.keys(selectedClients.value));
+};
+
+const toggleGroup = (group: ClientGroup) => {
+	toggleEntry(selectedGroups, group.id, group);
+	emit('update:groupIds', selectedGroups.value);
+};
+
+const toggleMatchedClient = (client: Client) => {
+	toggleEntry(selectedMatched, client.id, client);
+	emit('update:matchedIds', Object.keys(selectedMatched.value));
+};
+
+const toggleTag = (tag: Tag) => {
+	toggleEntry(selectedTags, tag.tag, tag);
+	emit('update:tags', selectedTags.value);
+};
+
+const updateSelectedColumns = (columns: string[]) => {
+	selectedColumns.value = columns;
+	columnFilters.value = {};
+};
+
+const getClientFieldValue = (client: Client, key: string) => {
+	switch (key) {
+		case 'ipv4':
+			return client.ipv4?.join(',') || '';
+		case 'ipv6':
+			return client.ipv6?.join(',') || '';
+		case 'updates':
+			return client.updates_status?.updates_available || 0;
+		case 'security_updates':
+			return client.updates_status?.security_updates_available || 0;
+		default:
+			return client[key as keyof Client] ?? '';
 	}
 };
 
-// Load more tags (pagination)
-const loadMoreTags = async () => {
-	currentTagOffset.value += pageLimit;
-	await loadTags(tagFilterText.value, currentTagOffset.value, true);
-};
-
-// Watch for tag filter changes
-let tagFilterTimeout: NodeJS.Timeout;
-watch(tagFilterText, (newValue) => {
-	clearTimeout(tagFilterTimeout);
-	tagFilterTimeout = setTimeout(async () => {
-		currentTagOffset.value = 0;
-		await loadTags(newValue);
-	}, 300); // Debounce for 300ms
+const LoadMore = defineComponent({
+	props: {
+		list: { type: Object as PropType<PagedList<unknown>>, required: true },
+	},
+	emits: ['load-more'],
+	setup(componentProps, { emit: emitLoadMore }) {
+		return () => {
+			if (componentProps.list.loading) {
+				return h('div', { class: 'flex items-center justify-center p-4' }, [
+					h('span', { class: 'text-theme-label' }, 'Loading...'),
+				]);
+			}
+			if (componentProps.list.items.length >= componentProps.list.count) {
+				return null;
+			}
+			return h('button', {
+				class: 'hover:opacity-80 px-6 py-3 text-sm text-white rounded inline-flex items-center justify-center duration-200 focus:outline-none w-full bg-primary',
+				type: 'button',
+				onClick: () => emitLoadMore('load-more'),
+			}, 'Load More');
+		};
+	},
 });
-
-// Helper function to get tag display name
-const getTagDisplayName = (tagName: string) => {
-	const tag = availableTags.value.find(t => t.tag === tagName);
-	return tag ? `${tag.tag} (${tag.client_count})` : tagName;
-};
-
-// Tag methods
-const toggleTag = (tagName: string) => {
-	const index = selectedTags.value.indexOf(tagName);
-	if (index > -1) {
-		selectedTags.value.splice(index, 1);
-	} else {
-		selectedTags.value.push(tagName);
-	}
-};
-
-const removeTag = (tagName: string) => {
-	const index = selectedTags.value.indexOf(tagName);
-	if (index > -1) {
-		selectedTags.value.splice(index, 1);
-	}
-};
-
-// Watch for tab changes to load data only when needed
-watch(selectedTab, (newTab) => {
-	if (newTab === 'individual-clients' && availableClients.value.length === 0) {
-		loadClients();
-	}
-	else if (newTab === 'client-groups' && availableGroups.value.length === 0) {
-		loadGroups();
-	}
-	else if (newTab === 'clients-matching' && matchingClients.value.length === 0) {
-		loadMatchingClients();
-	}
-	else if (newTab === 'clients-by-tags' && availableTags.value.length === 0) {
-		loadTags();
-	}
-});
-
-// Helper function to get client name by ID
-const getClientNameById = (clientId: string) => {
-	const client = availableClients.value.find(c => c.id === clientId);
-	return client?.name || clientId;
-};
-
-// Helper function to get group name by ID
-const getGroupNameById = (groupId: string) => {
-	const group = availableGroups.value.find(g => g.id === groupId);
-	return group?.description || groupId;
-};
-
-// Client methods
-const toggleClient = (clientId: string) => {
-	const index = selectedClients.value.indexOf(clientId);
-	if (index > -1) {
-		selectedClients.value.splice(index, 1);
-	}
-	else {
-		selectedClients.value.push(clientId);
-	}
-};
-
-const removeClient = (clientId: string) => {
-	const index = selectedClients.value.indexOf(clientId);
-	if (index > -1) {
-		selectedClients.value.splice(index, 1);
-	}
-};
-
-// Group methods
-const toggleGroup = (groupId: string) => {
-	const index = selectedGroups.value.indexOf(groupId);
-	if (index > -1) {
-		selectedGroups.value.splice(index, 1);
-	}
-	else {
-		selectedGroups.value.push(groupId);
-	}
-};
-
-const removeGroup = (groupId: string) => {
-	const index = selectedGroups.value.indexOf(groupId);
-	if (index > -1) {
-		selectedGroups.value.splice(index, 1);
-	}
-};
 
 // Icon components
 const IndividualClientsIcon = () => h('svg', {
@@ -1048,7 +761,3 @@ const ClientsByTagsIcon = () => h('svg', {
 	]),
 ]);
 </script>
-
-<style scoped>
-
-</style>
