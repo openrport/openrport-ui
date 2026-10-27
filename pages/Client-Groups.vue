@@ -135,7 +135,7 @@
 																	</div>
 																</div>
 															</td>
-															<td class="text-center min-h-[42px] whitespace-nowrap py-3.5 pl-4 pr-3 text-sm font-normal text-gray-800 dark:text-white sm:pl-6"></td>
+															<td class="text-center min-h-[42px] whitespace-nowrap py-3.5 pl-4 pr-3 text-sm font-normal text-gray-800 dark:text-white sm:pl-6" />
 															<td class="pr-4 sm:pr-6 relative w-8 whitespace-nowrap py-3.5 pl-3 text-right text-sm font-normal">
 																<DropdownMenu>
 																	<DropdownMenuTrigger as-child>
@@ -164,9 +164,9 @@
 																			<DropdownMenuContent class="absolute -right-8 -top-0 z-20 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-950">
 																				<div class="px-1 py-1">
 																					<DropdownMenuItem class="focus:bg-vtd-primary-600 focus:text-white disabled:bg-transparent group flex w-full items-center rounded-md px-2 py-2 text-xs transition-all duration-300 disabled:text-gray-400">
-																							<Pencil
-																								class="mr-2 h-4 w-4"
-																							/>
+																						<Pencil
+																							class="mr-2 h-4 w-4"
+																						/>
 																						<span>Edit</span>
 																					</DropdownMenuItem>
 																				</div>
@@ -175,7 +175,6 @@
 																				<div class="px-1 py-1">
 																					<DropdownMenuItem
 																						class="focus:bg-vtd-primary-600 focus:text-white disabled:bg-transparent group flex w-full items-center rounded-md px-2 py-2 text-xs transition-all duration-300 disabled:text-gray-400"
-
 																					>
 																						<Trash2 class="mr-2 h-4 w-4" />
 																						<span>Delete</span>

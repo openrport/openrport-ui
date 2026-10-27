@@ -91,6 +91,7 @@ export interface ClientGroup {
 	description: string;
 	num_clients: number;
 	clients_ids?: string[];
+	client_ids?: string[];
 	params?: any;
 	allowed_user_groups?: string[];
 }
@@ -444,6 +445,16 @@ export interface ScriptResponse {
 	data: Script[];
 	meta: Meta;
 }
+
+export interface Tag {
+	tag: string;
+	client_ids: string[];
+}
+export interface ClientTagsResponse {
+	data: Tag[];
+	meta: Meta;
+}
+
 export type QueryParams = {
 	[key: string]: string | number | boolean | undefined | null;
 };
@@ -487,4 +498,28 @@ export interface Result {
 	stdout: string;
 	stderr: string;
 	summary: string;
+}
+
+export interface SchedulePayload {
+	name: string;
+	schedule: string;
+	type: 'command' | 'script';
+	overlaps: boolean;
+	client_ids?: string[] | null;
+	group_ids?: string[] | null;
+	tags?: { tags: string[]; operator: 'AND' | 'OR' } | null;
+	command?: string;
+	script?: string;
+	interpreter?: string;
+	cwd?: string;
+	is_sudo?: boolean;
+	timeout_sec?: number;
+	execute_concurrently?: boolean;
+	abort_on_error?: boolean;
+}
+
+export interface Schedule extends SchedulePayload {
+	id: string;
+	created_at: string;
+	created_by: string;
 }

@@ -190,8 +190,16 @@ input::placeholder,textarea::placeholder {
     --tw-bg-opacity: 1;
     background-color: #f9fafb;
 }
+.bg-theme-dark {
+    --tw-bg-opacity: 1;
+    background-color: #e5e7eb;
+}
 .bg-transparent {
     background-color: transparent !important;
+}
+/* Keep the checked fill on checkboxes/radios that use bg-transparent for their unchecked state */
+[type=checkbox].bg-transparent:checked,[type=radio].bg-transparent:checked {
+    background-color: currentColor !important;
 }
 .bg-theme-backdrop\/75 {
     background-color: #6b7280bf;
@@ -211,6 +219,20 @@ input::placeholder,textarea::placeholder {
     background-color: #c6f94c;
 }
 
+.error {
+    color: rgb(239, 68, 68);
+}
+
+.primary-text {
+    color: #00528d;
+}
+.secondary-text {
+    color: #c6f94c;
+}
+
+.error-text {
+    color: #EF4444FF;
+}
 button.primary {
     background-color: #00528d;
     color: #fff
@@ -272,3 +294,4 @@ select {
     line-height: 1.5rem;
     padding: .5rem .75rem
 }
+

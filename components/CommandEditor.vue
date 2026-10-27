@@ -27,15 +27,7 @@ import { highlight } from 'prismjs/components/prism-core';
 import prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 
-const props = defineProps({
-	code: {
-		type: String,
-	},
-});
-const codeEdit = ref(props.code);
-watch(() => props.code, (newData) => {
-	codeEdit.value = newData;
-}, { deep: true });
+const codeEdit = defineModel<string>({ default: '' });
 const highlighter = (code: string) => {
 	return highlight(code, prism.languages.text);
 };

@@ -1,5 +1,5 @@
 import { HttpFactory, HttpMethod } from '~/repository/factory';
-import type {APITokenPayload, APITokenResponse, APITokensResponse, IpResponse, Profile, ProfileResponse} from '~/types';
+import type { APITokenPayload, APITokenResponse, APITokensResponse, IpResponse, Profile, ProfileResponse } from '~/types';
 
 class ProfileModule extends HttpFactory {
 	private RESOURCE = 'api/v1/me';
