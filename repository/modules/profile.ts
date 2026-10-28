@@ -1,5 +1,5 @@
 import { HttpFactory, HttpMethod } from '~/repository/factory';
-import type { APITokenPayload, APITokenResponse, APITokensResponse, IpResponse, Profile, ProfileResponse } from '~/types';
+import type { APITokenPayload, APITokenResponse, APITokensResponse, IpResponse, Profile, ProfileResponse, ProfileUpdatePayload } from '~/types';
 
 class ProfileModule extends HttpFactory {
 	private RESOURCE = 'api/v1/me';
@@ -13,6 +13,15 @@ class ProfileModule extends HttpFactory {
 		return response.data;
 	}
 
+	// Only the fields that change are sent, e.g. { username, two_fa_send_to, password, old_password }
+	async updateMe(payload: ProfileUpdatePayload): Promise<ProfileResponse> {
+		return this.call<ProfileResponse>(
+			HttpMethod.PUT,
+			`${this.RESOURCE}`,
+			payload,
+		);
+	}
+
 	async apiTokens(): Promise<APITokensResponse> {
 		return this.call<APITokensResponse>(
 			'GET',
@@ -21,19 +30,21 @@ class ProfileModule extends HttpFactory {
 		);
 	}
 
+	// The token itself is only returned here, once
 	async create(payload: APITokenPayload): Promise<APITokenResponse> {
 		return this.call<APITokenResponse>(
 			HttpMethod.POST,
 			`${this.RESOURCE}/tokens`,
-			payload,
+			{ scope: payload.scope, name: payload.name, expires_at: payload.expires_at },
 		);
 	}
 
+	// The scope of a token cannot change
 	async update(payload: APITokenPayload): Promise<APITokenResponse> {
 		return this.call<APITokenResponse>(
 			HttpMethod.PUT,
 			`${this.RESOURCE}/tokens/${payload.prefix}`,
-			payload,
+			{ name: payload.name, expires_at: payload.expires_at },
 		);
 	}
 

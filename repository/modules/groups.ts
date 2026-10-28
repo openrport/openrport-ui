@@ -1,5 +1,5 @@
 import { HttpFactory, HttpMethod } from '~/repository/factory';
-import type { Client, ClientGroup, ClientGroupResponse } from '~/types';
+import type { ClientGroup, ClientGroupResponse } from '~/types';
 
 class GroupsModule extends HttpFactory {
 	private RESOURCE = '/api/v1/client-groups';
@@ -23,7 +23,7 @@ class GroupsModule extends HttpFactory {
 			`${this.RESOURCE}?page[limit]=${itemPerPage}&page[offset]=${offset}&fields[client_groups]=id,description,params,allowed_user_groups`, undefined);
 	}
 
-	async create(payload: Client): Promise<any> {
+	async create(payload: Partial<ClientGroup>): Promise<any> {
 		return this.call(
 			HttpMethod.POST,
 			`${this.RESOURCE}`,

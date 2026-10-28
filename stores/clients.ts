@@ -42,6 +42,11 @@ export const useClientStore = defineStore('clients', {
 
 		async loadGroupList(id: string) {
 			const { $api } = useNuxtApp();
+			if (id === 'favorites') {
+				// Without IDs the filter would be dropped and every client listed
+				const favoriteIds = useFavoritesStore().ids;
+				return favoriteIds.length ? (await $api.clients.listByGroup(id, favoriteIds)).data : [];
+			}
 			const data = await $api.clients.listByGroup(id);
 			return data.data;
 		},

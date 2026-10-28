@@ -186,6 +186,12 @@ export interface Profile {
 	effective_user_permissions: Permissions;
 	group_permissions_enabled: boolean;
 }
+export interface ProfileUpdatePayload {
+	username: string;
+	two_fa_send_to: string;
+	password?: string;
+	old_password?: string;
+}
 export interface UserListResponse {
 	data: User[];
 }
@@ -215,12 +221,17 @@ export interface User {
 export interface UserPayload {
 	username: string;
 	groups: string[];
-	password: string;
+	password?: string;
+	password_expired?: boolean;
+	two_fa_send_to?: string;
 }
 
 export interface UserGroup {
 	name: string;
 	permissions: Permissions;
+	// Rport-plus extended permissions; null when unset
+	tunnels_restricted?: Record<string, unknown> | null;
+	commands_restricted?: { allow?: string[]; deny?: string[] } | null;
 }
 
 export interface UserGroupResponse {
@@ -304,9 +315,9 @@ export interface StoredTunnelResponse {
 	meta: Meta;
 }
 export interface UserSession {
-	expires_at: Date;
+	expires_at: string;
 	ip_address: string;
-	last_access_at: Date;
+	last_access_at: string;
 	session_id: number;
 	user_agent: string;
 	username: string;
@@ -319,8 +330,9 @@ export interface APIToken {
 	prefix: string;
 	scope: string;
 	name: string;
-	created_at: Date;
-	expires_at: Date;
+	created_at: string;
+	expires_at?: string | null;
+	token?: string;
 }
 export interface APITokensResponse {
 	data: APIToken[];
@@ -335,7 +347,7 @@ export interface IpResponse {
 	};
 }
 export interface APITokenPayload {
-	expires_at: Date;
+	expires_at?: string;
 	name: string;
 	scope: string;
 	prefix?: string;

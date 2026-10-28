@@ -76,15 +76,17 @@
 		<div class="ml-2 flex-shrink-0">
 			<div class="flex items-center justify-end gap-4">
 				<button
-					class="hover:opacity-80 p-0 text-primary rounded inline-flex items-center duration-200 focus:outline-none bg-transparent text-sm font-normal uppercase"
+					class="hover:opacity-80 p-0 text-primary rounded inline-flex items-center duration-200 focus:outline-none bg-transparent text-sm font-normal uppercase disabled:opacity-50"
 					type="button"
+					:disabled="reloading || !device?.id"
+					@click="reload"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="16px"
 						height="16px"
 						viewBox="0 0 24 24"
-						class="icon mr-2"
+						:class="['icon mr-2', { 'animate-spin': reloading }]"
 					>
 						<path
 							fill="currentColor"
@@ -95,8 +97,10 @@
 				</button>
 				<button
 					type="button"
-					class="inline-flex items-center duration-200 focus:outline-none rounded-full p-3 h-6 px-2 py-0 text-sm font-normal hover:bg-theme"
-					size="24px"
+					:class="['inline-flex items-center duration-200 focus:outline-none rounded-full p-3 h-6 px-2 py-0 text-sm font-normal hover:bg-theme', { 'text-red-500': isFavorite }]"
+					:title="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
+					:disabled="!device?.id"
+					@click="favorites.toggle(device.id)"
 				>
 					<span
 						class="flex items-center justify-center"
@@ -133,6 +137,23 @@ const props = defineProps({
 		required: true,
 	},
 });
+
+const clientStore = useClientStore();
+const favorites = useFavoritesStore();
+const reloading = ref(false);
+
+const isFavorite = computed(() => !!props.device?.id && favorites.has(props.device.id));
+
+// Fetches the client and its usage again, like the reference reload button
+const reload = async () => {
+	reloading.value = true;
+	try {
+		await clientStore.loadClientById(props.device.id);
+	}
+	finally {
+		reloading.value = false;
+	}
+};
 </script>
 
 <style scoped>
